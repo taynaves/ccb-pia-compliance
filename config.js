@@ -16,13 +16,13 @@ window.APP_CONFIG = {
   // A segurança real vem das Regras do Firebase (Security Rules).
   // ----------------------------------------------------------
   FIREBASE: {
-    apiKey:            "",
-    authDomain:        "",
-    databaseURL:       "",   // ex.: https://SEU-PROJETO-default-rtdb.firebaseio.com
-    projectId:         "",
-    storageBucket:     "",
-    messagingSenderId: "",
-    appId:             ""
+    apiKey:            "AIzaSyAQqnWyijR4L1awcg4CMFTTcB6K29ycQ2w",
+    authDomain:        "ccb-pia-compliance.firebaseapp.com",
+    databaseURL:       "https://ccb-pia-compliance-default-rtdb.firebaseio.com",   // ex.: https://SEU-PROJETO-default-rtdb.firebaseio.com
+    projectId:         "ccb-pia-compliance",
+    storageBucket:     "ccb-pia-compliance.firebasestorage.app",
+    messagingSenderId: "175284938289",
+    appId:             "1:175284938289:web:67a4d8f447c86cb86a9710"
   },
 
   // ----------------------------------------------------------
