@@ -1643,7 +1643,7 @@ async function deleteRrm(rrmId) {
   renderAdminPanel();
 }
 async function addRma(rrmId) {
-  const name = prompt("Nome da nova RMA (ex.: RMA-Coxim.MS):"); if (!name) return;
+  const name = prompt("Nome da nova RMA (ex.: RMA - Coxim.MS):"); if (!name) return;
   const ref = db.ref(`appConfig/locations/${rrmId}/rmas`).push();
   await ref.set({name, points:{}});
   if (!S.locations[rrmId].rmas) S.locations[rrmId].rmas = {};
