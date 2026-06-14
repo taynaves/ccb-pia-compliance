@@ -1344,8 +1344,7 @@ function resetSection(si) {
   toast("Seção limpa");
 }
 function confirmResetAll() {
-  if (!confirm("Limpar TODOS os campos para iniciar um novo mês?
-Esta ação não pode ser desfeita.")) return;
+  if (!confirm("Limpar TODOS os campos para iniciar um novo mês?\nEsta ação não pode ser desfeita.")) return;
   if (!S.clRef) return;
   S.clRef.child("items").remove();
   S.clRef.child("fields").remove();
