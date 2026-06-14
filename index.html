@@ -1657,7 +1657,7 @@ async function deleteRma(rrmId, rmaId) {
   renderAdminPanel();
 }
 async function addPoint(rrmId, rmaId) {
-  const name = prompt("Nome do ponto de atendimento (ex.: PIA-Coxim):"); if (!name) return;
+  const name = prompt("Nome do ponto de atendimento (ex.: PIA - Coxim):"); if (!name) return;
   const city = prompt("Cidade sede deste ponto (ex.: Coxim.MS):") || "";
   const ref = db.ref(`appConfig/locations/${rrmId}/rmas/${rmaId}/points`).push();
   await ref.set({name, city});
