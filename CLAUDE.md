@@ -40,6 +40,15 @@ antes de qualquer alteração. Em conflito entre código e documento, pergunte.
 8. **Falha 2× no mesmo item = PARAR**, expor o problema e alternativas em
    linguagem simples, e aguardar decisão do usuário.
 9. Respostas em português; código em inglês.
+10. **Recomendação de custo/benefício obrigatória:** ao final de TODA resposta que
+    proponha um próximo passo (auditorias, perguntas, planos e cada rodada), terminar
+    com o bloco: `▶ PRÓXIMO PASSO — modelo recomendado: [X] | esforço/raciocínio: [Y]
+    | motivo: [1 linha] | como eu troco: [comando ou menu exato desta interface]`.
+    Critério: tarefa mecânica e localizada = modelo intermediário com esforço baixo;
+    tarefa que toque geração de PDF, permissões do Firebase, múltiplas funções ou
+    grandes trechos do arquivo = modelo mais capaz com esforço alto. Nunca sugerir
+    modelo econômico para editar o index.html — o custo de uma regressão supera
+    qualquer economia de tokens.
 
 ## Ordem de trabalho pendente
 PEND-E → PEND-D → PEND-F → PEND-A → PEND-B → PEND-C → pacote CARGOS → ARQ-01/02
