@@ -212,7 +212,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul2)}
   display:grid;grid-template-columns:1fr 1fr;gap:10px;
 }
 .ident-fld label{font-size:11px;font-weight:600;color:var(--txt2);display:block;margin-bottom:2px}
-.ident-fld input[type=month],.ident-fld input[type=date],.ident-fld input[type=text]{
+.ident-fld input[type=month],.ident-fld input[type=date],.ident-fld input[type=text],.ident-fld select{
   font-size:12px;padding:5px 8px}
 
 /* ═══ CHECKLIST — SEÇÃO ════════════════════════════════════ */
@@ -1217,6 +1217,7 @@ function topbarHtml() {
 function renderMainApp() {
   const f = S.checklist.data?.fields || {};
   const ctx = S.context || {};
+  const locs = S.profile?.locations || [];
   const month = f.mes || new Date().toISOString().slice(0,7);
   const dataPrev = calcDataPrev(month);
   const wfState = S.checklist.data?.status || "draft";
@@ -1224,10 +1225,23 @@ function renderMainApp() {
   let bodyHtml = topbarHtml();
   bodyHtml += '<div class="app-body">';
 
-  // Card identificação
+  // Card identificação — "Ponto de atendimento" vira <select> quando há 2+ localidades
+  let pointFieldHtml;
+  if (locs.length >= 2) {
+    const opts = locs.map((loc, i) => {
+      const rrmN = S.locations[loc.rrmId]?.name || loc.rrmId;
+      const rmaN = S.locations[loc.rrmId]?.rmas?.[loc.rmaId]?.name || loc.rmaId;
+      const ptN  = S.locations[loc.rrmId]?.rmas?.[loc.rmaId]?.points?.[loc.pointId]?.name || loc.pointId;
+      const sel  = (loc.rrmId===ctx.rrmId && loc.rmaId===ctx.rmaId && loc.pointId===ctx.pointId) ? " selected" : "";
+      return `<option value="${i}"${sel}>${esc(ptN)} — ${esc(rmaN)} · ${esc(rrmN)}</option>`;
+    }).join("");
+    pointFieldHtml = `<div class="ident-fld"><label>Ponto de atendimento</label><select id="ctx-point" class="no-print" onchange="selectLocation(this.value)">${opts}</select></div>`;
+  } else {
+    pointFieldHtml = `<div class="ident-fld"><label>Ponto de atendimento</label><input type="text" value="${esc(ctx.pointName||'')}" disabled></div>`;
+  }
   bodyHtml += `<div class="ident-card">
     <div class="ident-fld"><label>Mês de referência</label><input type="month" id="fld-mes" value="${esc(month)}" onchange="setField('mes',this.value)" ${wfState==='publicado'?'disabled':''}></div>
-    <div class="ident-fld"><label>Ponto de atendimento</label><input type="text" value="${esc(ctx.pointName||'')}" disabled></div>
+    ${pointFieldHtml}
     <div class="ident-fld"><label>Fechamento até (prazo máximo)</label><input type="text" id="fld-dataprev" value="${esc(dataPrev)}" disabled></div>
     <div class="ident-fld"><label>Data de encerramento do checklist</label><input type="date" id="fld-enc" value="${esc(f.dataEnc||'')}" onchange="setField('dataEnc',this.value)" ${wfState==='publicado'?'disabled':''}></div>
     <div class="ident-fld"><label>Local</label><input type="text" value="${esc(ctx.pointCity||ctx.pointName||'')}" disabled></div>
@@ -1472,6 +1486,9 @@ async function loadOrCreateChecklist() {
 
 function setupChecklistListeners() {
   if (!S.checklist.id) return;
+  // Soltar listeners do contexto anterior antes de registrar os novos
+  // (evita listener/presença duplicados ao trocar de localidade)
+  fbUnlisten();
   const clRef = db.ref("checklists/" + S.checklist.id);
   S.clRef = clRef;
   // Injetar seção de histórico após DOM renderizado
