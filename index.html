@@ -1200,6 +1200,7 @@ function topbarHtml() {
   return `<div class="topbar">
   <img src="${CCB_ICON_URI}" class="topbar-icon" alt="CCB">
   <span class="topbar-title">${esc((window.APP_CONFIG||{}).APP_TITLE||"Checklist Compliance")}</span>
+  ${S.profile?.locations?.length >= 1 ? `<button class="tb-btn no-print" onclick="setScreen('select')" title="Qual localidade hoje?">📍</button>` : ""}
   <span class="topbar-ctx">${esc(ctx.rrmName||"")} · ${esc(ctx.rmaName||"")} · <strong>${esc(ctx.pointName||"")}</strong></span>
   <div class="topbar-right">
     <div class="presence-wrap">${presenceHtml}</div>
@@ -1209,7 +1210,6 @@ function topbarHtml() {
     <button class="tb-btn no-print" onclick="showHelp()">❓ Ajuda</button>
     ${isPrivileged() ? `<button class="tb-btn no-print" onclick="showAdmin()">⚙ Admin</button>` : ""}
     <button class="tb-btn no-print" onclick="setScreen('profile')">👤</button>
-    ${S.profile?.locations?.length > 1 ? `<button class="tb-btn no-print" onclick="setScreen('select')">📍</button>` : ""}
     <button class="tb-btn tb-btn-danger no-print" onclick="doSignOut()">Sair</button>
   </div></div>`;
 }
