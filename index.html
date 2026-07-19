@@ -861,7 +861,7 @@ function setScreen(name) {
   };
   app.innerHTML = (renders[name] || (() => "<p>Tela inválida</p>"))();
   if (name === "app") setupChecklistListeners();
-  // Ao exibir tela de perfil, popular RMA e Ponto com base na RRM já selecionada
+  // Ao exibir tela de perfil, popular RML e Ponto com base na RRM já selecionada
   if (name === "profile") setTimeout(() => { updateRmaOpts(); }, 0);
 }
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
@@ -1025,7 +1025,7 @@ function renderProfileScreen() {
       </div>
     </div>
     <hr class="mid-sep">
-    <div class="admin-section-title">Localidades (RRM → RMA → Ponto de Atendimento)</div>
+    <div class="admin-section-title">Localidades (RRM → RML → Ponto de Atendimento)</div>
     <div id="pf-locs">${locsHtml}</div>
     ${Object.keys(S.locations).length === 0 ?
       `<div class="login-err">Nenhuma localidade cadastrada pelo superusuário ainda.<br>
@@ -1038,7 +1038,7 @@ function renderProfileScreen() {
             <select id="add-rrm" onchange="updateRmaOpts()">${rrmOpts}</select>
           </div>
           <div class="form-group">
-            <label class="lbl">Administração Local (RMA)</label>
+            <label class="lbl">Administração Local (RML)</label>
             <select id="add-rma" onchange="updatePtOpts()"></select>
           </div>
         </div>
@@ -1101,7 +1101,7 @@ function addLocToProfile() {
   const rmaId = document.getElementById("add-rma")?.value;
   const ptId  = document.getElementById("add-pt")?.value;
   if (!rrmId || !rmaId || !ptId || rmaId === "" || ptId === "") {
-    toast("Selecione RRM, RMA e ponto de atendimento.", "err"); return;
+    toast("Selecione RRM, RML e ponto de atendimento.", "err"); return;
   }
   S.profile.locations = S.profile.locations || [];
   if (S.profile.locations.some(l => l.rrmId===rrmId && l.rmaId===rmaId && l.pointId===ptId)) {
@@ -1789,7 +1789,7 @@ function renderAdminPanel() {
     return `<div class="loc-tree"><div class="loc-tree-hdr">${esc(rrm.name)}
       <button class="btn btn-xs btn-danger" onclick="deleteRrm('${rrmId}')">✕ Excluir RRM</button></div>
       <div class="loc-tree-body">${rmasHtml}
-        <button class="btn btn-xs" style="margin-top:6px" onclick="addRma('${rrmId}')">+ RMA</button>
+        <button class="btn btn-xs" style="margin-top:6px" onclick="addRma('${rrmId}')">+ RML</button>
       </div></div>`;
   }).join("") || `<div style="font-size:12px;color:var(--txt3)">Nenhuma localidade cadastrada ainda.</div>`;
 
@@ -1812,7 +1812,7 @@ function renderAdminPanel() {
         </div>
       </div>
       <div class="admin-section">
-        <div class="admin-section-title">Gerenciar Localidades (RRM → RMA → Pontos)</div>
+        <div class="admin-section-title">Gerenciar Localidades (RRM → RML → Pontos)</div>
         ${locHtml}
         <div class="add-loc-form" style="margin-top:10px">
           <div style="font-size:12px;font-weight:600;margin-bottom:8px">Adicionar nova RRM</div>
@@ -1911,15 +1911,15 @@ async function deleteRrm(rrmId) {
   renderAdminPanel();
 }
 async function addRma(rrmId) {
-  const name = prompt("Nome da nova RMA (ex.: RMA-Coxim.MS):"); if (!name) return;
+  const name = prompt("Nome da nova RML (ex.: RML-Coxim.MS):"); if (!name) return;
   const ref = db.ref(`appConfig/locations/${rrmId}/rmas`).push();
   await ref.set({name, points:{}});
   if (!S.locations[rrmId].rmas) S.locations[rrmId].rmas = {};
   S.locations[rrmId].rmas[ref.key] = {name, points:{}};
-  toast("RMA adicionada ✓"); renderAdminPanel();
+  toast("RML adicionada ✓"); renderAdminPanel();
 }
 async function deleteRma(rrmId, rmaId) {
-  if (!confirm("Excluir esta RMA e todos seus pontos?")) return;
+  if (!confirm("Excluir esta RML e todos seus pontos?")) return;
   await db.ref(`appConfig/locations/${rrmId}/rmas/${rmaId}`).remove();
   delete S.locations[rrmId].rmas[rmaId];
   renderAdminPanel();
@@ -1979,7 +1979,7 @@ const HELP_CONTENT = [
 <h3>Gerenciar localidades</h3>
 <p>No <strong>Painel Admin</strong> (botão ⚙ no topo), o superusuário pode:</p>
 <ul>
-<li>Adicionar e remover RRMs, RMAs e pontos de atendimento</li>
+<li>Adicionar e remover RRMs, RMLs e pontos de atendimento</li>
 <li>Configurar o tamanho da imagem de login</li>
 <li>Aprovar ou rejeitar novos usuários</li>
 </ul>
