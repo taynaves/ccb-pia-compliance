@@ -204,6 +204,37 @@ Ordem de execução recomendada: **E → D → F → A → B → C → CARGOS**.
    (qualquer parte de nome/sobrenome); navegação por TAB/SHIFT+TAB ou clique. Fonte:
    cadastro mantido pelo Admin (nunca lista aberta de contas Google).
 
+### Ajustes confirmados pelo dono (20/07/2026) sobre CARGOS
+- **Cargos (só 1 por usuário):** Diácono · Irmã da Piedade · Auxiliar.
+- **Irmã da Piedade** usa a MESMA lista de funções de Auxiliar (decisão "a").
+- **Funções de auxiliar (7):** Colaborador de Escrituração da Obra da Piedade · Colaborador
+  Financeiro · Colaborador de Estoque/Expedição · Colaborador de Triagem-Depósito Obra da
+  Piedade · Colaborador de Escrituração Fiscal · Colaborador Administrativo-Assistente ·
+  Colaborador de Contabilidade.
+- **Funções de diácono (9):** Secretário · Tesoureiro · Procurador · Membro do Grupo
+  Verificador · Responsável pelos Voluntários · Responsável pela Piedade · Responsável pelo
+  Almoxarifado (Produtos/Serviços) · Responsável pelas Viagens · Responsável pela Contabilidade.
+- **Quem atribui:** o Admin/superusuário define cargo e funções de cada usuário (NÃO é
+  auto-atribuição). Novo usuário no 1º login nasce **Auxiliar / Colaborador de Escrituração
+  da Obra da Piedade**. O usuário só escolhe **quais** das suas funções aparecem no relatório.
+- **Papéis de fluxo** (Supervisor · Revisor · Responsável pela Conferência): tratados à parte,
+  ligados às assinaturas do relatório (CARGOS-4), não como função institucional da pessoa.
+
+## PARTE 7-B — MÓDULO DE PERMISSÕES E HIERARQUIA (PERM) — pedido em 20/07/2026
+> Requisito do dono: **construir como MÓDULO ISOLADO** (seção própria do código, com suas
+> constantes/funções e nós de Firebase bem delimitados), para que alterações aqui não afetem
+> o restante do sistema. Sujeito à rodada de confirmação de arquitetura antes de codificar.
+
+| Cód. | Regra |
+|---|---|
+| PERM-01 | 🔴 **Superusuário**: pode tudo. É o ÚNICO que altera o código do sistema e executa ações com questões críticas de segurança/sigilo. É **sempre supervisor geral**. Único por instalação (primeiro login). |
+| PERM-02 | 🔴 **Três níveis de administrador e três de supervisor:** local (RML) · regional (RRM) · geral (supraregional, +de uma RRM). |
+| PERM-03 | 🔴 Todo administrador (e o superusuário) é **supervisor por padrão**. Um administrador pode **revogar/reativar** a própria função de supervisor a qualquer momento (botão liga-desliga). |
+| PERM-04 | 🔴 **Somente o superusuário** atribui o papel de supervisor e o **domínio** da supervisão (local/regional/geral), sem restrição. |
+| PERM-05 | 🔴 **Supervisores** são responsáveis por um grupo de **revisores** e têm acesso a **todos os relatórios e versões** produzidos por sua equipe de revisores (dentro do seu domínio). |
+| PERM-06 | 🔵 **(FASE FUTURA)** Cada supervisor terá uma **página de logs** com todas as ações de sua área de influência (todos os subordinados ao seu domínio). |
+| PERM-07 | 🔴 Mapear a migração do atual `isSiteAdmin`/`isSuperUser`/`isPrivileged()` para este novo modelo de níveis (definir na rodada de arquitetura). |
+
 ---
 
 ## PARTE 8 — OBSOLETOS E EVOLUÍDOS (🚫 NÃO reintroduzir / histórico)
