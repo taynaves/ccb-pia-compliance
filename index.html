@@ -2625,6 +2625,10 @@ async function loadImgB64(url) {
 
 // ── Cabeçalho do relatório: imagem pronta carregada do repositório ─────
 // (ARQ-02: imagem fora do index.html; carregada em runtime e cacheada)
+// _cacheBust muda a cada carregamento da página (F5/novo login) → força o
+// navegador a buscar a versão mais nova da imagem quando ela é trocada no
+// repositório, evitando exibir uma cópia velha do cache do navegador.
+const _cacheBust = Date.now();
 let _pdfHeaderImg = null;
 function loadPdfHeaderImg() {
   if (_pdfHeaderImg) return Promise.resolve(_pdfHeaderImg);
@@ -2632,7 +2636,7 @@ function loadPdfHeaderImg() {
     const img = new Image();
     img.onload  = () => { _pdfHeaderImg = img; resolve(img); };
     img.onerror = () => reject(new Error("Falha ao carregar assets/pdf_header.jpg"));
-    img.src = "assets/pdf_header.jpg";
+    img.src = "assets/pdf_header.jpg?v=" + _cacheBust;
   });
 }
 
@@ -2648,22 +2652,24 @@ async function generateJsPDF(rc) {
   let y = 0;
 
   // ── Cabeçalho: imagem pronta ocupando a largura da página ──────────────
-  // Proporção real da imagem (6820×845) → altura ≈ 26,0mm em página de 210mm.
+  // A altura é derivada da proporção REAL da imagem carregada, então o sistema
+  // se adapta sozinho se a imagem for trocada por outra de tamanho diferente.
   const appVer = (window.APP_CONFIG||{}).APP_VERSION || "2.0";
-  const HDR_H = CW * (845 / 6820);   // mantém a proporção original da imagem
+  let hdrH = 26;   // fallback caso a imagem não carregue
   try {
     const hdrImg = await loadPdfHeaderImg();
-    doc.addImage(hdrImg, "JPEG", 0, 0, CW, HDR_H);
+    hdrH = CW * (hdrImg.naturalHeight / hdrImg.naturalWidth);
+    doc.addImage(hdrImg, "JPEG", 0, 0, CW, hdrH);
   } catch (e) {
     // Fallback (ARQ-04/05): sem a imagem o relatório ainda é gerado, com aviso
-    doc.setFillColor(31, 58, 95); doc.rect(0, 0, CW, HDR_H, "F");
+    doc.setFillColor(31, 58, 95); doc.rect(0, 0, CW, hdrH, "F");
     doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(12);
     doc.text("CONGREGAÇÃO CRISTÃ NO BRASIL", 8, 11);
     doc.setFont("helvetica","normal"); doc.setFontSize(9);
     doc.text("Checklist Mensal de Compliance — Secretaria da Piedade", 8, 17);
     toast("⚠ Imagem do cabeçalho não carregou; usando cabeçalho simples.", "err");
   }
-  y = HDR_H + 8;
+  y = hdrH + 8;
 
   // ── Título e identificação ─────────────────────────────
   doc.setTextColor(31,58,95); doc.setFont("helvetica","bold"); doc.setFontSize(11);
@@ -2675,8 +2681,9 @@ async function generateJsPDF(rc) {
   const pubAt = rc.data.publishedAt ? new Date(rc.data.publishedAt).toLocaleString("pt-BR") : "—";
   const fields = [
     ["Mês de referência:", rc.monthLabel],
+    ["Regional (RRM):", rc.ctx.rrmName||"—"],
+    ["Administração Local (RML):", rc.ctx.rmaName||"—"],
     ["Ponto de atendimento:", rc.ctx.pointName||"—"],
-    ["Adm. Local / Regional:", `${rc.ctx.rmaName||"—"} / ${rc.ctx.rrmName||"—"}`],
     ["Data de encerramento do checklist:", dtEnc],
     ["Data prevista de fechamento da Piedade:", calcDataPrev(rc.month)],
     ["Código do relatório:", rc.code],
