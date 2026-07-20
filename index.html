@@ -440,6 +440,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul2)}
   background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);
   color:#fff;cursor:pointer;white-space:nowrap}
 .btn-assign:hover{background:rgba(255,255,255,.25)}
+/* Operações em bloco — barra do formulário todo + botões por seção (R4) */
+.bulk-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;
+  padding:8px 12px;background:#eef2f7;border:1px solid var(--brd);border-radius:8px}
+.bulk-bar .bulk-lbl{font-size:12px;font-weight:600;color:var(--txt2);margin-right:2px}
+.bulk-btn{font-size:12px;padding:3px 10px;border-radius:5px;border:1px solid var(--brd);
+  background:#fff;color:var(--txt);cursor:pointer;white-space:nowrap}
+.bulk-btn:hover{background:var(--azul);color:#fff;border-color:var(--azul)}
+.sec-bulk-btn{font-size:11px;line-height:1;padding:2px 6px;border-radius:3px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;cursor:pointer}
+.sec-bulk-btn:hover{background:rgba(255,255,255,.28)}
 /* ═══ VISIBILIDADE (seções ocultas) ════════════════════════════ */
 .sec-hidden-badge{font-size:9px;background:rgba(0,0,0,.2);
   color:#fff;padding:1px 5px;border-radius:3px;margin-left:4px}
@@ -1369,6 +1379,16 @@ function renderMainApp() {
     <span style="color:var(--txt3);font-size:11px">(clique novamente para desmarcar)</span>
   </div>`;
 
+  // Operações em bloco para TODO o formulário (antes da 1ª seção) — R4
+  if (canEdit()) {
+    bodyHtml += `<div class="bulk-bar no-print">
+      <span class="bulk-lbl">Todo o formulário:</span>
+      <button class="bulk-btn" onclick="bulkStatus('all','PEND')">✗ Marcar tudo Pendente</button>
+      <button class="bulk-btn" onclick="bulkStatus('all','NA')">⊘ Marcar tudo N/A</button>
+      <button class="bulk-btn" onclick="bulkStatus('all','')">↺ Limpar escolhas</button>
+    </div>`;
+  }
+
   // Seções
   const hiddenSecs = S.context?.hiddenSections || [];
   let curParte = '';
@@ -1396,8 +1416,11 @@ function renderMainApp() {
         ${secAssignHtml}
       </div>
       <div class="sec-hdr-right">
+        ${canEdit()?`
+          <button class="sec-bulk-btn no-print" title="Marcar toda a seção como Pendente" onclick="bulkStatus(${si},'PEND')">✗</button>
+          <button class="sec-bulk-btn no-print" title="Marcar toda a seção como N/A" onclick="bulkStatus(${si},'NA')">⊘</button>
+          <button class="sec-bulk-btn no-print" title="Limpar as escolhas desta seção" onclick="bulkStatus(${si},'')">↺</button>`:''}
         ${canAssign?`<button class="btn-assign no-print" onclick="showAssignModal(${si},null)">👤 Atribuir</button>`:''}
-        ${canEdit()?`<button class="tb-btn btn-xs no-print" onclick="resetSection(${si})">↺</button>`:''}
       </div>
     </div>
     <table class="tbl"><thead>
@@ -1700,21 +1723,30 @@ function calcDataPrev(month) {
   } catch { return "dia 20 do mês seguinte"; }
 }
 
-function resetSection(si) {
-  if (!canEdit()) { toast("Documento bloqueado","err"); return; }
+// Operações em bloco (R4): define/limpa o STATUS de vários itens de uma vez.
+// scope = índice da seção OU "all" (formulário todo). val = "PEND" | "NA" | "" (limpar).
+// IMPORTANTE: altera SOMENTE o status. Observações e demais campos ficam intactos.
+function bulkStatus(scope, val) {
+  if (!canEdit()) { toast("Documento bloqueado para edição","err"); return; }
   if (!S.clRef) return;
-  const sec = SECS.find(s => s[0] === si);
-  if (!sec) return;
+  const ids = scope === "all"
+    ? ITEMS.map(it => it[0])
+    : ITEMS.filter(it => it[4] === scope).map(it => it[0]);
+  if (!ids.length) return;
+  const alvo = scope === "all" ? "TODOS os itens do formulário" : "todos os itens desta seção";
+  const acao = val === "PEND" ? "marcar como PENDENTE" : val === "NA" ? "marcar como N/A" : "LIMPAR as escolhas de";
+  if (!confirm(`Confirma ${acao} ${alvo}?\n\nApenas o STATUS é alterado — observações e os demais campos não mudam.`)) return;
   const upd = {};
-  for (let i = sec[3]; i <= sec[4]; i++) {
-    const k = String(i).padStart(3,"0");
-    upd[`items/${k}/status`] = "";
-    upd[`items/${k}/obs`] = "";
-    upd[`items/${k}/updatedBy`] = S.user.uid;
+  ids.forEach(id => {
+    const k = String(id).padStart(3,"0");
+    upd[`items/${k}/status`]        = val;   // "" limpa; "PEND"/"NA" define
+    upd[`items/${k}/updatedBy`]     = S.user.uid;
     upd[`items/${k}/updatedByName`] = S.profile?.name || "";
-  }
+    upd[`items/${k}/updatedAt`]     = firebase.database.ServerValue.TIMESTAMP;
+  });
   S.clRef.update(upd);
-  toast("Seção limpa");
+  S.clRef.child("contributors/" + S.user.uid).set(true);
+  toast(val === "" ? "Escolhas limpas ✓" : (val === "PEND" ? "Itens marcados como Pendente ✓" : "Itens marcados como N/A ✓"));
 }
 function confirmResetAll() {
   if (!confirm("Limpar TODOS os campos para iniciar um novo mês?\nEsta ação não pode ser desfeita.")) return;
@@ -2679,9 +2711,11 @@ function buildReportContext(code, stamp, now, prtCount, version) {
     if (status === "NA") {
       if (!naBySection[secIdx]) naBySection[secIdx] = [];
       naBySection[secIdx].push({ id, num, acao });
-    } else if (status === "PEND") {
+    } else if (status === "PEND" || status === "") {
+      // PEND-B: item sem resposta entra como "pendente" APENAS no relatório
+      // (não grava no Firebase). auto=true marca os que ficaram sem resposta.
       if (!pendBySection[secIdx]) pendBySection[secIdx] = [];
-      pendBySection[secIdx].push({ id, num, acao, obs });
+      pendBySection[secIdx].push({ id, num, acao, obs, auto: status === "" });
     }
   });
   return { data, ctx, f, items, month, monthLabel, code, stamp, now, prtCount, version, naBySection, pendBySection };
