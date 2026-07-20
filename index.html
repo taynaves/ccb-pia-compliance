@@ -3567,7 +3567,16 @@ const _origSetScreen = setScreen;
 // Carregar fechamento ao navegar para a tela
 async function goToFechamento() {
   const mes = new Date().toISOString().slice(0,7);
-  await loadFechamento(mes);
+  try {
+    await loadFechamento(mes);
+  } catch (e) {
+    // ARQ-04: nunca "clica e nada acontece" — mostrar erro específico
+    const denied = e?.code === "PERMISSION_DENIED" || /permission|denied/i.test(e?.message || "");
+    toast(denied
+      ? "Não foi possível abrir o Fechamento: acesso negado pelo banco. Falta a regra /fechamento nas Security Rules do Firebase (veja FIREBASE_SETUP.md)."
+      : "Não foi possível abrir o Fechamento: " + (e?.message || "erro desconhecido"), "err");
+    return;
+  }
   setScreen("fechamento");
 }
 

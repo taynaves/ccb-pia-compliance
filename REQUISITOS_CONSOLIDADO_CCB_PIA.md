@@ -174,6 +174,7 @@ Ordem de execução recomendada: **E → D → F → A → B → C → CARGOS**.
 | PEND-B | 🔴 Ao gerar relatório, itens sem nenhum status recebem automaticamente "não realizado" (mapear para `PEND`). ❓ **Decisão em aberto (perguntar antes de codificar):** (a) só na exibição do relatório, sem gravar no Firebase [recomendado], ou (b) gravação permanente em `items/{id}/status`. |
 | PEND-C | 🔴 Botão "👤 Atribuir" funcional: (1) nome do responsável pela conferência da seção aparece imediatamente à esquerda do botão; (2) atribuições saem no relatório (PDF e .md); (3) o atribuído entra como assinante extra do relatório — exceto se já estiver na lista (sem duplicidade). |
 | PEND-G | 🔴 A guardrail de processo pedida pelo usuário ("não desfazer o que já funciona") está formalizada na PARTE 9 e no metaprompt — vale para toda sessão futura. |
+| PEND-H | 🔴 **(FASE FUTURA) Gestão de permissões por nível.** O **superusuário** gerencia permissões e localidades de TODOS os usuários, em todos os níveis. O **administrador** gerencia no nível da sua RML. Ambos (superusuário e administrador) podem configurar o **perfil completo** de qualquer usuário (dados, cargo/função, localidades, papéis). Registrado a pedido do dono em 20/07/2026; NÃO implementar agora — depende de definição do modelo de administrador por RML. |
 
 ### CARGOS — Cadastro de cargos/funções + assinaturas + autocomplete (pacote à parte)
 🔴 Tratar como pacote próprio, com rodada de confirmação antes de codificar:

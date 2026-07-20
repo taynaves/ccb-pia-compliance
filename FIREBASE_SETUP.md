@@ -136,10 +136,19 @@ FIREBASE: {
           ".write": "auth != null && auth.uid == $uid"
         }
       }
+    },
+    "fechamento": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('approved').val() == true"
     }
   }
 }
 ```
+
+> **Importante (Camada 2 — Fechamento Contábil):** a regra `fechamento` acima é
+> obrigatória. Sem ela, ao clicar em **📊 Fechamento** o Firebase nega o acesso e
+> a tela não abre. O nó `fechamento` guarda os dados em
+> `fechamento/{rrmId}/{rmaId}/{pointId}/{AAAA_MM}`.
 
 4. Clique em **"Publicar"** (botão azul no topo direito)
 
