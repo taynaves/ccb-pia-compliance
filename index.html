@@ -2645,24 +2645,39 @@ async function generateJsPDF(rc) {
   // Imagem à esquerda — proporcional
   doc.addImage(imgData, "PNG", 3, 1, IMG_W, IMG_H);
   doc.setTextColor(255,255,255);
-  // Linha 1: topo alinhado com topo da imagem (y=1) — baseline em y=5
-  doc.setFontSize(12); doc.setFont("helvetica","bold");
-  doc.text("CONGREGAÇÃO CRISTÃ NO BRASIL", 36, 5);
-  // Linha 2: espaçamento mínimo (y=9)
-  doc.setFontSize(9.5); doc.setFont("helvetica","normal");
-  doc.text("Checklist Mensal de Compliance — Secretaria da Piedade", 36, 9);
-  // Linha 3: espaçamento mínimo (y=12.5)
-  doc.setFontSize(8);
-  doc.text(`${esc(rc.ctx.rrmName||"")} · ${esc(rc.ctx.rmaName||"")} · ${esc(rc.ctx.pointName||"")}`, 36, 12.5);
-  // Linha 4: espaço maior antes; base inferior alinhada com base da imagem (y=23)
-  doc.setFontSize(7);
+  // ── Posições Y das 4 linhas calculadas com ascensão/descida REAIS da fonte ──
+  // (o jsPDF posiciona pela baseline; o texto sobe pela ascensão e desce pela
+  // descida). Assim tudo fica dentro da área da imagem (y=1..23) com margem
+  // interna: topo da 1ª e base da 4ª ancorados; vãos 1-2 e 2-3 mínimos, vão 3-4
+  // o maior. A 4ª linha (observação) usa 75% da fonte original — menos chamativa.
+  const P = 0.3528;                 // mm por ponto
+  const ASC = 0.82, DESC = 0.22;    // frações da fonte acima/abaixo da baseline
+  const GAP = 0.6;                  // vãos mínimos (linhas 1-2 e 2-3)
+  const TOP = 2.5, BOT = 22.5;      // margens internas dentro da imagem (1..23)
+  const asc = fs => fs*P*ASC, des = fs => fs*P*DESC;
+  const FS1 = 12, FS2 = 9.5, FS3 = 8, FS4 = 7*0.75;   // FS4 = 75% do original
+  const b1 = TOP + asc(FS1);
+  const b2 = b1 + des(FS1) + GAP + asc(FS2);
+  const b3 = b2 + des(FS2) + GAP + asc(FS3);
+  const b4 = BOT - des(FS4);        // base da 4ª alinhada à base útil da imagem
+  // Linha 1
+  doc.setFontSize(FS1); doc.setFont("helvetica","bold");
+  doc.text("CONGREGAÇÃO CRISTÃ NO BRASIL", 36, b1);
+  // Linha 2
+  doc.setFontSize(FS2); doc.setFont("helvetica","normal");
+  doc.text("Checklist Mensal de Compliance — Secretaria da Piedade", 36, b2);
+  // Linha 3
+  doc.setFontSize(FS3);
+  doc.text(`${esc(rc.ctx.rrmName||"")} · ${esc(rc.ctx.rmaName||"")} · ${esc(rc.ctx.pointName||"")}`, 36, b3);
+  // Linha 4 (observação, 75%): base em b4; se quebrar em duas, a última fica em b4
+  doc.setFontSize(FS4);
   const creatorText = `Criado pela RRM-COXIM.MS, para uso interno — V.${appVer}. Não faz parte de um programa/sistema oficial da CCB.`;
   const creatorLines = doc.splitTextToSize(creatorText, MR - 36);
   if (creatorLines.length <= 1) {
-    doc.text(creatorLines[0] || creatorText, 36, 22);
+    doc.text(creatorLines[0] || creatorText, 36, b4);
   } else {
-    doc.text(creatorLines[0], 36, 20);
-    doc.text(creatorLines[1], 36, 23);
+    doc.text(creatorLines[0], 36, b4 - FS4*P*1.15);
+    doc.text(creatorLines[1], 36, b4);
   }
   y = HDR_H + 8;
 
