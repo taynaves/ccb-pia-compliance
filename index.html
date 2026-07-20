@@ -2623,6 +2623,23 @@ async function loadImgB64(url) {
   });
 }
 
+// ── Cabeçalho do relatório: imagem pronta carregada do repositório ─────
+// (ARQ-02: imagem fora do index.html; carregada em runtime e cacheada)
+// _cacheBust muda a cada carregamento da página (F5/novo login) → força o
+// navegador a buscar a versão mais nova da imagem quando ela é trocada no
+// repositório, evitando exibir uma cópia velha do cache do navegador.
+const _cacheBust = Date.now();
+let _pdfHeaderImg = null;
+function loadPdfHeaderImg() {
+  if (_pdfHeaderImg) return Promise.resolve(_pdfHeaderImg);
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload  = () => { _pdfHeaderImg = img; resolve(img); };
+    img.onerror = () => reject(new Error("Falha ao carregar assets/pdf_header.jpg"));
+    img.src = "assets/pdf_header.jpg?v=" + _cacheBust;
+  });
+}
+
 // ── GERAÇÃO DO PDF COM jsPDF ────────────────────────────────
 async function generateJsPDF(rc) {
   if (!window.jspdf) {
@@ -2634,52 +2651,25 @@ async function generateJsPDF(rc) {
   const CW = 210, ML = 14, MR = 196, BW = MR - ML;
   let y = 0;
 
-  // ── Cabeçalho ──────────────────────────────────────────
-  // Usar imagem embutida (base64) — proporção original mantida: 287×228 → w=28, h=22
-  const imgData = CCB_ICON_URI;
-  const IMG_W = 28, IMG_H = Math.round(28 * 228 / 287); // = 22mm, mantém proporção
-  const HDR_H = 26; // image: y=1..23, mais 3mm de margem inferior
+  // ── Cabeçalho: imagem pronta ocupando a largura da página ──────────────
+  // A altura é derivada da proporção REAL da imagem carregada, então o sistema
+  // se adapta sozinho se a imagem for trocada por outra de tamanho diferente.
   const appVer = (window.APP_CONFIG||{}).APP_VERSION || "2.0";
-  doc.setFillColor(31, 58, 95);
-  doc.rect(0, 0, CW, HDR_H, "F");
-  // Imagem à esquerda — proporcional
-  doc.addImage(imgData, "PNG", 3, 1, IMG_W, IMG_H);
-  doc.setTextColor(255,255,255);
-  // ── Posições Y das 4 linhas calculadas com ascensão/descida REAIS da fonte ──
-  // (o jsPDF posiciona pela baseline; o texto sobe pela ascensão e desce pela
-  // descida). Assim tudo fica dentro da área da imagem (y=1..23) com margem
-  // interna: topo da 1ª e base da 4ª ancorados; vãos 1-2 e 2-3 mínimos, vão 3-4
-  // o maior. A 4ª linha (observação) usa 75% da fonte original — menos chamativa.
-  const P = 0.3528;                 // mm por ponto
-  const ASC = 0.82, DESC = 0.22;    // frações da fonte acima/abaixo da baseline
-  const GAP = 0.6;                  // vãos mínimos (linhas 1-2 e 2-3)
-  const TOP = 2.5, BOT = 22.5;      // margens internas dentro da imagem (1..23)
-  const asc = fs => fs*P*ASC, des = fs => fs*P*DESC;
-  const FS1 = 12, FS2 = 9.5, FS3 = 8, FS4 = 7*0.75;   // FS4 = 75% do original
-  const b1 = TOP + asc(FS1);
-  const b2 = b1 + des(FS1) + GAP + asc(FS2);
-  const b3 = b2 + des(FS2) + GAP + asc(FS3);
-  const b4 = BOT - des(FS4);        // base da 4ª alinhada à base útil da imagem
-  // Linha 1
-  doc.setFontSize(FS1); doc.setFont("helvetica","bold");
-  doc.text("CONGREGAÇÃO CRISTÃ NO BRASIL", 36, b1);
-  // Linha 2
-  doc.setFontSize(FS2); doc.setFont("helvetica","normal");
-  doc.text("Checklist Mensal de Compliance — Secretaria da Piedade", 36, b2);
-  // Linha 3
-  doc.setFontSize(FS3);
-  doc.text(`${esc(rc.ctx.rrmName||"")} · ${esc(rc.ctx.rmaName||"")} · ${esc(rc.ctx.pointName||"")}`, 36, b3);
-  // Linha 4 (observação, 75%): base em b4; se quebrar em duas, a última fica em b4
-  doc.setFontSize(FS4);
-  const creatorText = `Criado pela RRM-COXIM.MS, para uso interno — V.${appVer}. Não faz parte de um programa/sistema oficial da CCB.`;
-  const creatorLines = doc.splitTextToSize(creatorText, MR - 36);
-  if (creatorLines.length <= 1) {
-    doc.text(creatorLines[0] || creatorText, 36, b4);
-  } else {
-    doc.text(creatorLines[0], 36, b4 - FS4*P*1.15);
-    doc.text(creatorLines[1], 36, b4);
+  let hdrH = 26;   // fallback caso a imagem não carregue
+  try {
+    const hdrImg = await loadPdfHeaderImg();
+    hdrH = CW * (hdrImg.naturalHeight / hdrImg.naturalWidth);
+    doc.addImage(hdrImg, "JPEG", 0, 0, CW, hdrH);
+  } catch (e) {
+    // Fallback (ARQ-04/05): sem a imagem o relatório ainda é gerado, com aviso
+    doc.setFillColor(31, 58, 95); doc.rect(0, 0, CW, hdrH, "F");
+    doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(12);
+    doc.text("CONGREGAÇÃO CRISTÃ NO BRASIL", 8, 11);
+    doc.setFont("helvetica","normal"); doc.setFontSize(9);
+    doc.text("Checklist Mensal de Compliance — Secretaria da Piedade", 8, 17);
+    toast("⚠ Imagem do cabeçalho não carregou; usando cabeçalho simples.", "err");
   }
-  y = HDR_H + 8;
+  y = hdrH + 8;
 
   // ── Título e identificação ─────────────────────────────
   doc.setTextColor(31,58,95); doc.setFont("helvetica","bold"); doc.setFontSize(11);
@@ -2691,8 +2681,9 @@ async function generateJsPDF(rc) {
   const pubAt = rc.data.publishedAt ? new Date(rc.data.publishedAt).toLocaleString("pt-BR") : "—";
   const fields = [
     ["Mês de referência:", rc.monthLabel],
+    ["Regional (RRM):", rc.ctx.rrmName||"—"],
+    ["Administração Local (RML):", rc.ctx.rmaName||"—"],
     ["Ponto de atendimento:", rc.ctx.pointName||"—"],
-    ["Adm. Local / Regional:", `${rc.ctx.rmaName||"—"} / ${rc.ctx.rrmName||"—"}`],
     ["Data de encerramento do checklist:", dtEnc],
     ["Data prevista de fechamento da Piedade:", calcDataPrev(rc.month)],
     ["Código do relatório:", rc.code],
@@ -2791,6 +2782,7 @@ async function generateJsPDF(rc) {
     doc.setDrawColor(180,180,180); doc.setLineWidth(.3);
     doc.line(ML, 284, MR, 284);
     doc.setFontSize(6.5); doc.setFont("helvetica","normal"); doc.setTextColor(150,150,150);
+    doc.text(`Sistema v${appVer}`, ML, 288);
     doc.text(rc.stamp, CW/2, 288, {align:"center"});
     doc.text(`Pág. ${p}/${total}`, MR, 288, {align:"right"});
   }
@@ -2804,6 +2796,7 @@ async function generateJsPDF(rc) {
       doc.setPage(p);
       doc.setFontSize(6.5); doc.setFont("helvetica","normal"); doc.setTextColor(150,150,150);
       doc.line(ML, 284, MR, 284);
+      doc.text(`Sistema v${appVer}`, ML, 288);
       doc.text(rc.stamp, CW/2, 288, {align:"center"});
       doc.text(`Pág. ${p}/${total2}`, MR, 288, {align:"right"});
     }
