@@ -140,7 +140,7 @@ do checklist. (Bug real, corrigido na rodada 4 do chat v3 — não reintroduzir.
 |---|---|
 | TERM-01 | ⚠️ **RMA → RML** (Reunião dos Mordomos Locais) em TODO texto visível ao usuário. Variáveis internas (`rmaId`, `rmas`, `addRma()`) permanecem, por compatibilidade com o Firebase. **ATENÇÃO — REGRESSÃO DETECTADA:** a inspeção do `index.html` v03 (19/07/2026) encontrou ≥9 ocorrências de "RMA" em texto visível (linhas ~864, 1028, 1041, 1104, 1792, 1815, 1914, 1919, 1922) e nenhuma "RML" real. A troca deve ser (re)aplicada integralmente na próxima sessão. |
 | TERM-02 | ✅ **"Verificação" → "Conferência"** APENAS nos papéis de assinatura (`SIGS`, `lbl` do responsável — já aplicado). NUNCA alterar nomes oficiais de documentos CCB ("Termo de Verificação do Caixa", FOR.TES.09, "Protocolo de Entrega de Documentos" etc.). |
-| TERM-03 | ✅ Autoria neutra: "Criado pela RRM-COXIM.MS, para uso interno — V.X.X. Não faz parte de um programa/sistema oficial da CCB." (em PDF, login, ajuda e rodapé). Proibida autoria pessoal. |
+| TERM-03 | ✅ Autoria neutra: "Criado pela RRM-COXIM.MS, para uso interno — V.X.X. Não faz parte de um programa/sistema oficial da CCB." (em PDF, login e rodapé). Proibida autoria pessoal **nesses locais**. **EXCEÇÃO autorizada pelo dono (20/07/2026):** APENAS na aba "Sobre" da Ajuda usa-se autoria pessoal — "Criado por: Dr. Taynã Naves, diácono / RRM COXIM, MS / Congregação Cristã no Brasil". PDF, login e rodapé permanecem neutros. |
 | TERM-04 | ✅ Linguagem CCB em qualquer texto gerado: nunca "Vossa Cooperação" (→ irmão/irmã); nunca "Bom dia/Boa tarde" em texto formal (→ "A paz de Deus!" no informal); nunca "político" para deliberações (→ "deliberativo-distributivo"/"normativo-distributivo"). |
 
 ---
@@ -214,7 +214,7 @@ Ordem de execução recomendada: **E → D → F → A → B → C → CARGOS**.
 | Ícone/loading em SVG gerado por IA | 🚫 Rejeitado pelo usuário → substituído pela imagem real `ccb_church_small.png` (287×228 px). |
 | `MAPA_CONCILIACAO_PIEDADE_v1.md` | 🚫 Superado pelo v2 (o definitivo). |
 | Caminhos `/reportCodes/` e `/reports/` na raiz | 🚫 Causa de `permission_denied` → dados movidos para o nó do checklist. |
-| "Criado por Dr. Taynã Naves" | 🚫 Substituído pelo texto institucional neutro (TERM-03). |
+| "Criado por Dr. Taynã Naves" | 🚫 no PDF, login e rodapé (texto institucional neutro — TERM-03). ⚠️ EXCEÇÃO: reautorizado pelo dono APENAS na aba "Sobre" da Ajuda (20/07/2026 — ver TERM-03). |
 | Rótulo "Data prevista de fechamento" | 🚫 → "Fechamento até (prazo máximo)". |
 | Regra "📊 RECOMENDAÇÃO DE MODELO" ao fim de cada resposta | 🚫 Regra de processo de UM chat específico (v2); não é requisito do sistema. Reavaliar só se o usuário pedir. |
 | Campos Ponto/Local como texto disabled (BUG-04) | Evoluiu → decisão final é o dropdown real (PEND-D). |

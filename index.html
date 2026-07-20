@@ -1555,6 +1555,11 @@ function rbGroupHtml(id, status) {
 // ═══════════════════════════════════════════════════════════
 //  CHECKLIST — ESTADO E FIREBASE
 // ═══════════════════════════════════════════════════════════
+// Data de hoje em formato YYYY-MM-DD (data LOCAL, não UTC)
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
 async function loadOrCreateChecklist() {
   const ctx = S.context;
   const month = new Date().toISOString().slice(0,7);
@@ -1571,6 +1576,14 @@ async function loadOrCreateChecklist() {
   }
   if (found) {
     S.checklist = found;
+    // Data de encerramento: padrão = hoje (fixada uma vez, editável depois).
+    // Só grava se ainda estiver vazia e o checklist for editável (não publicado).
+    if (!found.data?.fields?.dataEnc && found.data?.status !== "publicado") {
+      const today = todayISO();
+      await db.ref("checklists/" + found.id + "/fields/dataEnc").set(today);
+      if (!S.checklist.data.fields) S.checklist.data.fields = {};
+      S.checklist.data.fields.dataEnc = today;
+    }
   } else {
     const newRef = db.ref("checklists").push();
     const newData = {
@@ -1579,7 +1592,7 @@ async function loadOrCreateChecklist() {
       createdBy: S.user.uid, createdByName: S.profile?.name||"",
       createdAt: firebase.database.ServerValue.TIMESTAMP,
       contributors: { [S.user.uid]: true },
-      items: {}, fields: {}, signames: ["","","",""],
+      items: {}, fields: { dataEnc: todayISO() }, signames: ["","","",""],
     };
     await newRef.set(newData);
     S.checklist = {id: newRef.key, data: newData};
@@ -2139,8 +2152,10 @@ const HELP_CONTENT = [
 <div style="font-size:18px;font-weight:700;color:var(--azul)">Checklist Mensal de Compliance</div>
 <div style="font-size:12px;color:var(--txt2);margin:4px 0">Secretaria da Piedade | Obra da Piedade</div>
 <div style="font-size:12px;color:var(--txt2)">Versão 2.0 — Fase 1 (Firebase + Auth + Checklist)</div>
-<div style="font-size:11px;color:var(--txt3);margin-top:12px">Criado pela RRM-COXIM.MS, para uso interno — V.2.0</div>
-<div style="font-size:11px;color:var(--txt3)">Congregação Cristã no Brasil — RRM-Coxim.MS</div>
+<div style="font-size:11px;color:var(--txt3);margin-top:12px">Criado por:</div>
+<div style="font-size:11px;color:var(--txt3)">Dr. Taynã Naves, diácono</div>
+<div style="font-size:11px;color:var(--txt3)">RRM COXIM, MS</div>
+<div style="font-size:11px;color:var(--txt3)">Congregação Cristã no Brasil</div>
 <hr style="margin:16px 0;border-color:var(--brd)">
 <div style="font-size:11px;color:var(--txt3)">Fase 2: Workflow (Rascunho→Revisão→Publicado)<br>
 Fase 3: Relatório PDF profissional<br>
