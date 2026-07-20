@@ -217,6 +217,18 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul2)}
 .ident-fld label{font-size:11px;font-weight:600;color:var(--txt2);display:block;margin-bottom:2px}
 .ident-fld input[type=month],.ident-fld input[type=date],.ident-fld input[type=text],.ident-fld select{
   font-size:12px;padding:5px 8px}
+/* Combobox de localidade com filtro digitável (R2) */
+.loc-combo{position:relative}
+.loc-combo-list{position:absolute;top:100%;left:0;right:0;z-index:60;background:var(--card);
+  border:1px solid var(--brd);border-radius:6px;margin-top:2px;max-height:240px;overflow-y:auto;
+  box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.loc-combo-item{padding:6px 10px;font-size:12px;cursor:pointer;border-bottom:1px solid var(--brd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.loc-combo-item:last-child{border-bottom:none}
+.loc-combo-item:hover{background:var(--azul);color:#fff}
+.loc-combo-item.cur{font-weight:700;color:var(--azul)}
+.loc-combo-item.cur::after{content:" ✓"}
+.loc-combo-item.cur:hover{color:#fff}
+.loc-combo-empty{padding:8px 10px;font-size:12px;color:var(--txt3)}
 
 /* ═══ CHECKLIST — SEÇÃO ════════════════════════════════════ */
 .part-banner{
@@ -1186,6 +1198,41 @@ async function selectLocation(i) {
   setScreen("app");
 }
 
+// ── Combobox de localidade com filtro digitável (R2) ────────
+// Cada item = "Ponto — RML · RRM"; o filtro casa qualquer parte, em qualquer posição.
+function locComboItems() {
+  const locs = S.profile?.locations || [];
+  const c = S.context || {};
+  return locs.map((loc, i) => {
+    const rrmN = S.locations[loc.rrmId]?.name || loc.rrmId;
+    const rmaN = S.locations[loc.rrmId]?.rmas?.[loc.rmaId]?.name || loc.rmaId;
+    const ptN  = S.locations[loc.rrmId]?.rmas?.[loc.rmaId]?.points?.[loc.pointId]?.name || loc.pointId;
+    const cur  = (loc.rrmId===c.rrmId && loc.rmaId===c.rmaId && loc.pointId===c.pointId);
+    return { i, label: `${ptN} — ${rmaN} · ${rrmN}`, cur };
+  });
+}
+function renderLocComboList(term) {
+  const box = document.getElementById("ctx-point-list");
+  if (!box) return;
+  const t = (term || "").trim().toLowerCase();
+  const items = locComboItems().filter(o => !t || o.label.toLowerCase().includes(t));
+  box.style.display = "block";
+  box.innerHTML = items.length
+    ? items.map(o => `<div class="loc-combo-item${o.cur?' cur':''}" onmousedown="selectLocation(${o.i})">${esc(o.label)}</div>`).join("")
+    : `<div class="loc-combo-empty">Nenhuma localidade encontrada</div>`;
+}
+function openLocCombo() { renderLocComboList(""); }
+function closeLocCombo() {
+  // Delay para permitir o clique (onmousedown) num item antes de esconder;
+  // se nada for selecionado, restaura o texto do ponto atual no campo.
+  setTimeout(() => {
+    const box = document.getElementById("ctx-point-list");
+    const inp = document.getElementById("ctx-point-input");
+    if (box) box.style.display = "none";
+    if (inp) inp.value = S.context?.pointName || "";
+  }, 150);
+}
+
 // ═══════════════════════════════════════════════════════════
 //  TELA PRINCIPAL — TOPBAR + CHECKLIST
 // ═══════════════════════════════════════════════════════════
@@ -1228,17 +1275,15 @@ function renderMainApp() {
   let bodyHtml = topbarHtml();
   bodyHtml += '<div class="app-body">';
 
-  // Card identificação — "Ponto de atendimento" vira <select> quando há 2+ localidades
+  // Card identificação — "Ponto de atendimento" vira combobox com filtro quando há 2+ localidades
   let pointFieldHtml;
   if (locs.length >= 2) {
-    const opts = locs.map((loc, i) => {
-      const rrmN = S.locations[loc.rrmId]?.name || loc.rrmId;
-      const rmaN = S.locations[loc.rrmId]?.rmas?.[loc.rmaId]?.name || loc.rmaId;
-      const ptN  = S.locations[loc.rrmId]?.rmas?.[loc.rmaId]?.points?.[loc.pointId]?.name || loc.pointId;
-      const sel  = (loc.rrmId===ctx.rrmId && loc.rmaId===ctx.rmaId && loc.pointId===ctx.pointId) ? " selected" : "";
-      return `<option value="${i}"${sel}>${esc(ptN)} — ${esc(rmaN)} · ${esc(rrmN)}</option>`;
-    }).join("");
-    pointFieldHtml = `<div class="ident-fld"><label>Ponto de atendimento</label><select id="ctx-point" class="no-print" onchange="selectLocation(this.value)">${opts}</select></div>`;
+    pointFieldHtml = `<div class="ident-fld loc-combo"><label>Ponto de atendimento</label>
+      <input type="text" id="ctx-point-input" class="no-print" autocomplete="off"
+        placeholder="Digite qualquer parte do nome para filtrar…"
+        value="${esc(ctx.pointName||'')}"
+        onfocus="this.select();openLocCombo()" oninput="renderLocComboList(this.value)" onblur="closeLocCombo()">
+      <div id="ctx-point-list" class="loc-combo-list" style="display:none"></div></div>`;
   } else {
     pointFieldHtml = `<div class="ident-fld"><label>Ponto de atendimento</label><input type="text" value="${esc(ctx.pointName||'')}" disabled></div>`;
   }
