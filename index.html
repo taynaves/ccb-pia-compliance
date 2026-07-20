@@ -2643,38 +2643,26 @@ async function generateJsPDF(rc) {
   doc.setFillColor(31, 58, 95);
   doc.rect(0, 0, CW, HDR_H, "F");
   // Imagem à esquerda — proporcional
-  const IMG_TOP = 1, IMG_BOTTOM = IMG_TOP + IMG_H; // imagem: y=1 .. y=23
-  doc.addImage(imgData, "PNG", 3, IMG_TOP, IMG_W, IMG_H);
+  doc.addImage(imgData, "PNG", 3, 1, IMG_W, IMG_H);
   doc.setTextColor(255,255,255);
-  // ── Posições Y das 4 linhas calculadas pela altura real de cada fonte ──
-  // (PEND-F) topo da 1ª = topo da imagem; base da 4ª = base da imagem;
-  // vãos 1-2 e 2-3 mínimos; vão 3-4 absorve o restante (o maior).
-  const PT2MM = 0.352;                 // altura real da fonte ≈ fontSize × 0,352 mm/pt
-  const FS1 = 12, FS2 = 9.5, FS3 = 8, FS4 = 7;   // tamanhos de fonte inalterados
-  const h1 = FS1*PT2MM, h2 = FS2*PT2MM, h3 = FS3*PT2MM, h4 = FS4*PT2MM;
-  const GAP_MIN = 0.7;                 // espaços 1-2 e 2-3 (mínimos)
-  const base1 = IMG_TOP + h1;          // topo da 1ª linha alinhado ao topo da imagem
-  const base2 = base1 + GAP_MIN + h2;
-  const base3 = base2 + GAP_MIN + h3;
-  const base4 = IMG_BOTTOM;            // base da 4ª linha alinhada à base da imagem
-  // Linha 1
-  doc.setFontSize(FS1); doc.setFont("helvetica","bold");
-  doc.text("CONGREGAÇÃO CRISTÃ NO BRASIL", 36, base1);
-  // Linha 2
-  doc.setFontSize(FS2); doc.setFont("helvetica","normal");
-  doc.text("Checklist Mensal de Compliance — Secretaria da Piedade", 36, base2);
-  // Linha 3
-  doc.setFontSize(FS3);
-  doc.text(`${esc(rc.ctx.rrmName||"")} · ${esc(rc.ctx.rmaName||"")} · ${esc(rc.ctx.pointName||"")}`, 36, base3);
-  // Linha 4 (base ancorada em base4; se quebrar em duas, a última fica em base4)
-  doc.setFontSize(FS4);
+  // Linha 1: topo alinhado com topo da imagem (y=1) — baseline em y=5
+  doc.setFontSize(12); doc.setFont("helvetica","bold");
+  doc.text("CONGREGAÇÃO CRISTÃ NO BRASIL", 36, 5);
+  // Linha 2: espaçamento mínimo (y=9)
+  doc.setFontSize(9.5); doc.setFont("helvetica","normal");
+  doc.text("Checklist Mensal de Compliance — Secretaria da Piedade", 36, 9);
+  // Linha 3: espaçamento mínimo (y=12.5)
+  doc.setFontSize(8);
+  doc.text(`${esc(rc.ctx.rrmName||"")} · ${esc(rc.ctx.rmaName||"")} · ${esc(rc.ctx.pointName||"")}`, 36, 12.5);
+  // Linha 4: espaço maior antes; base inferior alinhada com base da imagem (y=23)
+  doc.setFontSize(7);
   const creatorText = `Criado pela RRM-COXIM.MS, para uso interno — V.${appVer}. Não faz parte de um programa/sistema oficial da CCB.`;
   const creatorLines = doc.splitTextToSize(creatorText, MR - 36);
   if (creatorLines.length <= 1) {
-    doc.text(creatorLines[0] || creatorText, 36, base4);
+    doc.text(creatorLines[0] || creatorText, 36, 22);
   } else {
-    doc.text(creatorLines[0], 36, base4 - (h4 + 0.5));
-    doc.text(creatorLines[1], 36, base4);
+    doc.text(creatorLines[0], 36, 20);
+    doc.text(creatorLines[1], 36, 23);
   }
   y = HDR_H + 8;
 
