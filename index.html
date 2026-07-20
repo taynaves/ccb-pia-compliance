@@ -224,10 +224,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul2)}
   box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .loc-combo-item{padding:6px 10px;font-size:12px;cursor:pointer;border-bottom:1px solid var(--brd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .loc-combo-item:last-child{border-bottom:none}
-.loc-combo-item:hover{background:var(--azul);color:#fff}
+.loc-combo-item:hover,.loc-combo-item.hi{background:var(--azul);color:#fff}
 .loc-combo-item.cur{font-weight:700;color:var(--azul)}
 .loc-combo-item.cur::after{content:" ✓"}
-.loc-combo-item.cur:hover{color:#fff}
+.loc-combo-item.cur:hover,.loc-combo-item.cur.hi{color:#fff}
 .loc-combo-empty{padding:8px 10px;font-size:12px;color:var(--txt3)}
 
 /* ═══ CHECKLIST — SEÇÃO ════════════════════════════════════ */
@@ -1211,17 +1211,47 @@ function locComboItems() {
     return { i, label: `${ptN} — ${rmaN} · ${rrmN}`, cur };
   });
 }
+let _locComboHi = -1;   // item destacado na lista filtrada (navegação por teclado)
 function renderLocComboList(term) {
   const box = document.getElementById("ctx-point-list");
   if (!box) return;
   const t = (term || "").trim().toLowerCase();
   const items = locComboItems().filter(o => !t || o.label.toLowerCase().includes(t));
+  box._items = items;   // guarda a lista filtrada atual (para o teclado)
+  if (_locComboHi >= items.length) _locComboHi = items.length - 1;
   box.style.display = "block";
   box.innerHTML = items.length
-    ? items.map(o => `<div class="loc-combo-item${o.cur?' cur':''}" onmousedown="selectLocation(${o.i})">${esc(o.label)}</div>`).join("")
+    ? items.map((o, idx) => `<div class="loc-combo-item${o.cur?' cur':''}${idx===_locComboHi?' hi':''}" onmousedown="selectLocation(${o.i})">${esc(o.label)}</div>`).join("")
     : `<div class="loc-combo-empty">Nenhuma localidade encontrada</div>`;
 }
-function openLocCombo() { renderLocComboList(""); }
+function highlightLocCombo() {
+  const box = document.getElementById("ctx-point-list");
+  if (!box) return;
+  Array.from(box.querySelectorAll(".loc-combo-item")).forEach((el, idx) => {
+    el.classList.toggle("hi", idx === _locComboHi);
+    if (idx === _locComboHi) el.scrollIntoView({ block: "nearest" });
+  });
+}
+// Teclado: ↓/↑ e Tab/Shift+Tab movem; Enter escolhe; Esc fecha
+function locComboKey(e) {
+  const box = document.getElementById("ctx-point-list");
+  if (!box || box.style.display === "none") return;
+  const items = box._items || [];
+  const n = items.length;
+  const k = e.key;
+  if (k === "ArrowDown" || (k === "Tab" && !e.shiftKey)) {
+    if (!n) return;
+    e.preventDefault(); _locComboHi = (_locComboHi + 1) % n; highlightLocCombo();
+  } else if (k === "ArrowUp" || (k === "Tab" && e.shiftKey)) {
+    if (!n) return;
+    e.preventDefault(); _locComboHi = (_locComboHi - 1 + n) % n; highlightLocCombo();
+  } else if (k === "Enter") {
+    if (_locComboHi >= 0 && _locComboHi < n) { e.preventDefault(); selectLocation(items[_locComboHi].i); }
+  } else if (k === "Escape") {
+    box.style.display = "none"; _locComboHi = -1;
+  }
+}
+function openLocCombo() { _locComboHi = -1; renderLocComboList(""); }
 function closeLocCombo() {
   // Delay para permitir o clique (onmousedown) num item antes de esconder;
   // se nada for selecionado, restaura o texto do ponto atual no campo.
@@ -1230,6 +1260,7 @@ function closeLocCombo() {
     const inp = document.getElementById("ctx-point-input");
     if (box) box.style.display = "none";
     if (inp) inp.value = S.context?.pointName || "";
+    _locComboHi = -1;
   }, 150);
 }
 
@@ -1282,7 +1313,7 @@ function renderMainApp() {
       <input type="text" id="ctx-point-input" class="no-print" autocomplete="off"
         placeholder="Digite qualquer parte do nome para filtrar…"
         value="${esc(ctx.pointName||'')}"
-        onfocus="this.select();openLocCombo()" oninput="renderLocComboList(this.value)" onblur="closeLocCombo()">
+        onfocus="this.select();openLocCombo()" oninput="_locComboHi=-1;renderLocComboList(this.value)" onkeydown="locComboKey(event)" onblur="closeLocCombo()">
       <div id="ctx-point-list" class="loc-combo-list" style="display:none"></div></div>`;
   } else {
     pointFieldHtml = `<div class="ident-fld"><label>Ponto de atendimento</label><input type="text" value="${esc(ctx.pointName||'')}" disabled></div>`;
