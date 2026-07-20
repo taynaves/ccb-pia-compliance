@@ -101,6 +101,9 @@ button{font-family:inherit;cursor:pointer}
 .tb-btn:hover{background:rgba(255,255,255,.22)}
 .tb-btn-danger{border-color:rgba(255,100,100,.4)}
 .tb-btn-danger:hover{background:rgba(255,60,60,.2)}
+/* Ícone de perfil (👤): recolore o emoji para branco suave, dando contraste
+   sobre a barra azul sem ficar mais chamativo que os demais botões da região */
+.prof-ico{filter:brightness(0) invert(1);opacity:.9;display:inline-block}
 
 /* ═══ PRESENCE (quem está online) ════════════════════════ */
 .presence-wrap{display:flex;align-items:center;gap:4px}
@@ -1209,7 +1212,7 @@ function topbarHtml() {
     <button class="tb-btn no-print" onclick="importMDAndPrint()" title="Importar .md e gerar PDF">📝↑</button>
     <button class="tb-btn no-print" onclick="showHelp()">❓ Ajuda</button>
     ${isPrivileged() ? `<button class="tb-btn no-print" onclick="showAdmin()">⚙ Admin</button>` : ""}
-    <button class="tb-btn no-print" onclick="setScreen('profile')">👤</button>
+    <button class="tb-btn no-print" onclick="setScreen('profile')"><span class="prof-ico">👤</span></button>
     <button class="tb-btn tb-btn-danger no-print" onclick="doSignOut()">Sair</button>
   </div></div>`;
 }
