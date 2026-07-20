@@ -2750,36 +2750,44 @@ async function generateJsPDF(rc) {
   }
   y = hdrH + 8;
 
-  // ── Título e identificação ─────────────────────────────
-  doc.setTextColor(31,58,95); doc.setFont("helvetica","bold"); doc.setFontSize(11);
-  doc.text("RELATÓRIO DE FECHAMENTO — CHECKLIST COMPLIANCE", ML, y); y += 2;
-  doc.setDrawColor(31,58,95); doc.setLineWidth(.5);
-  doc.line(ML, y, MR, y); y += 5;
-
+  // ── Título + identificação (bloco redesenhado, R3) ─────────────────────
   const dtEnc = rc.f.dataEnc ? new Date(rc.f.dataEnc+"T12:00").toLocaleDateString("pt-BR") : "—";
   const pubAt = rc.data.publishedAt ? new Date(rc.data.publishedAt).toLocaleString("pt-BR") : "—";
-  const fields = [
-    ["Mês de referência:", rc.monthLabel],
-    ["Regional (RRM):", rc.ctx.rrmName||"—"],
-    ["Administração Local (RML):", rc.ctx.rmaName||"—"],
-    ["Ponto de atendimento:", rc.ctx.pointName||"—"],
-    ["Data de encerramento do checklist:", dtEnc],
-    ["Data prevista de fechamento da Piedade:", calcDataPrev(rc.month)],
-    ["Código do relatório:", rc.code],
-    ["Status / Publicação:", rc.data.status === "publicado" ? `Publicado em ${pubAt}` : "Rascunho / Em revisão"],
-    ["Revisado por:", rc.data.reviewedByName||"—"],
-  ];
-  doc.autoTable({
-    startY: y, margin:{left:ML,right:14},
-    body: fields, head: [],
-    styles: { fontSize:8.5, cellPadding:1.8 },
-    columnStyles: {
-      0:{fontStyle:"bold", cellWidth:75, textColor:[31,58,95]},
-      1:{textColor:[30,30,30]}
-    },
-    theme:"plain",
-  });
-  y = doc.lastAutoTable.finalY + 6;
+  const statusStr = rc.data.status === "publicado" ? `Publicado em ${pubAt}` : "Rascunho / Em revisão";
+
+  // Título (esq.) + hierarquia RRM › RML no canto superior direito (longe do Ponto)
+  doc.setTextColor(31,58,95); doc.setFont("helvetica","bold"); doc.setFontSize(11);
+  doc.text("RELATÓRIO DE FECHAMENTO — CHECKLIST COMPLIANCE", ML, y);
+  doc.setFont("helvetica","normal"); doc.setFontSize(6); doc.setTextColor(130,130,130);
+  doc.text("REGIONAL (RRM)   ·   ADM. LOCAL (RML)", MR, y-2.6, {align:"right"});
+  doc.setFont("helvetica","bold"); doc.setFontSize(8.5); doc.setTextColor(31,58,95);
+  doc.text(`${esc(rc.ctx.rrmName||"—")}   ›   ${esc(rc.ctx.rmaName||"—")}`, MR, y+1.4, {align:"right"});
+  y += 3.2;
+  doc.setDrawColor(31,58,95); doc.setLineWidth(.5); doc.line(ML, y, MR, y); y += 5;
+
+  // Card suave com barra de acento; Ponto de atendimento em destaque + grid 2 colunas
+  const cardTop = y, cardH = 47;
+  doc.setFillColor(246,248,251); doc.roundedRect(ML, cardTop, BW, cardH, 2, 2, "F");
+  doc.setFillColor(31,58,95); doc.rect(ML, cardTop, 1.5, cardH, "F");
+  doc.setFont("helvetica","normal"); doc.setFontSize(6.5); doc.setTextColor(130,130,130);
+  doc.text("PONTO DE ATENDIMENTO", ML+6, cardTop+6.5);
+  doc.setFont("helvetica","bold"); doc.setFontSize(14); doc.setTextColor(31,58,95);
+  doc.text(esc(rc.ctx.pointName||"—"), ML+6, cardTop+13.5);
+  doc.setDrawColor(220,226,234); doc.setLineWidth(.3); doc.line(ML+6, cardTop+17, MR-4, cardTop+17);
+  const idCell = (x, gy, label, val) => {
+    doc.setFont("helvetica","normal"); doc.setFontSize(6); doc.setTextColor(130,130,130);
+    doc.text(label.toUpperCase(), x, gy);
+    doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(45,45,45);
+    doc.text(String(val), x, gy+4);
+  };
+  const colLx = ML+6, colRx = ML+100;
+  let gy = cardTop+23;
+  idCell(colLx, gy, "Mês de referência", rc.monthLabel);            idCell(colRx, gy, "Código do relatório", rc.code);
+  gy += 8.5;
+  idCell(colLx, gy, "Fechamento até (prazo máx.)", calcDataPrev(rc.month)); idCell(colRx, gy, "Situação", statusStr);
+  gy += 8.5;
+  idCell(colLx, gy, "Encerramento do checklist", dtEnc);           idCell(colRx, gy, "Revisado por", rc.data.reviewedByName||"—");
+  y = cardTop + cardH + 6;
 
   // ── Itens N/A ─────────────────────────────────────────
   const naSecs = Object.keys(rc.naBySection);
