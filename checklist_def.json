@@ -1,0 +1,642 @@
+{
+  "version": 1,
+  "updatedAt": null,
+  "parts": [
+    {
+      "id": "ACPI-REG",
+      "name": "ACPI-REG",
+      "sections": [
+        {
+          "id": 1,
+          "title": "Seção 1 — Caixa | Grupo 100",
+          "items": [
+            {
+              "id": 1,
+              "num": "1.1",
+              "momento": "F",
+              "acao": "Emitir e assinar o Termo de Verificação do Caixa do mês"
+            },
+            {
+              "id": 2,
+              "num": "1.2",
+              "momento": "F",
+              "acao": "Confirmar que as contas 10010, 10020 e 10030 batem com o Termo de Verificação do Caixa"
+            },
+            {
+              "id": 3,
+              "num": "1.3",
+              "momento": "C",
+              "acao": "Verificar que despesas de locomoção foram utilizadas exclusivamente por pessoal autorizado"
+            },
+            {
+              "id": 4,
+              "num": "1.4",
+              "momento": "F",
+              "acao": "Anexar ao SIGA todos os documentos de pagamentos via Caixa"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Seção 2 — Bancos conta movimento | Grupo 101",
+          "items": [
+            {
+              "id": 5,
+              "num": "2.1",
+              "momento": "F",
+              "acao": "Conciliar os valores do Grupo 101 com os extratos bancários"
+            },
+            {
+              "id": 6,
+              "num": "2.2",
+              "momento": "F",
+              "acao": "Encaminhar cópia do Extrato Bancário e Conciliação Bancária ao movimento contábil"
+            },
+            {
+              "id": 7,
+              "num": "2.3",
+              "momento": "C",
+              "acao": "Carimbar e assinar todos os Documentos Fiscais pagos pelo banco"
+            },
+            {
+              "id": 8,
+              "num": "2.4",
+              "momento": "F",
+              "acao": "Contabilizar todos os cheques emitidos no período"
+            },
+            {
+              "id": 9,
+              "num": "2.5",
+              "momento": "P",
+              "acao": "Verificar guarda dos cheques em cofre na Casa de Oração"
+            },
+            {
+              "id": 10,
+              "num": "2.6",
+              "momento": "P",
+              "acao": "Conferir validade das procurações para movimentação das contas bancárias"
+            },
+            {
+              "id": 11,
+              "num": "2.7",
+              "momento": "F",
+              "acao": "Anexar ao SIGA todos os documentos de pagamentos via Banco"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Seção 3 — Aplicações financeiras | Grupo 103",
+          "items": [
+            {
+              "id": 12,
+              "num": "3.1",
+              "momento": "F",
+              "acao": "Conferir que os valores do Grupo 103 batem com os extratos das aplicações financeiras"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Seção 4 — Direitos realizáveis | Grupo 104",
+          "items": [
+            {
+              "id": 13,
+              "num": "4.1",
+              "momento": "F",
+              "acao": "Conciliar conta 1040 — Adiantamentos para Fornecedores"
+            },
+            {
+              "id": 14,
+              "num": "4.2",
+              "momento": "F",
+              "acao": "Conciliar conta 1044 — Adiantamentos para Viagens Missionárias"
+            },
+            {
+              "id": 15,
+              "num": "4.3",
+              "momento": "P",
+              "acao": "Verificar que adiantamentos em aberto não ultrapassam 30 dias após o término da viagem"
+            },
+            {
+              "id": 16,
+              "num": "4.4",
+              "momento": "F",
+              "acao": "Conciliar conta 1045 — Adiantamentos para Despesas (quando utilizada)"
+            },
+            {
+              "id": 17,
+              "num": "4.5",
+              "momento": "F",
+              "acao": "Conciliar conta 1046 — Adiantamentos para Reuniões de Atendimentos (quando utilizada)"
+            },
+            {
+              "id": 18,
+              "num": "4.6",
+              "momento": "F",
+              "acao": "Conciliar conta 1047 — Adiantamentos para Viagens / Cartão de Crédito (quando utilizada)"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Seção 5 — Estoques | Grupo 105",
+          "items": [
+            {
+              "id": 19,
+              "num": "5.1",
+              "momento": "P",
+              "acao": "Conferir que a conta 1054 bate com o relatório Inventário Produto no SIGA"
+            },
+            {
+              "id": 20,
+              "num": "5.2",
+              "momento": "P",
+              "acao": "Verificar que o nível de estoque é suficiente para até 4 reuniões"
+            },
+            {
+              "id": 21,
+              "num": "5.3",
+              "momento": "PD",
+              "acao": "Realizar contagem física total do estoque (obrigatório ao menos 2× ao ano)"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Seção 6 — Contas correntes | Grupo 106",
+          "items": [
+            {
+              "id": 22,
+              "num": "6.1",
+              "momento": "F",
+              "acao": "Conciliar conta 1062 — Valores entre Departamentos (conferir consolidado na ADM)"
+            },
+            {
+              "id": 23,
+              "num": "6.2",
+              "momento": "F",
+              "acao": "Conciliar conta 1065 — Transferências Coletas Piedade"
+            },
+            {
+              "id": 24,
+              "num": "6.3",
+              "momento": "F",
+              "acao": "Verificar que os valores da conta 1066 foram transferidos conforme ata de reunião"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Seção 7 — Fornecedores | Grupo 200",
+          "items": [
+            {
+              "id": 25,
+              "num": "7.1",
+              "momento": "F",
+              "acao": "Conciliar conta 2000 — Fornecedores de Materiais Diversos (quando utilizada)"
+            },
+            {
+              "id": 26,
+              "num": "7.2",
+              "momento": "P",
+              "acao": "Verificar que devoluções de compras foram abatidas na conta Fornecedores"
+            },
+            {
+              "id": 27,
+              "num": "7.3",
+              "momento": "C",
+              "acao": "Confirmar que pagamentos foram efetuados por boleto, online ou cheque"
+            },
+            {
+              "id": 28,
+              "num": "7.4",
+              "momento": "F",
+              "acao": "Conciliar conta 2001 — Fornecedores / Supermercado Obra da Piedade (quando utilizada)"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Seção 8 — Contas a pagar | Grupo 201",
+          "items": [
+            {
+              "id": 29,
+              "num": "8.1",
+              "momento": "F",
+              "acao": "Verificar que a conta 2010 — Contas a Pagar está zerada"
+            },
+            {
+              "id": 30,
+              "num": "8.2",
+              "momento": "F",
+              "acao": "Conciliar conta 2017 — Cartão de Crédito Viagens (quando utilizada)"
+            },
+            {
+              "id": 31,
+              "num": "8.3",
+              "momento": "F",
+              "acao": "Conciliar conta 2019 — Cartão de Crédito (quando utilizada)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EAPI-REG",
+      "name": "EAPI-REG",
+      "sections": [
+        {
+          "id": 9,
+          "title": "Seção 1 — Estrutura da Obra da Piedade",
+          "items": [
+            {
+              "id": 32,
+              "num": "1.1",
+              "momento": "PD",
+              "acao": "Verificar existência e funcionamento do Conselho de Diáconos mais Antigos da Regional"
+            },
+            {
+              "id": 33,
+              "num": "1.2",
+              "momento": "PD",
+              "acao": "Verificar existência e funcionamento do Grupo Gestor da Regional"
+            },
+            {
+              "id": 34,
+              "num": "1.3",
+              "momento": "PD",
+              "acao": "Verificar existência e funcionamento do Grupo GDBras da Regional"
+            },
+            {
+              "id": 35,
+              "num": "1.4",
+              "momento": "PD",
+              "acao": "Avaliar adequação da estrutura da Piedade para as atividades do período"
+            },
+            {
+              "id": 36,
+              "num": "1.5",
+              "momento": "PD",
+              "acao": "Confirmar que os Atributos dos Diáconos estão preenchidos e vinculados no SIGA"
+            },
+            {
+              "id": 37,
+              "num": "1.6",
+              "momento": "PD",
+              "acao": "Verificar equilíbrio na distribuição de atividades entre os Diáconos"
+            },
+            {
+              "id": 38,
+              "num": "1.7",
+              "momento": "PD",
+              "acao": "Confirmar que Diáconos com responsabilidades administrativas possuem acesso ao SIGA"
+            },
+            {
+              "id": 39,
+              "num": "1.8",
+              "momento": "PD",
+              "acao": "Confirmar que os Diáconos têm conhecimento dos treinamentos e comunicados no SIGA/INFOCCB"
+            },
+            {
+              "id": 40,
+              "num": "1.9",
+              "momento": "PD",
+              "acao": "Conferir que os Diáconos e suas responsabilidades estão atualizados no SIGA"
+            },
+            {
+              "id": 41,
+              "num": "1.10",
+              "momento": "PD",
+              "acao": "Verificar que trabalhos administrativos são executados por Diáconos e colaboradores da Piedade"
+            },
+            {
+              "id": 42,
+              "num": "1.11",
+              "momento": "PD",
+              "acao": "Verificar se as agregadas da Regional foram verificadas no período anterior"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "Seção 2 — Casa de Oração",
+          "items": [
+            {
+              "id": 43,
+              "num": "2.1",
+              "momento": "PD",
+              "acao": "Verificar distribuição dos Diáconos entre as Casas de Oração"
+            },
+            {
+              "id": 44,
+              "num": "2.2",
+              "momento": "PD",
+              "acao": "Confirmar que as Casas de Oração possuem recursos para coleta (caixas, PIX, Cartão)"
+            },
+            {
+              "id": 45,
+              "num": "2.3",
+              "momento": "F",
+              "acao": "Conferir e assinar o livro de coletas do mês"
+            },
+            {
+              "id": 46,
+              "num": "2.4",
+              "momento": "C",
+              "acao": "Verificar realização dos depósitos semanais de coletas em espécie e moedas"
+            },
+            {
+              "id": 47,
+              "num": "2.5",
+              "momento": "C",
+              "acao": "Confirmar registro das coletas no livro C50 após cada serviço Sacro"
+            },
+            {
+              "id": 48,
+              "num": "2.6",
+              "momento": "C",
+              "acao": "Verificar que a contagem de coletas foi feita por pelo menos 3 irmãos"
+            },
+            {
+              "id": 49,
+              "num": "2.7",
+              "momento": "C",
+              "acao": "Confirmar que depósitos via Caixa Eletrônico seguem o Comunicado nº 139/2016"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "Seção 3 — Irmãs da Obra da Piedade",
+          "items": [
+            {
+              "id": 50,
+              "num": "3.1",
+              "momento": "PD",
+              "acao": "Verificar compatibilidade do quadro de Irmãs da Piedade com a demanda da localidade"
+            },
+            {
+              "id": 51,
+              "num": "3.2",
+              "momento": "PD",
+              "acao": "Confirmar que cadastros de todas as Irmãs da Piedade estão atualizados no SIGA"
+            },
+            {
+              "id": 52,
+              "num": "3.3",
+              "momento": "PD",
+              "acao": "Verificar realização de reuniões de treinamento com as Irmãs e colaboradores"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "Seção 4 — Atendimentos",
+          "items": [
+            {
+              "id": 53,
+              "num": "4.1",
+              "momento": "R",
+              "acao": "Realizar a Reunião de Atendimento do mês"
+            },
+            {
+              "id": 54,
+              "num": "4.2",
+              "momento": "R",
+              "acao": "Conferir o preenchimento das Fichas C1 ANTES de iniciar a Reunião de Atendimento"
+            },
+            {
+              "id": 55,
+              "num": "4.3",
+              "momento": "R",
+              "acao": "Verificar que todos os campos das Fichas C1 estão preenchidos corretamente"
+            },
+            {
+              "id": 56,
+              "num": "4.4",
+              "momento": "R",
+              "acao": "Verificar dupla assinatura nas Fichas C1: Irmã da Piedade E Diácono"
+            },
+            {
+              "id": 57,
+              "num": "4.5",
+              "momento": "R",
+              "acao": "Verificar que os valores em caneta vermelha estão isentos de rasuras"
+            },
+            {
+              "id": 58,
+              "num": "4.6",
+              "momento": "C",
+              "acao": "Confirmar que TODOS os atendimentos (inclusive emergenciais) possuem Ficha C1"
+            },
+            {
+              "id": 59,
+              "num": "4.7",
+              "momento": "R",
+              "acao": "Verificar que todos os atendimentos foram previamente aprovados em reunião"
+            },
+            {
+              "id": 60,
+              "num": "4.8",
+              "momento": "R",
+              "acao": "Devolver e conferir todos os envelopes até a reunião seguinte; baixar no SIGA"
+            },
+            {
+              "id": 61,
+              "num": "4.9",
+              "momento": "P",
+              "acao": "Digitalizar e anexar Fichas C1 e Envelopes na Reunião correspondente no SIGA"
+            },
+            {
+              "id": 62,
+              "num": "4.10",
+              "momento": "R",
+              "acao": "Verificar que os necessitados assinaram o comprovante com nome por extenso"
+            },
+            {
+              "id": 63,
+              "num": "4.11",
+              "momento": "R",
+              "acao": "Verificar que envelopes não assinados possuem recibo de atendimento assinado e anexado"
+            },
+            {
+              "id": 64,
+              "num": "4.12",
+              "momento": "R",
+              "acao": "Confirmar que todos os comprovantes de compras são documentos fiscais hábeis"
+            },
+            {
+              "id": 65,
+              "num": "4.13",
+              "momento": "R",
+              "acao": "Verificar que Fichas C1, Envelopes e comprovantes estão devidamente carimbados"
+            },
+            {
+              "id": 66,
+              "num": "4.14",
+              "momento": "P",
+              "acao": "Revisar e conferir todos os atendimentos realizados no mês"
+            },
+            {
+              "id": 67,
+              "num": "4.15",
+              "momento": "R",
+              "acao": "Confirmar que atendimentos foram feitos por Dinheiro e/ou Cartão corporativo"
+            },
+            {
+              "id": 68,
+              "num": "4.16",
+              "momento": "R",
+              "acao": "Verificar existência de lista de presença para cada Reunião de Atendimento"
+            },
+            {
+              "id": 69,
+              "num": "4.17",
+              "momento": "R",
+              "acao": "Confirmar que as atas de cada reunião contêm a lista de presença"
+            },
+            {
+              "id": 70,
+              "num": "4.18",
+              "momento": "P",
+              "acao": "Verificar numeração sequencial das páginas do Livro de Atas"
+            },
+            {
+              "id": 71,
+              "num": "4.19",
+              "momento": "R",
+              "acao": "Confirmar que a Reunião de Atendimento foi realizada em período diurno (09h às 12h)"
+            },
+            {
+              "id": 72,
+              "num": "4.20",
+              "momento": "P",
+              "acao": "Verificar que atendimentos ao ministério estão em Ata separada no SIGA"
+            },
+            {
+              "id": 73,
+              "num": "4.21",
+              "momento": "P",
+              "acao": "Conferir cadastros de prontuários para identificar e eliminar duplicidades"
+            },
+            {
+              "id": 74,
+              "num": "4.22",
+              "momento": "R",
+              "acao": "Verificar que nenhum cartão pessoal foi utilizado em atendimentos do mês"
+            },
+            {
+              "id": 75,
+              "num": "4.23",
+              "momento": "P",
+              "acao": "Confirmar arquivamento correto dos documentos do mês (retenção mínima de 10 anos)"
+            },
+            {
+              "id": 76,
+              "num": "4.24",
+              "momento": "R",
+              "acao": "Verificar que atendimentos do Fundo Musical foram feitos em Reunião específica e separada"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "title": "Seção 5 — Arquivos",
+          "items": [
+            {
+              "id": 77,
+              "num": "5.1",
+              "momento": "PD",
+              "acao": "Verificar encadernação em brochura do Livro de Atas"
+            },
+            {
+              "id": 78,
+              "num": "5.2",
+              "momento": "PD",
+              "acao": "Confirmar que o Livro de Atas contempla apenas os 12 meses do exercício"
+            },
+            {
+              "id": 79,
+              "num": "5.3",
+              "momento": "P",
+              "acao": "Verificar que documentos de atendimento ao Ministério estão arquivados separadamente"
+            },
+            {
+              "id": 80,
+              "num": "5.4",
+              "momento": "F",
+              "acao": "Confirmar arquivamento do movimento contábil e envelopes de Viagens na Administração"
+            },
+            {
+              "id": 81,
+              "num": "5.5",
+              "momento": "C",
+              "acao": "Esclarecer eventuais dúvidas do Conselho Fiscal junto à Administração"
+            },
+            {
+              "id": 82,
+              "num": "5.6",
+              "momento": "P",
+              "acao": "Digitalizar e anexar Atas de Reuniões e Posição Financeira no SIGA"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "title": "Seção 6 — Almoxarifado da Obra da Piedade",
+          "items": [
+            {
+              "id": 83,
+              "num": "6.1",
+              "momento": "PD",
+              "acao": "Verificar que o almoxarifado está anexado à Casa de Oração"
+            },
+            {
+              "id": 84,
+              "num": "6.2",
+              "momento": "PD",
+              "acao": "Avaliar compatibilidade da infraestrutura do Almoxarifado com as necessidades"
+            },
+            {
+              "id": 85,
+              "num": "6.3",
+              "momento": "PD",
+              "acao": "Verificar que o Salão de Costura está anexado à Casa de Oração"
+            },
+            {
+              "id": 86,
+              "num": "6.4",
+              "momento": "PD",
+              "acao": "Confirmar designação de responsável pelas compras do almoxarifado"
+            },
+            {
+              "id": 87,
+              "num": "6.5",
+              "momento": "C",
+              "acao": "Verificar que cotações foram realizadas e anexadas aos Documentos Fiscais"
+            },
+            {
+              "id": 88,
+              "num": "6.6",
+              "momento": "R",
+              "acao": "Verificar que todas as DT estão assinadas pelos Atendidos"
+            },
+            {
+              "id": 89,
+              "num": "6.7",
+              "momento": "P",
+              "acao": "Digitalizar e anexar DTs na Reunião correspondente no SIGA"
+            },
+            {
+              "id": 90,
+              "num": "6.8",
+              "momento": "P",
+              "acao": "Confirmar que compras para estoque foram lançadas no SIGA conforme procedimento"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
