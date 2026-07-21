@@ -1,5 +1,5 @@
 # MAPA — Modo de Teste / Homologação (sandbox isolado)
-## Documento de análise e desenho (v2 — 21/07/2026) · é desenho, não código
+## Documento de análise e desenho (v3 — 21/07/2026) · é desenho, não código
 
 > **Para que serve:** permitir que o **supervisor** ligue um **modo de teste**, no qual cada
 > **testador** tem um **ambiente próprio e privado**, usa o sistema **de verdade** (inclusive o
@@ -20,9 +20,17 @@
 3. **Identificar vulnerabilidades** (o que expõe dado ou permite ação indevida).
 4. **Levantar necessidades** (o que falta).
 5. **Receber sugestões, críticas e elogios** (feedback livre).
-6. **⭐ O mais importante — receber uma VERSÃO POR ESCRITO**, editada **dentro do sistema** por
-   cada testador: o relatório como *ele* acha que deveria ser. É a matéria-prima que o
-   superusuário depois transforma na versão oficial aprimorada.
+6. **⭐ O mais importante — receber uma VERSÃO POR ESCRITO do FORMULÁRIO DE CHECKLIST** (o
+   formulário da auditoria em si — partes/seções/itens), editada **dentro do sistema** por cada
+   testador. Não é só preencher respostas: o testador pode **reescrever de verdade o formulário**:
+   - **criar** partes, seções ou itens novos;
+   - **reescrever/ajustar** o texto, a denominação e a nomenclatura de um item existente;
+   - **remover** itens, seções ou **partes inteiras** que não fazem mais sentido;
+   - **reordenar, fundir dois itens em um, desmembrar um item em vários** *(sugestão nova —
+     aceita, ver Seção 5-B)*.
+   É a matéria-prima que o superusuário depois usa para montar a versão oficial aprimorada
+   (Seção 5-B).
+7. **Testar o fluxo inteiro, não só o texto** — ver Seção 4-B (usuários reais e virtuais).
 
 ---
 
@@ -105,7 +113,35 @@ stateDiagram-v2
 | Testador da sessão | sim (a sua) | só a **própria** | não |
 | Supervisor que **criou** a sessão | sim | sim (cada uma) | **sim, em separado** |
 | Outro supervisor | **não** | não | não |
-| Superusuário | sim | sim | sim (+ importar/mesclar) |
+| **Superusuário** | sim | sim | **sim, sempre — de todo mundo, sem exceção** |
+
+---
+
+## 4-B. Usuários reais e "usuários virtuais" (testar o fluxo inteiro, sozinho ou em grupo)
+Além de deixar feedback e reescrever o formulário, o testador precisa conseguir **simular o
+fluxo colaborativo inteiro** (conferir → enviar → aprovar/devolver — ver `MAPA_FLUXO_POR_SECAO`)
+mesmo que esteja testando **sozinho**. Por isso, **dentro da própria gaveta**, o testador ganha
+dois poderes extras:
+
+1. **Convidar usuários reais para a sua gaveta.** O testador pode trazer outras pessoas para
+   dentro do **seu** ambiente de teste e **atribuir a elas qualquer cargo/função** (ex.: colocar
+   um colega como "revisor" para experimentar o fluxo de aprovação de verdade, com duas pessoas
+   reais). Isso é diferente de "ser testador da sessão" (Seção 4) — é o testador **compondo o
+   elenco dentro do seu próprio teste**.
+2. **Criar usuários virtuais (fictícios).** O testador pode criar contas de mentira
+   (ex.: "Conferidor Teste 1", "Revisor Teste 2") **só dentro da sua gaveta**, e alternar entre
+   elas para **agir sozinho como se fosse várias pessoas com cargos diferentes** — testando o
+   fluxo decisório completo (enviar uma seção como um "conferidor virtual", depois trocar para
+   um "revisor virtual" e aprovar/devolver) sem precisar de mais gente disponível.
+
+> **Por que isso importa:** o objetivo não é só corrigir o **texto** do checklist — é testar se
+> o **fluxo de trabalho e as decisões** (quem pode aprovar o quê, travas, devoluções) fazem
+> sentido na prática. Usuários virtuais permitem isso **mesmo com um testador sozinho**.
+>
+> **Isolamento:** usuários virtuais e convites feitos por um testador **só existem e só agem
+> dentro da gaveta dele** (`/sandbox/{sessao}/testers/{uid}/...`). Não viram usuários reais do
+> sistema, não recebem acesso a nada oficial, e desaparecem com o descarte da sessão.
+> **Superusuário continua vendo tudo isso também**, gaveta por gaveta.
 
 ---
 
@@ -200,21 +236,33 @@ Regra de ouro só é real se a **Security Rule** do Firebase garantir. Desenho d
 
 ---
 
-## 9. Decisões que preciso confirmar com você
-1. **Nome das sessões de teste:** o supervisor dá um nome livre (ex.: "Teste de campo — julho")
-   ou o sistema numera sozinho ("Teste #1")? *(sugiro: nome livre + data automática.)*
-2. **Convite de testadores:** o supervisor escolhe de uma lista de usuários existentes, ou pode
-   convidar por e-mail alguém de fora? *(sugiro: só usuários já cadastrados, por simplicidade e
-   sigilo.)*
-3. **Feedback:** um campo de texto livre basta, ou você quer também uma **nota/estrela** e uma
-   **categoria** (ex.: "erro", "sugestão", "dúvida")? *(sugiro: texto + categoria; nota é opcional.)*
-4. **A IA redige a proposta / faz a fusão (5-B)?** Se sim, provedor **sempre selecionável**
-   (Claude, Gemini, outra) — decisão detalhada em `MAPA_IA_v1`.
-5. **Alvo do "liberar" (5-B):** a versão aprimorada substitui a **definição de checklist** (o
-   modelo, Fase 1) e/ou o **modelo de relatório**? *(sugiro: a definição de checklist é o alvo
-   principal; confirmar.)*
-6. **O testador pode ver o próprio "antes → depois"** e reeditar durante a sessão aberta? *(sugiro:
-   sim, enquanto a sessão está "Coletando".)*
+## 9. Decisões
+
+### ✅ Confirmadas por você (21/07/2026)
+- **Ambiente único e privado por testador** — cada um só vê o próprio (Seção 2/4).
+- **Só o supervisor-dono vê cada gaveta, em separado** (Seção 4, tabela de visibilidade).
+- **Superusuário sempre vê tudo, de todo mundo, sem exceção** (reforçado na tabela).
+- **Importar/mesclar/juntar/acrescentar/remover pelo superusuário**, com ou sem IA — **Claude e
+  Gemini sempre disponíveis** + espaço para outra IA (Seção 5-B; detalhado em `MAPA_IA_v1`).
+- **Alvo do "liberar" = a definição do checklist** (o modelo/formulário oficial, Fase 1).
+- **Testador pode incluir usuários reais na própria gaveta e atribuir qualquer cargo/função,
+  e também criar usuários virtuais** para simular sozinho o fluxo completo (Seção 4-B).
+- **Objetivo ampliado:** o testador pode reescrever o formulário inteiro — criar/remover
+  partes, seções, itens; renomear; ajustar redação (Seção 0).
+
+### ❓ Ainda em aberto (preciso da sua confirmação)
+1. **Nome das sessões de teste:** nome livre (ex.: "Teste de campo — julho") ou numeração
+   automática ("Teste #1")? *(sugiro: nome livre + data automática.)*
+2. **Convite de testadores para a sessão** (Seção 4, quem o *supervisor* convida): só usuários
+   já cadastrados no sistema, ou pode convidar alguém de fora por e-mail? *(sugiro: só
+   cadastrados, por simplicidade e sigilo — o convite de "elenco" dentro da gaveva, Seção 4-B,
+   é outra coisa e pode incluir qualquer cadastrado.)*
+3. **Feedback:** texto livre basta, ou também nota/estrela + categoria (erro/sugestão/dúvida)?
+   *(sugiro: texto + categoria; nota opcional.)*
+4. **Usuários virtuais têm limite de quantidade** por gaveta (ex.: até 10), para não virar uma
+   bagunça difícil de revisar depois? *(sugiro: um limite prático, ex. 8–10.)*
+5. **O testador pode ver o próprio "antes → depois"** e reeditar durante a sessão aberta?
+   *(sugiro: sim, enquanto a sessão está "Coletando".)*
 
 ---
 

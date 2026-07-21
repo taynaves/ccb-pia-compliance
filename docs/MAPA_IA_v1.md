@@ -50,8 +50,12 @@ qual endereço ele liga** — o site nem percebe a diferença.
 
 ## 3. Para que a IA seria usada neste sistema (usos previstos)
 - **Resumir os feedbacks dos testes** e redigir a "proposta consolidada" (ver `MAPA_MODO_TESTE`).
+- **Ajudar a mesclar/fundir** versões de checklist produzidas em testes distintos (ver
+  `MAPA_MODO_TESTE_v1`, Seção 5-B).
 - **Ajudar a redigir observações** de itens do checklist (rascunho que o humano revisa).
 - **Explicar pendências** em linguagem simples para quem for preencher.
+- **Módulo de documentação (Drive/OCR/auditoria)** — uso maior e mais sensível, com regras
+  próprias de economia de tokens e LGPD — ver documento dedicado `MAPA_IA_DOCUMENTACAO_v1.md`.
 - *(Sempre com o humano no controle — a IA propõe, a pessoa aprova.)*
 
 ---
