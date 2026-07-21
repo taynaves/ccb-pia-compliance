@@ -56,11 +56,12 @@ flowchart LR
 2. **Drive da Regional = backup/arquivo** de TODA a documentação (todas as versões .md). É uma
    conta **da Regional** (ou da administração local, que tem a guarda física), **não** pessoal.
    Cada Regional guarda **apenas os seus** relatórios (isolamento).
-3. **Poda automática:** quando o uso do Firebase chegar a **95%** de um **orçamento configurável**,
-   o sistema (a) confirma que o backup no Drive está **atualizado**, depois (b) remove os dados
-   **mais antigos** até voltar a **50%** — **sempre preservando no Firebase a última versão
-   validada** de cada relatório **geral e parcial** de cada mês. Ou seja: o histórico completo vai
-   para o Drive; no Firebase fica sempre "o mais recente e válido" para não sumir da tela.
+3. **Poda com consentimento (NUNCA automática):** ao chegar a **95%** de um **orçamento
+   configurável**, o sistema **avisa o superusuário e pede autorização** para podar. Só **depois do
+   consentimento explícito** ele (a) confirma que o backup no Drive está **atualizado** e (b) remove
+   os dados **mais antigos** até voltar a **50%** — **sempre preservando no Firebase a última versão
+   validada** de cada relatório **geral e parcial** de cada mês. Nada é apagado sem o "OK" humano.
+   Antes de podar, mostra um **resumo do que sairá** (meses/áreas/versões) para revisão.
 4. **Retenção variável:** de **6 meses a 2 anos** (configurável pelo superusuário/regional).
    Passado o prazo, o Firebase mantém só a última versão; o Drive mantém o histórico enquanto houver espaço.
 5. **Alertas de espaço aos administradores:** em **50%, 75%, 90%, 95%** (e 98% crítico) do orçamento.
@@ -76,7 +77,27 @@ flowchart LR
 ### ⚠️ Ponto técnico honesto (Drive)
 Ler/escrever no Drive exige o **Google Apps Script** (grátis, já previsto) ou OAuth. Como agora é
 **uma conta por Regional** (e não dezenas de pessoais), isso fica **viável e gerenciável** — foi o
-que destravou a ideia. A limpeza automática dos 6 meses–2 anos também roda por Apps Script agendado.
+que destravou a ideia. A limpeza dos 6–24 meses roda por Apps Script agendado, **mas só executa a
+poda após consentimento** (item 3 acima).
+
+### 2.1 Sistema agnóstico de BaaS + capacidade máxima estimada (pedido do dono)
+O sistema **não fica preso ao Firebase**. Existe o conceito de **provedor de armazenamento (BaaS)**:
+- **Firebase = padrão-ouro e recomendado** (é o que usaremos). Um futuro superusuário, ao **ampliar**,
+  pode plugar **outro BaaS** (ex.: Supabase, Appwrite) — talvez mais barato em escala.
+- **Ao conectar/escolher o BaaS**, o sistema mostra um **alerta/aviso com a capacidade máxima
+  estimada** do sistema para aquele provedor, calculada a partir da **tabela da Seção 1** (bytes por
+  ponto/mês) × **retenção escolhida** × **orçamento do provedor**.
+- Essa **capacidade máxima (em pontos de atendimento)** fica visível em **local apropriado** (ex.:
+  no painel do superusuário e no painel do Admin), com um medidor de uso atual × máximo.
+
+**Fórmula (transparente):**
+```
+pontos_máx ≈ (orçamento_GB × 1.048.576 KB) ÷ (KB_por_ponto_mês × meses_de_retenção)
+```
+**No nosso caso (Firebase):** orçamento ~0,8 GB · ~100 KB/ponto/mês · retenção 12 meses →
+**≈ 700–750 pontos de atendimento** como teto seguro. (E MS não chega nem a **⅓** disso — folga enorme.)
+Ao aproximar-se do teto (junto com os alertas de 50/75/90/95%), o sistema avisa o superusuário para
+**podar** (com consentimento), **ampliar a conta/BaaS**, ou **reduzir a retenção**.
 
 ---
 
@@ -156,13 +177,19 @@ limpa, estados claros, e **nada de "clica e nada acontece"** (todo erro é visí
 
 ---
 
-## 6. Decisões pendentes (para fechar o desenho desta parte)
-1. **Orçamento do Firebase**: definir o "teto" (ex.: 0,8 GB) que dispara alertas e poda — concorda?
-2. **Quem é dono do Drive de backup:** a **Regional** ou a **administração local**? (Você indicou a
-   local como responsável pela guarda; a Regional coordena.) Qual das duas hospeda a conta Drive?
-3. **Retenção padrão** dentro da faixa 6–24 meses (sugiro **12 meses** como padrão inicial).
-4. **2FA obrigatório** para superusuário e admins (recomendo **sim**).
-5. **Editor de checklist:** reordenar começa por **setas ▲▼** (recomendo) e arrastar-soltar depois?
+## 6. Decisões — FECHADAS pelo dono (20/07/2026)
+1. ✅ **Orçamento do BaaS**: sim, com "teto" configurável (Firebase ~0,8 GB) disparando alertas.
+2. ✅ **Dono do Drive de backup:** qualquer uma (Regional **ou** administração local), **respeitando
+   a área de cobertura de cada uma** (cada conta guarda só o que é da sua área).
+3. ✅ **Retenção padrão:** **12 meses** (ajustável de 6 a 24).
+4. ✅ **2FA obrigatório** para superusuário e admins.
+5. ✅ **Editor de checklist:** reordenar por **setas ▲▼** primeiro; arrastar-soltar como evolução.
+
+### Refinamentos adicionais (20/07/2026)
+6. ✅ **Poda NUNCA automática** — só após consentimento explícito do superusuário (item 2.3).
+7. ✅ **Sistema agnóstico de BaaS** — Firebase é o padrão-ouro; ao conectar um BaaS, exibir a
+   **capacidade máxima estimada de pontos** (Seção 2.1), em local apropriado (painel do superusuário
+   e do Admin). Firebase ≈ **750 pontos** de teto seguro no nosso cenário.
 
 > Continuamos em **modo desenho** (sem mexer no código do sistema). Quando o desenho geral estiver
 > fechado, voltamos ao início e implementamos fase a fase, testando — com baixo risco de reviravolta.
