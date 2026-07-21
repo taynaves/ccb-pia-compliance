@@ -6,6 +6,12 @@
 >
 > **Resposta curta: SIM, é totalmente possível — e não muda a arquitetura do sistema.** O
 > provedor de IA é **trocável** sem reescrever o site. Abaixo o porquê e como.
+>
+> **Requisito firmado pelo dono (v1.1):** deve ser **sempre possível usar Claude E Gemini** — e
+> ainda deixar aberto para **outra IA** que dê conta do trabalho. Por isso o desenho abaixo é
+> **multi-provedor por padrão**: o proxy fala uma "língua comum" e cada provedor é um "adaptador"
+> plugável. O superusuário só escolhe qual usar (ou deixa a IA fazer a fusão dos testes — ver
+> `MAPA_MODO_TESTE_v1`, Seção 5-B).
 
 ---
 
@@ -70,9 +76,10 @@ apertado, a recomendação é usar o **modelo mais econômico** que dê conta:
 
 ## 5. Recomendação
 1. **Sim, integrar com o Claude é viável** e não custa retrabalho no site — a troca vive no proxy.
-2. Se quiser **máxima flexibilidade**: desenhar o proxy para aceitar **os dois provedores**, com
-   uma chave de configuração ("usar Gemini" / "usar Claude"). Assim você testa qual responde
-   melhor **sem** tocar no site.
+2. **Multi-provedor por padrão** (requisito seu): o proxy é desenhado com **adaptadores**
+   plugáveis — Claude e Gemini **sempre** disponíveis, com "gancho" para uma terceira IA. O
+   superusuário escolhe numa configuração ("usar Claude" / "usar Gemini" / "usar outra"), sem
+   tocar no site. Cada provedor tem **sua própria chave**, todas guardadas **só no proxy**.
 3. Para **custo mínimo**: começar com **Claude Haiku 4.5**, com **teto de gasto mensal** no proxy.
 4. **Nada disso mexe no `index.html` agora** — é desenho. Quando chegarmos à implementação do
    módulo de IA (final do projeto, Fase 6), seguimos este mapa.
