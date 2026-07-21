@@ -119,8 +119,11 @@ qualquer combinação de filtros e por **níveis**:
   validada (esta só entra na **exclusão definitiva** — ver 2.4).
 - **Seleção por nível:** alterar um ou vários níveis de uma vez (ex.: desmarcar uma Regional inteira).
 
-**Previsão ao vivo:** a cada ajuste no seletor, uma barra mostra **antes × depois** — espaço
+**Previsão ao vivo:** a cada ajuste no seletor, mostra **antes × depois** — espaço
 **ocupado/livre previsto** após executar — para o superusuário decidir com números na tela.
+Além dos números, um **recurso visual** ajuda a percepção: um **medidor tipo barra horizontal ou
+pizza** (como o do **Google Drive / Dropbox**), com **código de cores** (ex.: ocupado atual · o que
+será liberado · livre resultante) e a barra "andando" conforme o superusuário ajusta a seleção.
 Só executa após **confirmação**; toda execução vira registro no **log append-only**.
 
 ```mermaid
