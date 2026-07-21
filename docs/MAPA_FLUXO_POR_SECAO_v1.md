@@ -133,10 +133,9 @@ Abrindo o mês:
 
 ---
 
-## 10. Decisões para fechar este desenho
-1. **Uma seção tem UM conferidor por vez** (o que enviou), certo? (Recomendo sim — evita bagunça.)
-2. **Aprovação:** uma seção precisa de **um** revisor para ficar "aprovada", ou pode exigir **mais de
-   um** em certos casos? (Sugiro: 1 por padrão; configurável no futuro.)
-3. **"Devolver para correção"** entra desde já no desenho? (Recomendo **sim** — é essencial.)
-4. **Situação do mês** com os rótulos da Seção 5 está boa, ou quer outros nomes?
-5. **Painel de progresso do mês** (barra + prazo dia 20) — incluir? (Recomendo **sim**.)
+## 10. Decisões — FECHADAS pelo dono (20/07/2026)
+1. ✅ **Uma seção tem UM conferidor por vez** (o que enviou).
+2. ✅ **Aprovação:** **1 revisor** por padrão; poder exigir mais de um fica configurável no futuro.
+3. ✅ **"Devolver para correção"** entra desde já no desenho.
+4. ✅ **Rótulos de situação do mês** aprovados (Seção 5).
+5. ✅ **Painel de progresso do mês** (barra + prazo dia 20) incluído.
