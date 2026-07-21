@@ -99,6 +99,63 @@ pontos_máx ≈ (orçamento_GB × 1.048.576 KB) ÷ (KB_por_ponto_mês × meses_d
 Ao aproximar-se do teto (junto com os alertas de 50/75/90/95%), o sistema avisa o superusuário para
 **podar** (com consentimento), **ampliar a conta/BaaS**, ou **reduzir a retenção**.
 
+### 2.2 Auto-calibração pelo uso REAL (não ficar preso à estimativa da Seção 1)
+A tabela da Seção 1 é um **chute inicial**. Depois de alguns meses de uso, o sistema **mede o
+tamanho real** (KB por ponto/mês de verdade) e **recalibra** a capacidade máxima e os alertas.
+- **Manual ou automática** (o superusuário escolhe o modo).
+- Mostra lado a lado: **estimado × medido** (com margem/confiança), e a nova "capacidade máxima real".
+- Recalibra sozinha quando houver amostra suficiente (ex.: ≥ 3 meses e ≥ N pontos), ou sob pedido.
+> Ganho: o teto de "750 pontos" deixa de ser suposição e passa a refletir a realidade daquela
+> instalação (que pode ser mais leve ou mais pesada que o chute).
+
+### 2.3 Console de Gestão de Armazenamento (poda granular + previsão ao vivo)
+Quando o superusuário for **podar** (sempre com consentimento — nunca automático), ele não recebe
+uma lista "pegar ou largar": recebe um **console interativo** onde **ajusta o que sai**, por
+qualquer combinação de filtros e por **níveis**:
+- **Por período:** de/até quais meses (incluir/excluir mais ou menos meses).
+- **Por área (hierárquico):** Regional → ADM Local (RML) → Ponto de atendimento — marcar um nível
+  inteiro ou combinações (ex.: "só as versões antigas dos pontos da RML X").
+- **Por tipo:** só **versões anteriores** (mantendo a última validada) **ou** também a última
+  validada (esta só entra na **exclusão definitiva** — ver 2.4).
+- **Seleção por nível:** alterar um ou vários níveis de uma vez (ex.: desmarcar uma Regional inteira).
+
+**Previsão ao vivo:** a cada ajuste no seletor, uma barra mostra **antes × depois** — espaço
+**ocupado/livre previsto** após executar — para o superusuário decidir com números na tela.
+Só executa após **confirmação**; toda execução vira registro no **log append-only**.
+
+```mermaid
+flowchart LR
+  S[Seletor granular<br/>período · área · tipo · nível] --> P[Previsão ao vivo<br/>ocupado/livre depois]
+  P --> C{Confirmar?}
+  C -- sim --> X[Executar: garante backup no Drive → remove do Firebase]
+  C -- ajustar --> S
+  X --> L[Registra no log]
+```
+
+### 2.4 Exclusão DEFINITIVA (irreversível) — só o superusuário, nunca automática
+Diferente da poda (que arquiva no Drive e é reversível), aqui os dados **somem de vez**, inclusive as
+**últimas versões validadas** de relatórios gerais e parciais.
+- **Somente o superusuário.** **Nunca automática.** **Dupla verificação** (confirmar + reconfirmar,
+  ex.: digitar uma palavra-chave/senha de recuperação).
+- **Só para relatórios com mais de 2 anos de criação.**
+- Usa o **mesmo console granular** (2.3), com a previsão ao vivo, mas marcado como **"EXCLUSÃO
+  DEFINITIVA"** (visual de alerta forte, vermelho).
+- **Salvaguarda que sugiro (necessidade inferida):** antes de excluir de vez, oferecer/registrar uma
+  **exportação final** (para o Drive ou download) — para que nada se perca por engano — e respeitar
+  **retenções legais** (ver abaixo). Todo o ato vai para o log com **justificativa obrigatória**.
+
+### 2.5 Sugestões que infiro da sua real necessidade (novas)
+- **Retenção legal / "trava de guarda" (legal hold):** poder marcar meses/relatórios específicos como
+  **"não excluir"** (ex.: sob auditoria, questão jurídica). A poda e a exclusão **pulam** o que estiver
+  travado. Isso protege de apagar por engano algo que precisa ser guardado — comum em sistemas de
+  compliance. *(Recomendo fortemente.)*
+- **Modo "simulação" (dry-run):** o console sempre mostra o resultado **antes** de executar (já embutido
+  na previsão ao vivo), e permite salvar a seleção como um "plano de limpeza" para revisar depois.
+- **Relatório de saúde do armazenamento:** um painel com tendência de crescimento (GB/mês), previsão de
+  "quando vou encher", e recomendação (podar / ampliar / reduzir retenção).
+- **Confirmação em duas pessoas para exclusão definitiva em massa:** para grandes exclusões, exigir
+  também um 2º superusuário/admin (como no break-glass) — evita erro catastrófico de um só clique.
+
 ---
 
 ## 3. Recuperação de acesso do superusuário

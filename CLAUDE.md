@@ -10,9 +10,12 @@ O dono do projeto (Taynã) NÃO é programador: explique tudo em português simp
 sem jargão, e nunca presuma conhecimento técnico dele.
 
 ## Fonte de verdade
-`REQUISITOS_CONSOLIDADO_CCB_PIA.md` (na raiz deste repositório) é a ÚNICA fonte de
-requisitos, regras, terminologia, pendências e proibições. Leia-o integralmente
-antes de qualquer alteração. Em conflito entre código e documento, pergunte.
+`docs/REQUISITOS_CONSOLIDADO_CCB_PIA.md` é a ÚNICA fonte de requisitos, regras,
+terminologia, pendências e proibições. Leia-o integralmente antes de qualquer
+alteração. Em conflito entre código e documento, pergunte.
+Toda a documentação e apoio do projeto de requisitos vive na pasta `docs/`
+(mapas de desenho, conteúdo do checklist, setups). O site publicado
+(`index.html`, `config.js`, `assets/`) e `CLAUDE.md` permanecem na raiz.
 
 ## Regras invioláveis (resumo — detalhes no consolidado)
 1. **Uma entrega por rodada.** Implementar → verificar → commitar em branch →
