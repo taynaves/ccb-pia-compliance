@@ -1,5 +1,5 @@
 # MAPA — Modo de Teste / Homologação (sandbox isolado)
-## Documento de análise e desenho (v3 — 21/07/2026) · é desenho, não código
+## Documento de análise e desenho (v4 — 21/07/2026) · é desenho, não código
 
 > **Para que serve:** permitir que o **supervisor** ligue um **modo de teste**, no qual cada
 > **testador** tem um **ambiente próprio e privado**, usa o sistema **de verdade** (inclusive o
@@ -88,13 +88,51 @@ stateDiagram-v2
 
 ---
 
+## 3-B. Metadados da sessão (identificação, organização e busca)
+Cada sessão de teste é criada com **nome livre** (ex.: "Teste de campo — julho") e carrega os
+seguintes metadados, gravados automaticamente ou preenchidos na criação:
+
+| Metadado | Origem | Uso |
+|---|---|---|
+| **Nome** (livre) | digitado pelo supervisor | identificação humana |
+| **Data + hora de criação** | automático | diferenciar sessões no mesmo dia (podem ser várias) |
+| **Código do arquivo/sessão** | gerado automático (ex.: `TST-2026-07-21-03`) | referência rápida para o superusuário citar/localizar |
+| **Supervisor responsável** | quem criou | dono da sessão (Seção 4) |
+| **Testador(es)** | lista de quem foi convidado/entrou | ver quem participou |
+| **Última modificação** | automático, a cada ação | saber se a sessão está "viva" ou parada |
+| **Estado** | automático (Seção 3) | Aberta/Coletando/Encerrada/Consolidada/Descartada/Arquivada |
+| **Contagem de feedbacks** | automático | visão rápida de volume |
+
+**Na tela de listagem de sessões** (que o supervisor-dono e o superusuário veem), esses
+metadados viram:
+- **Colunas ordenáveis** (clicar no cabeçalho da coluna ordena por aquele critério — nome, data,
+  supervisor, estado, última modificação etc.);
+- **Filtro/busca** por qualquer um desses campos (ex.: buscar por supervisor, por período, por
+  código, por estado).
+
+> `[SUPOSIÇÃO]` A listagem segue o mesmo padrão visual de outras listagens do sistema (paginação
+> 10–100, como a página de Arquivo/Logs do `MAPA_FLUXO_POR_SECAO`) — reaproveita componente, não
+> inventa um novo estilo de tela.
+
+---
+
 ## 4. Quem faz o quê (amarra com o módulo de permissões)
 - **Ligar/desligar o modo de teste:** **supervisor** (de qualquer nível) ou superusuário.
   É o mesmo botão liga-desliga da supervisão, mas para o escopo "teste". **Quem cria a sessão
   vira o "dono" dela** e é o único (fora o superusuário) a enxergar as gavetas dos testadores.
-- **Ser testador:** qualquer usuário que o supervisor **convide** para a sessão de teste.
-  Dentro dela, o testador tem **poderes ampliados** (pode usar o editor do relatório por
-  inteiro), porque **não há risco** — está tudo na **gaveta dele** no sandbox.
+- **Ser testador:** qualquer usuário que o supervisor **convide** para a sessão de teste — pode
+  ser alguém **já cadastrado** no sistema, ou (novidade confirmada) **alguém de fora, convidado
+  por e-mail**. Dentro dela, o testador tem **poderes ampliados** (pode usar o editor do
+  relatório por inteiro), porque **não há risco** — está tudo na **gaveta dele** no sandbox.
+  - **Convite externo (por e-mail) exige uma declaração de ciência.** Antes de enviar o convite,
+    o **supervisor** precisa marcar/assinar uma declaração de que **a responsabilidade por
+    qualquer vazamento de dados** — principalmente informação crítica/sigilosa — **é
+    exclusivamente dele**, **inclusive** se o vazamento vier de uma ação de um testador que ele
+    próprio cadastrou/convidou. Essa declaração fica **registrada** (quem, quando, para qual
+    sessão) no **log de auditoria** — não é só um aviso na tela, é um **registro permanente**.
+  - **Por que isso é seguro apesar do convite externo:** o convidado só entra na **gaveta**
+    daquele supervisor (sandbox), nunca no sistema oficial — mas como ainda é dado sensível
+    (pode conter exemplos reais durante o teste), a responsabilização formal é necessária.
 - **Deixar feedback + versão escrita:** todo testador, **na própria gaveta**. Fica **preso à
   sessão** e ao ponto do sistema (tela/seção/item), para o supervisor saber do que se falava.
 - **Pedir o relatório de revisões:** o **supervisor dono** da sessão / superusuário.
@@ -128,11 +166,12 @@ dois poderes extras:
    um colega como "revisor" para experimentar o fluxo de aprovação de verdade, com duas pessoas
    reais). Isso é diferente de "ser testador da sessão" (Seção 4) — é o testador **compondo o
    elenco dentro do seu próprio teste**.
-2. **Criar usuários virtuais (fictícios).** O testador pode criar contas de mentira
-   (ex.: "Conferidor Teste 1", "Revisor Teste 2") **só dentro da sua gaveta**, e alternar entre
-   elas para **agir sozinho como se fosse várias pessoas com cargos diferentes** — testando o
-   fluxo decisório completo (enviar uma seção como um "conferidor virtual", depois trocar para
-   um "revisor virtual" e aprovar/devolver) sem precisar de mais gente disponível.
+2. **Criar usuários virtuais (fictícios) — até 10 por gaveta.** O testador pode criar contas de
+   mentira (ex.: "Conferidor Teste 1", "Revisor Teste 2") **só dentro da sua gaveta**, e alternar
+   entre elas para **agir sozinho como se fosse várias pessoas com cargos diferentes** — testando
+   o fluxo decisório completo (enviar uma seção como um "conferidor virtual", depois trocar para
+   um "revisor virtual" e aprovar/devolver) sem precisar de mais gente disponível. **Limite: 10
+   usuários virtuais por gaveta** (confirmado — evita bagunça difícil de revisar depois).
 
 > **Por que isso importa:** o objetivo não é só corrigir o **texto** do checklist — é testar se
 > o **fluxo de trabalho e as decisões** (quem pode aprovar o quê, travas, devoluções) fazem
@@ -149,9 +188,10 @@ dois poderes extras:
 Quando o supervisor pede, o sistema monta **um documento** (`.md` + PDF) com:
 
 1. **Cabeçalho:** nome/objetivo da sessão, período, quem participou, quantos feedbacks.
-2. **Feedbacks organizados** por tela/seção/item, cada um com: quem, quando, categoria
-   (falha / dificuldade / vulnerabilidade / necessidade / sugestão / crítica / elogio),
-   e (se houver) o "antes → depois" da edição que a pessoa fez no editor.
+2. **Feedbacks organizados** por tela/seção/item, cada um com: quem, quando, **texto**,
+   **categoria** (falha / dificuldade / vulnerabilidade / necessidade / sugestão / crítica /
+   elogio), **nota opcional de 0 a 5 estrelas** (confirmado), e (se houver) o "antes → depois"
+   da edição que a pessoa fez no editor.
 3. **Uma coluna por testador** com a **versão escrita** que cada um produziu (a matéria-prima
    principal — objetivo ⭐ da Seção 0).
 4. **Proposta consolidada:** um bloco "Sugestões priorizadas" — o que apareceu com mais
@@ -192,14 +232,32 @@ uma sessão encerrada e trabalha num **"estúdio de consolidação"**:
 
 ---
 
-## 6. Descarte e retenção (sem lixo acumulado)
-- **Descarte manual, com dupla verificação** (nunca automático) — coerente com a política de
-  exclusão do `MAPA_ARMAZENAMENTO_E_EDITOR`.
-- **Aviso de espaço:** dados de teste **contam** para a cota do BaaS enquanto existem; por isso
-  o painel de armazenamento mostra o sandbox **separado** ("Testes: X MB") e sugere descartar
-  sessões encerradas antigas.
-- **Sugestão inferida (nova):** oferecer **auto-lembrete** — "esta sessão de teste está encerrada
-  há 30 dias; deseja descartar?" — **lembrete**, não exclusão automática.
+## 6. Descarte e retenção — política de "lixeira" (confirmado, v4)
+O "descarte" (Seção 3) **não é exclusão imediata e definitiva**. Funciona em **dois estágios**:
+
+1. **"Descartar" (1º estágio) — some para o testador e para o supervisor comum.** A sessão sai
+   da lista normal (para quem a usava), mas **não é apagada**: vai para uma **pasta "Lixeira"**,
+   claramente identificada, que **reúne os documentos de todos os testes descartados de todas
+   as sessões**. Essa Lixeira é **sempre acessível ao superusuário** — nunca ao testador nem ao
+   supervisor comum.
+2. **Exclusão definitiva (2º estágio) — só o superusuário, manual.** Uma sessão na Lixeira pode
+   ser **apagada de verdade** quando: (a) passarem **6 meses** (prazo **variável/configurável**)
+   desde que foi para a Lixeira; **ou** (b) o espaço do Firebase estiver ficando cheio (ligado ao
+   painel de armazenamento do `MAPA_ARMAZENAMENTO`); **ou** (c) o superusuário **pedir
+   manualmente**, a qualquer momento. Em qualquer um dos três casos, a exclusão definitiva é
+   **sempre um ato manual do superusuário** (nunca automática) — coerente com a política geral
+   de exclusão do `MAPA_ARMAZENAMENTO_E_EDITOR` (dupla verificação).
+
+> **Por que dois estágios:** protege contra descarte por engano (a sessão fica recuperável na
+> Lixeira) e ainda assim evita acúmulo indefinido de dado de teste ocupando espaço/sigilo
+> desnecessariamente.
+
+- **Aviso de espaço:** dados de teste (incluindo a Lixeira) **contam** para a cota do BaaS
+  enquanto existem; o painel de armazenamento mostra o sandbox **separado** ("Testes: X MB" /
+  "Lixeira de testes: Y MB").
+- **Auto-lembrete ao superusuário:** "há sessões na Lixeira há mais de 6 meses (ou perto do
+  prazo configurado); deseja excluir definitivamente?" — **lembrete**, a decisão final é sempre
+  manual.
 
 ---
 
@@ -236,9 +294,7 @@ Regra de ouro só é real se a **Security Rule** do Firebase garantir. Desenho d
 
 ---
 
-## 9. Decisões
-
-### ✅ Confirmadas por você (21/07/2026)
+## 9. Decisões — TODAS confirmadas por você (21/07/2026)
 - **Ambiente único e privado por testador** — cada um só vê o próprio (Seção 2/4).
 - **Só o supervisor-dono vê cada gaveta, em separado** (Seção 4, tabela de visibilidade).
 - **Superusuário sempre vê tudo, de todo mundo, sem exceção** (reforçado na tabela).
@@ -246,28 +302,27 @@ Regra de ouro só é real se a **Security Rule** do Firebase garantir. Desenho d
   Gemini sempre disponíveis** + espaço para outra IA (Seção 5-B; detalhado em `MAPA_IA_v1`).
 - **Alvo do "liberar" = a definição do checklist** (o modelo/formulário oficial, Fase 1).
 - **Testador pode incluir usuários reais na própria gaveta e atribuir qualquer cargo/função,
-  e também criar usuários virtuais** para simular sozinho o fluxo completo (Seção 4-B).
+  e também criar usuários virtuais (até 10)** para simular sozinho o fluxo completo (Seção 4-B).
 - **Objetivo ampliado:** o testador pode reescrever o formulário inteiro — criar/remover
   partes, seções, itens; renomear; ajustar redação (Seção 0).
-
-### ❓ Ainda em aberto (preciso da sua confirmação)
-1. **Nome das sessões de teste:** nome livre (ex.: "Teste de campo — julho") ou numeração
-   automática ("Teste #1")? *(sugiro: nome livre + data automática.)*
-2. **Convite de testadores para a sessão** (Seção 4, quem o *supervisor* convida): só usuários
-   já cadastrados no sistema, ou pode convidar alguém de fora por e-mail? *(sugiro: só
-   cadastrados, por simplicidade e sigilo — o convite de "elenco" dentro da gaveva, Seção 4-B,
-   é outra coisa e pode incluir qualquer cadastrado.)*
-3. **Feedback:** texto livre basta, ou também nota/estrela + categoria (erro/sugestão/dúvida)?
-   *(sugiro: texto + categoria; nota opcional.)*
-4. **Usuários virtuais têm limite de quantidade** por gaveta (ex.: até 10), para não virar uma
-   bagunça difícil de revisar depois? *(sugiro: um limite prático, ex. 8–10.)*
-5. **O testador pode ver o próprio "antes → depois"** e reeditar durante a sessão aberta?
-   *(sugiro: sim, enquanto a sessão está "Coletando".)*
+- **Nome da sessão:** livre, com metadados automáticos completos — data+hora de criação, código
+  de referência, supervisor, testador(es), última modificação, estado, contagem de feedbacks —
+  todos **ordenáveis e filtráveis** na listagem (Seção 3-B).
+- **Convite de testador:** usuário já cadastrado, **ou** externo por e-mail — neste caso, o
+  supervisor assina uma **declaração de responsabilidade exclusiva** sobre vazamentos, inclusive
+  os causados por quem ele convidou, registrada no log (Seção 4).
+- **Feedback:** texto + categoria + **nota opcional de 0 a 5 estrelas** (Seção 5-A).
+- **Testador pode ver o próprio "antes → depois"** e reeditar enquanto a sessão está
+  "Coletando" (Seção 3/4-B).
+- **Descarte em dois estágios (Lixeira):** descartar tira da vista do testador/supervisor comum
+  mas guarda numa Lixeira só do superusuário; exclusão definitiva é manual, após 6 meses
+  (variável), por espaço, ou por pedido — nunca automática (Seção 6).
 
 ---
 
 ## 10. Resumo de uma linha
 > **Modo de teste = um sistema-gêmeo onde cada testador tem uma gaveta privada (`/sandbox/{sessao}/
-> testers/{uid}`), só o supervisor-dono vê cada uma, e depois o superusuário importa/mescla o
-> melhor de um ou vários testes — com ou sem IA (Claude/Gemini/outra) — para liberar uma versão
-> oficial aprimorada, sem nunca encostar nos relatórios reais durante o teste.**
+> testers/{uid}`), rica em metadados buscáveis, só o supervisor-dono vê cada uma (superusuário
+> vê tudo, sempre), e depois o superusuário importa/mescla o melhor de um ou vários testes — com
+> ou sem IA (Claude/Gemini/outra) — para liberar uma versão oficial aprimorada; descarte vai
+> primeiro para uma Lixeira do superusuário, exclusão definitiva sempre manual.**

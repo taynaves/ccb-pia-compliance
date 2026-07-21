@@ -92,6 +92,23 @@ AAAA-MM_MODULO-SIGA_TIPO-DOCUMENTO_DESCRICAO-CURTA_SEQ.ext
 - Nomes **não** carregam dado sigiloso desnecessário (nome de pessoa física, número de conta
   completo) — ver LGPD, Seção 6.
 
+> **Regras específicas já registradas (decisão FINAL adiada — ver nota abaixo):**
+> - Documento **de conta** → nome sempre inclui o **número da conta**, conforme o **plano de
+>   contas** da instituição.
+> - **Comprovante** (nota, cupom, cheque etc.) → nome sempre inclui o **valor financeiro** do
+>   documento.
+> - **Cheque** → nome sempre inclui o **número do cheque**.
+> - **Movimentação de cartão de débito pré-pago** → nome sempre inclui o **número de
+>   identificação do cartão**.
+> - *(e outras regras semelhantes, por tipo de documento, a mapear junto com você.)*
+>
+> `[SUPOSIÇÃO / DECISÃO ADIADA]` O **padrão definitivo de nomenclatura** (Seção 3 como um todo)
+> só será fechado **depois que o módulo de IA estiver funcionando**, testando com uma **amostra
+> de documentos reais** — para validar se o reconhecimento consegue extrair esses campos
+> (número de conta, valor, número de cheque, ID de cartão) com confiabilidade suficiente antes
+> de virar regra fixa. As regras acima já ficam **anotadas como requisito**, não como versão
+> final.
+
 ## 4. Passo 3 — Reorganização da pasta do Drive
 ```
 📁 [Ponto] /
