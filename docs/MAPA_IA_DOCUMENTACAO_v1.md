@@ -322,9 +322,9 @@ Você confirmou: **mesmo sistema**, arquitetura modular. Módulos já identifica
 1. **Padrão definitivo de nome do arquivo** — só fecha depois de testar com amostra real no
    módulo funcionando (Seção 3.4) — decisão sua, adiada por você mesmo, não uma pendência minha.
 2. **Janela de tempo para desfazer** (sugeri 24–72h configurável) — confirmar um número.
-3. **O script de editor/conversor de PDF que você já tem pronto** (Seção 6.2, item 3): preciso
-   que você me mostre esse script (arquivo, ou onde está) para eu desenhar a integração dele
-   como módulo — sem vê-lo, não posso propor como ele se encaixa.
+3. ~~**O script de editor/conversor de PDF**~~ ✅ **RESOLVIDO:** você me enviou os 4 scripts;
+   a análise completa e a proposta do módulo estão em **`MAPA_MODULO_PDF_v1.md`** (a versão mais
+   atual é o "Gestor de Documentos v5.0"; o plano é reembalá-lo como módulo simples integrado).
 
 ---
 
