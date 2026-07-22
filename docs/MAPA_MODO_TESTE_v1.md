@@ -124,12 +124,20 @@ metadados viram:
   ser alguém **já cadastrado** no sistema, ou (novidade confirmada) **alguém de fora, convidado
   por e-mail**. Dentro dela, o testador tem **poderes ampliados** (pode usar o editor do
   relatório por inteiro), porque **não há risco** — está tudo na **gaveta dele** no sandbox.
-  - **Convite externo (por e-mail) exige uma declaração de ciência.** Antes de enviar o convite,
-    o **supervisor** precisa marcar/assinar uma declaração de que **a responsabilidade por
-    qualquer vazamento de dados** — principalmente informação crítica/sigilosa — **é
-    exclusivamente dele**, **inclusive** se o vazamento vier de uma ação de um testador que ele
-    próprio cadastrou/convidou. Essa declaração fica **registrada** (quem, quando, para qual
-    sessão) no **log de auditoria** — não é só um aviso na tela, é um **registro permanente**.
+  - **Convite externo (por e-mail) exige uma declaração de ciência, assinada dentro do
+    sistema por reautenticação Google (confirmado).** Antes de enviar o convite, o
+    **supervisor** lê a declaração de que **a responsabilidade por qualquer vazamento de
+    dados** — principalmente informação crítica/sigilosa — **é exclusivamente dele**,
+    **inclusive** se o vazamento vier de uma ação de um testador que ele próprio
+    cadastrou/convidou, e **confirma digitando a senha da conta Google** (a mesma tela de
+    reautenticação usada no login) — funcionando como uma **assinatura eletrônica** do aceite.
+    O registro grava: **texto exato aceito** (versão/hash), **conta Google confirmada**, **data
+    e hora**, e (se disponível) **IP/dispositivo** — tudo no **log de auditoria**, permanente.
+  - `[LACUNA jurídica]` Essa reautenticação tem valor de **assinatura eletrônica simples**
+    (reconhecida no direito brasileiro para atos privados, útil para provar quem aceitou e
+    quando), mas **não equivale** a uma **assinatura digital certificada ICP-Brasil** (presunção
+    legal mais forte). Para o uso interno aqui, é suficiente; se algum dia isso precisar valer
+    numa disputa judicial séria, recomendo confirmação jurídica antes de confiar só nisso.
   - **Por que isso é seguro apesar do convite externo:** o convidado só entra na **gaveta**
     daquele supervisor (sandbox), nunca no sistema oficial — mas como ainda é dado sensível
     (pode conter exemplos reais durante o teste), a responsabilização formal é necessária.
