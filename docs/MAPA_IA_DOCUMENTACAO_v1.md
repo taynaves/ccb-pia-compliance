@@ -198,13 +198,15 @@ desenho precisa de mecanismos específicos:
 - **Qualquer usuário com acesso** (conferidor do ponto, e supervisores/administradores dentro
   do seu domínio) pode **renomear qualquer grupo de documentos** e **mover automaticamente**
   para a pasta padrão — não é restrito a um único "dono" do ponto.
-- **Desfazer, com prazo:**
-  - **Conferidor:** pode **desfazer ou alterar as próprias** renomeações/movimentações, dentro
-    de uma **janela de tempo** (a definir — sugestão: 24–72h, configurável).
-  - **Supervisor:** pode desfazer/alterar as ações **dos seus supervisionados**, dentro da
-    mesma lógica de domínio usada no resto do sistema (MAPA_PERMISSOES).
-  - **Superusuário:** pode desfazer/alterar qualquer ação, sempre.
-- Cada desfazer **também vai ao log** (o que foi desfeito, por quem, quando).
+- **Desfazer E refazer, com prazo (confirmado):** todo desfazer pode ser **refeito** — ou seja,
+  o histórico é uma **pilha undo/redo** (como num editor de texto), não um "desfazer que apaga a
+  possibilidade de voltar". Enquanto a ação estiver dentro da janela de tempo, o usuário pode ir
+  e voltar (desfazer → refazer → desfazer) livremente.
+  - **Conferidor:** pode desfazer/refazer/alterar as **próprias** renomeações/movimentações,
+    dentro de uma **janela de tempo** (a definir — sugestão: 24–72h, configurável).
+  - **Supervisor:** idem para as ações **dos seus supervisionados** (domínio — MAPA_PERMISSOES).
+  - **Superusuário:** desfazer/refazer qualquer ação, sempre.
+- Cada desfazer **e** cada refazer **vão ao log** (o que, por quem, quando).
 
 ---
 
