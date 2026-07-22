@@ -132,7 +132,17 @@ metadados viram:
     cadastrou/convidou, e **confirma digitando a senha da conta Google** (a mesma tela de
     reautenticação usada no login) — funcionando como uma **assinatura eletrônica** do aceite.
     O registro grava: **texto exato aceito** (versão/hash), **conta Google confirmada**, **data
-    e hora**, e (se disponível) **IP/dispositivo** — tudo no **log de auditoria**, permanente.
+    e hora**, e (se disponíveis) **IP do dispositivo, IP do roteador, endereço MAC do
+    dispositivo e endereço MAC do roteador** — tudo no **log de auditoria**, permanente.
+    *(`[LACUNA técnica]` nem todo esse conjunto é sempre capturável por um navegador comum —
+    IP do dispositivo é fácil; IP/MAC do roteador e MAC do dispositivo dependem do que o
+    navegador expõe, que varia por navegador/SO. Vamos capturar **tudo que for tecnicamente
+    possível**, e documentar honestamente no próprio registro o que não pôde ser coletado.)*
+  - **Termo de confidencialidade dos testadores convidados (novo, confirmado):** todo usuário
+    trazido para dentro de uma gaveta de teste — real (convidado pelo testador) ou externo
+    (convidado pelo supervisor por e-mail) — precisa **assinar, da mesma forma** (reautenticação
+    Google), um **termo de confidencialidade** próprio, antes de poder agir na gaveta. Mesmos
+    dados de registro (texto aceito, conta, data/hora, IPs/MACs disponíveis) no log.
   - `[LACUNA jurídica]` Essa reautenticação tem valor de **assinatura eletrônica simples**
     (reconhecida no direito brasileiro para atos privados, útil para provar quem aceitou e
     quando), mas **não equivale** a uma **assinatura digital certificada ICP-Brasil** (presunção
