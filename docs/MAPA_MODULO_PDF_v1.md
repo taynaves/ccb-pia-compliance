@@ -1,5 +1,5 @@
 # MAPA — Módulo "Estúdio de PDF" (a versão simples e integrada do seu Gestor de Documentos)
-## Documento de análise e desenho (v2 — 22/07/2026) · é desenho, não código
+## Documento de análise e desenho (v3 — 22/07/2026) · é desenho, não código
 
 > **Origem:** você criou, em conversas anteriores, **4 versões** de uma ferramenta de PDF/Drive
 > (em Google Apps Script). Pediu que eu analisasse as 4, identificasse a mais atual, resgatasse
@@ -248,15 +248,48 @@ grupo (sugestão nova, não estava no seu pedido):
 
 > Assim a "confiança" é **conquistada gradualmente e medível**, não um salto no escuro.
 
-### 6B.6 Ideia extra que aumenta MUITO o acerto e quase não custa: folha separadora
-Um truque físico, poderoso e **de custo de IA ~zero**: ao escanear, **coloque uma folha
-separadora** entre um processo e outro (uma folha colorida, ou com um **QR/código** impresso, ou
-até uma **folha em branco**). O sistema **detecta essa folha** como **fronteira definitiva** de
-processo — acerto perto de 100%, sem depender de IA para achar o limite.
-- Variante sem imprimir nada: **página em branco** como separador (detecção trivial).
-- Variante robusta: **folha com QR** que pode até **já dizer** a categoria/pasta de destino do
-  próximo processo. `[SUPOSIÇÃO]` a validar na implementação, mas é técnica consagrada em
-  digitalização em massa.
+### 6B.6 Folha separadora — DOIS tipos + estratégia de treinamento que se auto-elimina (confirmado)
+Um truque físico, poderoso e **de custo de IA ~zero**: ao escanear, **colocar uma folha
+separadora** entre um processo e outro. O sistema **detecta essa folha** como **fronteira
+definitiva** — acerto perto de 100%, sem depender de IA para achar o limite. **Confirmados dois
+tipos**, para dois momentos diferentes:
+
+**(a) Folha EM BRANCO — separador "não sei o tipo".**
+Para quando o auxiliar da Piedade **não sabe exatamente** a que processo/tipo cada bloco
+pertence. Ela só diz "**aqui termina um, começa outro**" — marca a fronteira **sem rotular**.
+Detecção trivial (página quase toda branca), custo zero. O sistema agrupa certo; a classificação
+do tipo fica para o OCR/heurística/IA depois.
+
+**(b) Folha com QR — separador "sei o tipo".**
+Separa **e identifica** o que vem a seguir. Requisitos confirmados para essa folha:
+1. **QR code** (legível por máquina) — carrega: "fronteira de processo" + **tipo dos documentos
+   que vêm até o próximo separador** + (opcional) **categoria/pasta de destino**.
+2. **Cabeçalho/título visível bem grande** — para **ninguém achar que é rascunho e jogar fora**
+   (ex.: "★ FOLHA SEPARADORA DO SISTEMA — NÃO DESCARTAR").
+3. **Identificação humana, por extenso**, de **exatamente que tipo** de documentos devem vir
+   até o próximo separador (ex.: "A seguir: LOCOMOÇÃO DE DIÁCONO — 1 formulário + 1 cupom NFC-e").
+   Assim a própria folha **orienta quem está montando a pilha** antes de escanear.
+
+**A sacada (confirmada por você): o separador é um TREINADOR que se auto-elimina.**
+O separador dá **muito trabalho humano extra** (imprimir, intercalar), então **não é para durar
+para sempre**. A estratégia:
+- Cada digitalização **com** separadores é um **gabarito perfeito** (a "resposta certa"): o
+  sistema sabe, sem dúvida, quais páginas formam cada processo e de que tipo são.
+- Isso vira **dado de treino rotulado** — de graça — que alimenta o **aprendizado de regras**
+  (Seção 6B.4) e os **exemplos few-shot**. O sistema aprende os padrões **daquele ponto** com
+  exemplos impecáveis.
+- Conforme o **grau de confiança** (Seção 6B.5) do agrupamento **sem** separador sobe e se
+  mantém alto, o sistema **avisa**: *"já acerto sozinho os processos deste tipo — você pode
+  parar de usar o separador aqui"*. O andaime **cai sozinho**, tipo por tipo, ponto por ponto.
+- **Sempre reversível:** se um dia o acerto cair (documento novo, mudança de padrão), é só
+  **voltar a usar o separador** por um tempo para retreinar.
+
+> **Por que isso é ótimo:** o mesmo esforço humano que **organiza hoje** também **ensina o
+> sistema a não precisar mais dele amanhã**. O trabalho extra tem prazo de validade.
+
+> `[SUPOSIÇÃO]` A leitura de QR e a detecção de página em branco são técnicas consagradas em
+> digitalização em massa; a geração da folha (com QR + cabeçalho + texto) é simples. Detalhes
+> técnicos (biblioteca de QR, limiar de "página branca") ficam para a implementação.
 
 ### 6B.7 Facilita ou complica? (honestidade final)
 - **Para você (uso):** facilita **muito** — de "escanear e passar horas separando/juntando/
@@ -284,9 +317,10 @@ processo — acerto perto de 100%, sem depender de IA para achar o limite.
 5. **Pipeline escanear→arquivar (Seção 6-B):** aprovado seguir com o desenho do agrupamento
    automático + aprendizado de regras + grau de confiança? *(recomendo sim — é o maior ganho de
    automação.)*
-6. **Folha separadora (6B.6):** você topa usar folhas separadoras (em branco, coloridas ou com
-   QR) na hora de escanear? Isso dispara o acerto para perto de 100% quase sem custo. *(recomendo
-   pelo menos a opção de folha em branco.)*
+6. ✅ **Folha separadora (6B.6) — CONFIRMADO.** Dois tipos: **em branco** (quando não se sabe o
+   tipo) e **com QR + cabeçalho + texto** (separa e identifica o tipo do que vem a seguir).
+   **Confirmado também** que os separadores servem como **treinamento que se auto-elimina** — o
+   sistema aprende com eles até dispensá-los, tipo por tipo, com base no grau de confiança.
 
 ---
 
