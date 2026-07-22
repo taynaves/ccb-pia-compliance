@@ -1,5 +1,6 @@
 # MAPA — Módulo "Estúdio de PDF" (a versão simples e integrada do seu Gestor de Documentos)
-## Documento de análise e desenho (v3 — 22/07/2026) · é desenho, não código
+## Documento de análise e desenho (v4 — 22/07/2026) · é desenho, não código
+> **Nome do módulo confirmado pelo dono: "Estúdio de PDF".**
 
 > **Origem:** você criou, em conversas anteriores, **4 versões** de uma ferramenta de PDF/Drive
 > (em Google Apps Script). Pediu que eu analisasse as 4, identificasse a mais atual, resgatasse
@@ -92,16 +93,124 @@ Em vez de abrir cheia de opções, a tela inicial mostra **botões grandes de ta
 │  num só PDF       partes            para PDF                   │
 │                                                                │
 │  🏷️ RENOMEAR      🗜️ COMPRIMIR      🖼️ IMAGEM → PDF            │
-│  com ajuda de IA  (reduzir tamanho) rápido                     │
+│  com ajuda de IA  reduzir tamanho   rápido                     │
+│                                                                │
+│  ✏️ EDITAR PDF    ✍️ ASSINAR                                   │
+│  texto/marcas/    em lote, com      (ver Seções 4.2 e 4.3)     │
+│  assinatura       certificado                                  │
 └──────────────────────────────────────────────────────────────┘
 ```
 - O usuário **escolhe a tarefa** e só então vê **os poucos controles daquela tarefa**.
 - Todo o resto (enquadramento avançado, override por página, escala manual…) fica num
-  **"⚙ Opções avançadas"** recolhido — quem precisa, abre; quem não precisa, nem vê.
+  **"⚙ Opções avançadas"** recolhido — quem precisa, abre; quem não precisa, nem vê. **Confirmado
+  pelo dono:** o modo avançado existe, **mas também precisa ser fácil e intuitivo** (não pode ser
+  um painel confuso — controles agrupados, com nomes claros e ajuda ao passar o mouse).
 - **Assistentes passo-a-passo** (1: escolha os arquivos → 2: ordene → 3: pronto), com
   **pré-visualização** sempre visível.
+- **Tarefas confirmadas (22/07):** Juntar, Dividir, Converter, Renomear, Imagem→PDF,
+  **Comprimir** — todas sim. **+ Editar PDF** (Seção 4.2) e **+ Assinar** (Seção 4.3), que são
+  maiores e têm ressalvas próprias.
 
-### 4.2 Integração com o Drive do ponto (o ponto-chave que faltava)
+### 4.2 EDITAR PDF — "tão bom quanto o Sejda" (com honestidade sobre o alcance)
+**Pedido do dono:** uma ferramenta de **editar PDF** — mas **só se ficar tão boa quanto o editor
+do Sejda** (sejda.com/pt). Motivo real: em processos do SIGA, se esquecer de baixar o comprovante
+de uma etapa intermediária, o documento se perde (ex.: **transferência entre departamentos = 3
+passos, cada um imprime o comprovante e assina**). Então precisa poder **completar, marcar e
+assinar** documentos com liberdade.
+
+Aqui preciso ser **muito honesto**, porque "editar PDF" esconde **duas coisas bem diferentes**:
+
+| Tipo de edição | Dificuldade | Viável no nosso orçamento? |
+|---|---|---|
+| **(A) Adicionar por cima:** texto novo, caixas, destaque, "borracha" (whiteout), imagem, carimbo, assinatura, números de página, preencher formulários | **Média** — dá para fazer bem com PDF-lib + uma camada de desenho sobre a página | ✅ **Sim.** É a maior parte do que o Sejda faz e cobre o seu caso (completar/assinar comprovantes) |
+| **(B) Editar o texto que já está "impresso" dentro do PDF** (mudar uma palavra que já faz parte do arquivo, refluindo o parágrafo) | **Alta** — o Sejda faz de forma limitada; é tecnicamente difícil e nem o Sejda acerta sempre | ⚠️ **Parcial/arriscado.** Recomendo **não** prometer paridade total aqui |
+
+> **Proposta honesta:** entregamos o tipo **(A) com qualidade Sejda** (que resolve o seu problema
+> dos comprovantes — adicionar texto, carimbo e assinatura, apagar/cobrir, inserir/remover/girar
+> páginas, preencher campos). O tipo **(B)** — reescrever texto embutido — fica como **"quando
+> possível"**, sem promessa de igualar o Sejda, porque seria superestimar. `[LACUNA]` confirmar
+> na implementação até onde o (B) é viável sem comprometer o resto.
+
+> **Nota de segurança:** editar/assinar acontece **sobre o documento**, e toda alteração relevante
+> (quem editou, quando) vai ao **log** — coerente com o resto do sistema.
+
+### 4.3 ASSINAR PDFs em lote (assinatura digital) — análise honesta e em camadas
+**Pergunta do dono:** em quase todo processo, **3 diáconos** precisam assinar ao menos um
+documento. Dá para integrar um **assinador digital autenticado** (gov.br, ou **assinatura
+qualificada com certificado ICP-Brasil**) e assinar **um bloco de PDFs de uma vez** — ex.:
+selecionar uma pasta com 80 PDFs e, numa **única ação**, assinar todos automaticamente, um a um —
+em vez de subir arquivo por arquivo (como no gov.br), que é lento?
+
+**Resposta curta:** **é possível assinar em lote**, sim — essa parte é a fácil. O que **não** é
+simples (e onde preciso ser honesto) é **onde a "identidade digital" mora** e **como o navegador
+a alcança**. Vou separar em camadas, do mais simples ao mais forte:
+
+#### 4.3.1 Antes de tudo: hoje a assinatura é FÍSICA (isto é uma mudança de processo)
+Pelo seu próprio manual (script #1), hoje os documentos são **impressos, assinados à caneta por
+3 diáconos e escaneados**. Ou seja: assinar digitalmente **substituiria** a assinatura física —
+é uma **decisão institucional** (a CCB/ADM aceita assinatura digital no lugar da física para
+esses documentos?), não só técnica. **Preciso que você confirme isso antes**, porque muda tudo:
+- **Se a assinatura continua física:** o Estúdio de PDF **não precisa** de assinador ICP-Brasil.
+  O que importa é o **módulo de verificação** conferir se o documento escaneado **tem** as
+  assinaturas/carimbos (Seção 4.3.5).
+- **Se vamos migrar para digital:** aí sim entram as camadas abaixo.
+
+#### 4.3.2 As três "identidades" possíveis (e o que cada uma exige)
+| Opção | Força jurídica | Onde a "chave" mora | Assina em lote sem subir 1 a 1? |
+|---|---|---|---|
+| **Assinatura eletrônica simples** (nossa, via reautenticação Google + hash + carimbo de tempo) | Baixa/média (vale p/ uso interno) | No nosso sistema | ✅ Fácil e total — nós controlamos |
+| **gov.br** (assinatura avançada) | Média/alta | Nuvem do governo | ⚠️ Só via **API oficial** (exige ser **integrador credenciado** — processo formal com o ITI); o portal comum é 1 a 1 |
+| **ICP-Brasil qualificada** (certificado A1 arquivo, ou A3 token/cartão) | **Alta** (presunção legal máxima) | A1 = arquivo; A3 = dentro do token físico | ✅ Em lote **é possível**, mas exige um **componente local** no PC (extensão/app que fala com o token) |
+
+#### 4.3.3 O detalhe técnico decisivo (por que não é "só clicar")
+- **Certificado A3 (token/cartão — o mais comum e seguro):** a chave **nunca sai do token**. Um
+  site na nuvem **não consegue** falar direto com um token USB. Precisa de um **componente local**
+  instalado no PC do diácono (uma extensão de navegador tipo *Web PKI*, ou um app assinador de
+  mesa). **Com** esse componente, dá para **assinar os 80 de uma vez** localmente (o token assina
+  um hash de cada arquivo em sequência; pode pedir o PIN uma vez ou a cada arquivo, conforme o
+  token). O nosso sistema **prepara o lote** e **entrega os assinados de volta** à pasta.
+- **Certificado A1 (arquivo .pfx):** a chave é um arquivo. Assinar 80 em lote é trivial — **mas**
+  alguém teria que **carregar a chave privada** onde a assinatura acontece. Se for no servidor,
+  é **risco sério** (entregar a chave privada). Recomendo, se A1, assinar **localmente** também,
+  não no servidor.
+- **gov.br:** assinar em lote pela **API** exige **credenciamento oficial** (não é "ligar um
+  botão"); o portal público (assinador.iti.br) é **um por vez** — exatamente a lentidão que você
+  quer evitar.
+
+#### 4.3.4 A realidade dos "3 diáconos"
+Cada diácono tem **a sua própria** identidade digital. Então "assinar 80 de uma vez" é **por
+assinante**: o diácono A assina o lote dele, depois o B, depois o C. Dá para orquestrar isso como
+uma **fila de assinaturas** ("faltam as assinaturas de B e C"), mas são **3 sessões**, não 1
+clique coletivo. Isso é **inerente** a qualquer assinatura com validade jurídica — não é
+limitação nossa.
+
+#### 4.3.5 Recomendação em fases (honesta e sem prometer demais)
+1. **Fase A — já resolve muito e é barata:** implementar a **assinatura eletrônica simples**
+   nossa (reautenticação Google + hash + carimbo de tempo + registro no log), **em lote**,
+   reusando o mecanismo que já desenhamos para os termos (`MAPA_MODO_TESTE_v1`). Serve para
+   documentos internos e para acelerar o fluxo. **`[LACUNA jurídica]` confirmar se a ADM aceita
+   isso** no lugar da assinatura física para cada tipo de documento.
+2. **Fase B — se precisar de validade forte:** integrar **ICP-Brasil A3 via componente local**
+   (ex.: uma extensão de navegador de assinatura), com o sistema **preparando e devolvendo o
+   lote**. É a que entrega o "seleciono 80 e assino todos" com peso jurídico máximo. Exige uma
+   ferramenta de assinatura local (algumas são comerciais — a avaliar custo).
+3. **gov.br por API:** só se a instituição quiser trilhar o **credenciamento** oficial — é um
+   projeto à parte, mais burocrático.
+
+> `[LACUNA importante]` Assinatura com validade jurídica é área sensível. Nada aqui deve ser
+> tratado como certeza legal sem **confirmação de um advogado** e da **ADM/CCB** sobre o que é
+> aceito para cada documento. Meu papel é dizer o que é **tecnicamente possível** — a decisão de
+> validade é jurídica/institucional.
+
+#### 4.3.6 Ligação com a verificação documental (você lembrou bem)
+O **módulo de verificação** (`MAPA_IA_DOCUMENTACAO_v1`, Seção 6) **precisa** detectar **assinatura
+faltando** (quando deveria haver) e **carimbo faltando** (idem), além de **rubrica no lugar de
+assinatura por extenso**. Isso **já está** naquele desenho e é **reforçado aqui**: seja a
+assinatura física (o verificador confere no escaneado) ou digital (o verificador confere se o PDF
+tem as N assinaturas digitais esperadas), a regra "faltou assinatura/carimbo → apontar" vale nos
+dois mundos.
+
+### 4.4 Integração com o Drive do ponto (o ponto-chave que faltava)
 - O módulo **já sabe qual é a pasta do ponto** (a pasta cedida e gerida pela Regional), porque
   isso vem das **permissões do sistema principal** (Regional → Localidade → Ponto — ver
   `MAPA_IA_DOCUMENTACAO_v1`, Seção 4). O usuário **não precisa colar URL/ID** de pasta como nos
@@ -112,7 +221,7 @@ Em vez de abrir cheia de opções, a tela inicial mostra **botões grandes de ta
   acesso ao Drive é resolvido pelas permissões e pelo backend — o usuário só **usa**, não
   configura nem re-autoriza nada.
 
-### 4.3 O renomeador com IA — consertado
+### 4.5 O renomeador com IA — consertado
 - **A chave da IA sai do navegador** e vai para o **proxy** (Apps Script servidor), como já
   decidido em `MAPA_IA_v1`. O usuário **nunca** digita chave nenhuma.
 - **Multi-provedor** (Claude e Gemini sempre + gancho para outra), como fechamos.
@@ -121,7 +230,7 @@ Em vez de abrir cheia de opções, a tela inicial mostra **botões grandes de ta
   Seção 3). Ou seja: **o "Renomear" do Estúdio de PDF e o renomeador automático do módulo de
   documentação são a MESMA engine**, só com portas de entrada diferentes.
 
-### 4.4 Geração de PDF — mantém o que já funciona
+### 4.6 Geração de PDF — mantém o que já funciona
 - **PDF no navegador (PDF-lib/PDF.js)** — barato, rápido, sem cota de servidor, como no v5.0.
 - **Aproveita o `calculateFit()`/`calculateLayout()`** que você já depurou (preview idêntico ao
   resultado) — é um código bom, não se joga fora.
@@ -304,23 +413,60 @@ para sempre**. A estratégia:
 - **Conclusão:** **vale a pena** e está **alinhada ao objetivo maior**. Recomendo tratar o
   agrupamento como parte do **mesmo pipeline** M2+M3, não como um módulo à parte.
 
+### 6B.8 Editor de separadores (confirmado — com modelo de permissão)
+Como vamos usar **folhas com QR**, o dono pediu um **editor de separadores**. Desenho:
+- O usuário recebe uma **galeria de separadores prontos** (modelos padrão).
+- Ele pode **criar novos separadores a partir dos modelos**, ajustando elementos conforme a
+  própria necessidade: **pasta de destino**, **padrão de renomeação** de um grupo, **inserir um
+  tipo de processo novo**, texto do cabeçalho, etc. Ao salvar, o sistema **gera o QR + o
+  cabeçalho + o texto** e disponibiliza para **imprimir**.
+- **Modelo de permissão (confirmado):**
+  - **Separadores PADRÃO:** só o **superusuário** cria/edita/remove (são o "oficial", como a
+    definição do checklist — governança central).
+  - **Usuário comum (conferidor/admin no seu domínio):** **não altera** os padrão, mas **cria os
+    seus próprios** (derivados), para o seu ponto/necessidade. Ficam no escopo dele.
+- **Coerência:** é o mesmo princípio "padrão central intocável × derivados locais" que já usamos
+  no checklist (Fase 1) e na estrutura de pastas (`MAPA_IA_DOCUMENTACAO_v1`, Seção 4.2).
+- **Rastreável:** o QR do separador pode conter um **código de versão**, para o sistema saber
+  qual separador (e quais regras) foi usado — útil para o aprendizado (Seção 6B.4).
+
 ---
 
-## 7. Decisões que preciso confirmar com você
-1. **Nome do módulo:** "Estúdio de PDF"? "Ferramentas de PDF"? "Organizador de Documentos"?
-2. **Lista inicial de tarefas** (Seção 4.1): Juntar, Dividir, Converter, Renomear, Imagem→PDF —
-   está boa? Quer **Comprimir** (reduzir tamanho)? Quer **assinar/carimbar** PDF no futuro?
-3. **"Modo avançado" existe?** Confirmo que mantemos todo o poder atual escondido num botão de
-   opções avançadas (recomendo **sim** — não perder o que você já construiu).
-4. **Onde este módulo aparece:** como uma aba/menu dentro do sistema principal, ou como uma
-   ferramenta que se abre "por cima" quando você está mexendo nos documentos de um mês?
-5. **Pipeline escanear→arquivar (Seção 6-B):** aprovado seguir com o desenho do agrupamento
-   automático + aprendizado de regras + grau de confiança? *(recomendo sim — é o maior ganho de
-   automação.)*
-6. ✅ **Folha separadora (6B.6) — CONFIRMADO.** Dois tipos: **em branco** (quando não se sabe o
-   tipo) e **com QR + cabeçalho + texto** (separa e identifica o tipo do que vem a seguir).
-   **Confirmado também** que os separadores servem como **treinamento que se auto-elimina** — o
-   sistema aprende com eles até dispensá-los, tipo por tipo, com base no grau de confiança.
+## 7. Decisões
+
+### ✅ Confirmadas por você (22/07/2026)
+1. **Nome do módulo:** **"Estúdio de PDF"**.
+2. **Tarefas:** Juntar, Dividir, Converter, Renomear, Imagem→PDF, **Comprimir** — todas sim.
+   **+ Editar PDF** (com ressalva de alcance, Seção 4.2) e **+ Assinar em lote** (Seção 4.3).
+3. **Modo avançado:** existe, **mas também fácil e intuitivo** (não pode ser painel confuso).
+5. **Pipeline escanear→arquivar (Seção 6-B):** aprovado — agrupamento automático + aprendizado +
+   grau de confiança.
+6. **Folha separadora (6B.6):** dois tipos (branco / QR+cabeçalho+texto) + estratégia de
+   treinamento auto-eliminável. **+ Editor de separadores** (6B.8): padrão só do superusuário;
+   usuário cria derivados no seu escopo.
+
+### 💡 Minha recomendação para a pergunta 4 (você estava em dúvida)
+**Pergunta:** o módulo aparece como **aba/menu fixo** no sistema, ou como ferramenta que **abre
+"por cima"** ao mexer nos documentos do mês? Qual é mais fácil e menos complexo?
+
+**Recomendo a opção "aba/menu fixo" como casa principal**, pelos motivos:
+- **Mais fácil de aprender:** o usuário sabe que "as ferramentas de PDF ficam **sempre no mesmo
+  lugar**". Ferramenta que aparece/some conforme o contexto **confunde** o leigo.
+- **Menos complexo de construir:** um ponto de entrada único é mais simples que integrar o
+  Estúdio dentro de várias telas.
+- **Sem perder a conveniência:** onde fizer sentido (ex.: na tela dos documentos de um mês),
+  colocamos **atalhos** que **levam** ao Estúdio já com aqueles arquivos carregados — o melhor
+  dos dois mundos, sem a complexidade de "abrir por cima".
+
+> Ou seja: **casa fixa no menu + atalhos contextuais que apontam para ela.** Confirme se topa.
+
+### ❓ Ainda em aberto (dependem de decisão sua/institucional)
+7. **Assinatura digital (Seção 4.3):** primeiro preciso saber — **a ADM/CCB aceita assinatura
+   digital no lugar da física** para esses documentos? E, se sim, qual nível: nossa **simples**
+   (Fase A), **ICP-Brasil A3** com componente local (Fase B), ou **gov.br** via credenciamento?
+8. **Editar PDF (Seção 4.2):** confirmar que o alcance tipo **(A)** (adicionar texto/marcas/
+   assinatura/carimbo, apagar, mexer em páginas, preencher formulário) já atende — deixando o
+   tipo **(B)** (reescrever texto embutido) como "quando possível", sem promessa de igualar Sejda.
 
 ---
 
@@ -331,4 +477,6 @@ para sempre**. A estratégia:
 > do módulo de documentação — tudo como um módulo a mais do mesmo sistema. E, por cima disso, um
 > pipeline "escanear → agrupar (barato, por heurística) → juntar em PDF → renomear → arquivar",
 > que aprende com suas correções e vai pedindo cada vez menos conferência — sem estourar o
-> orçamento de tokens.**
+> orçamento de tokens. Com Editar PDF (qualidade Sejda para adicionar/marcar/assinar) e
+> Assinatura em lote (da nossa simples à ICP-Brasil, conforme a ADM aceitar), sempre honesto
+> sobre o que é técnico e o que é decisão jurídica/institucional.**

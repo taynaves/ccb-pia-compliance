@@ -215,7 +215,13 @@ Depois de organizado, o módulo **compara documentos × lançamentos do SIGA** e
 - **Falta de documento** de um tipo exigido num processo (ex.: processo sem o extrato correspondente).
 - **Falta de carimbo/assinatura** (ou presença de **rubrica** onde deveria ter **assinatura por
   extenso** — via OCR + comparação de padrão visual, não é 100% garantido, então o relatório
-  marca isso como "**verificar**", não como certeza absoluta).
+  marca isso como "**verificar**", não como certeza absoluta). **Requisito reforçado pelo dono
+  (22/07):** o verificador **precisa** detectar quando um documento foi enviado **sem um carimbo
+  que deveria estar lá**, ou **sem uma ou mais assinaturas** exigidas. Isso vale tanto para
+  assinatura **física** (confere no escaneado) quanto **digital** (confere se o PDF tem as N
+  assinaturas digitais esperadas) — ver `MAPA_MODULO_PDF_v1.md`, Seção 4.3.6. As regras de
+  "quantas assinaturas / quais carimbos por tipo de documento" saem do manual operacional
+  (o script #1, ex.: locomoção de Irmã da Piedade = 4 diáconos; C-9 = mín. 3 diáconos).
 - **Inconsistência contábil** (contas que não batem, valores divergentes entre documento e SIGA).
 - **Lançamento sem documento físico** (tem no SIGA, não tem o papel).
 - **Documento sem lançamento** (tem o papel, não tem no SIGA).
