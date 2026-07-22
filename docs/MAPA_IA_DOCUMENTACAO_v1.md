@@ -238,8 +238,10 @@ A auditoria **completa e válida** exige **resumo por processo + detalhamento it
 Você confirmou: **mesmo sistema**, arquitetura modular. Módulos já identificados:
 1. **Relatório** (o checklist de compliance, já existente).
 2. **Documentação** (este módulo — Drive/OCR/renomeação/auditoria).
-3. **Editor/conversor de PDF** — evolução de um **script que você já tem pronto** (a integrar;
-   preciso conhecer esse script antes de desenhar a integração — ver Seção 8).
+3. **Editor/conversor de PDF ("Estúdio de PDF")** — desenho completo em `MAPA_MODULO_PDF_v1.md`.
+   **Integração forte com este módulo:** o renomeador + o agrupamento automático + a junção de
+   PDF formam **um pipeline único** ("escanear → agrupar → juntar → renomear → arquivar") — ver
+   `MAPA_MODULO_PDF_v1.md`, Seção 6-B (agrupamento barato por heurística + aprendizado de regras).
 4. **(outros módulos futuros)** — a arquitetura deve deixar espaço para crescer.
 > Isso **fecha** a pergunta 6 da v1 deste documento (satélite × mesmo sistema): é o **mesmo
 > sistema**, um módulo a mais.
