@@ -516,11 +516,10 @@ Como vamos usar **folhas com QR**, o dono pediu um **editor de separadores**. De
    "cobrir com retângulo cor-do-fundo + reescrever com a fonte detectada" (viável para PDFs
    nascidos digitais, como os do SIGA).
 
-### ❓ Ainda em aberto
-9. **Onde o módulo aparece:** confirmar a minha recomendação (casa fixa no menu + atalhos
-   contextuais) — Seção 7 acima.
-10. **Provedor de certificado em nuvem:** cotar/testar (BirdID, VIDaaS, SafeID…) e ver qual a ADM
-    referenda — só na hora de implementar a Fase B, mas convém você já ir sondando com a ADM.
+9. ✅ **Onde o módulo aparece — DECIDIDO:** **casa fixa no menu + atalhos contextuais** (que
+   levam ao Estúdio já com os arquivos carregados).
+10. ✅ **Provedor de certificado em nuvem — DECIDIDO:** cotar/testar (BirdID, VIDaaS, SafeID…) e
+    ver qual a ADM referenda **na hora de implementar** a Fase B (sondar a ADM antes ajuda).
 
 ---
 

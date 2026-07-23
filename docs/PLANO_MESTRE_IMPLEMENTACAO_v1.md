@@ -1,14 +1,21 @@
 # PLANO MESTRE DE IMPLEMENTAÇÃO
-## Ordem de construção de todo o sistema (v1 — 20/07/2026)
+## Ordem de construção de todo o sistema (v2 — 22/07/2026)
 
-> **Para que serve:** agora que o **desenho** das grandes áreas está pronto (permissões, cargos,
-> fluxo por seção, armazenamento/BaaS, recuperação, editor de checklist), este documento define
-> **a ordem exata** de implementação — em fases e sub-rodadas pequenas, testáveis, sem quebrar o que
-> já funciona. É o mapa para quando **voltarmos a codificar**.
+> **Para que serve:** agora que o **desenho** de todas as grandes áreas está pronto, este
+> documento define **a ordem exata** de implementação — em fases e sub-rodadas pequenas,
+> testáveis, sem quebrar o que já funciona. É o mapa para quando **voltarmos a codificar**.
+>
+> **v2 — o que mudou desde a v1:** entraram no plano os módulos novos desenhados nesta rodada de
+> desenho — **modo de teste isolado**, **módulo de IA (multi-provedor)**, **módulo de
+> Documentação (Drive/OCR/renomear/auditoria)**, **Estúdio de PDF**, **pipeline
+> escanear→arquivar** e **assinatura digital em nuvem**. A ordem foi reorganizada para respeitar
+> as dependências entre eles.
 >
 > **Documentos-fonte** (pasta `docs/`): `REQUISITOS_CONSOLIDADO_CCB_PIA.md` ·
 > `MAPA_PERMISSOES_RELATORIOS_v1.md` · `MAPA_ARMAZENAMENTO_E_EDITOR_v1.md` ·
-> `MAPA_FLUXO_POR_SECAO_v1.md` · `CHECKLIST_CONTEUDO.md` · `checklist_def.json`.
+> `MAPA_FLUXO_POR_SECAO_v1.md` · `MAPA_MODO_TESTE_v1.md` · `MAPA_IA_v1.md` ·
+> `MAPA_IA_DOCUMENTACAO_v1.md` · `MAPA_MODULO_PDF_v1.md` · `CHECKLIST_CONTEUDO.md` ·
+> `checklist_def.json`.
 
 ---
 
@@ -17,7 +24,9 @@
 2. **Segurança primeiro** — o que protege dado sigiloso vem antes do que é conveniência.
 3. **Nunca quebrar o que já funciona** (checagem de guarda + `node --check` + render quando aplicável).
 4. **Verificação real** (render de PDF/tela quando fizer sentido), não só "confia".
-5. **Tom de UX**: sóbrio, profissional, moderno, com requinte — em tudo.
+5. **Tom de UX**: sóbrio, profissional, moderno, com requinte — e **fácil para leigo** em tudo.
+6. **IA sempre atrás do proxy** (chave nunca no navegador), **multi-provedor** (Claude/Gemini/outra).
+7. **Reuso**: a mesma engine de IA e a mesma pasta do Drive servem vários módulos — não duplicar.
 
 ---
 
@@ -34,66 +43,122 @@ organização da documentação em `docs/`.
 
 ```mermaid
 graph TD
-  F0[Fase 0 — PERM + Security Rules + Recuperação] --> F1[Fase 1 — Checklist como dado + Editor]
-  F0 --> F2[Fase 2 — CARGOS]
-  F1 --> F3[Fase 3 — Fluxo por seção]
+  F0["Fase 0 — Permissões + Security Rules + Recuperação"] --> F1["Fase 1 — Checklist como dado + Editor"]
+  F0 --> F2["Fase 2 — CARGOS"]
+  F1 --> F3["Fase 3 — Fluxo por seção"]
   F2 --> F3
-  F3 --> F4[Fase 4 — Armazenamento & Arquivo]
+  F0 --> FIA["Fase IA — Proxy multi-provedor - base para tudo que usa IA"]
+  F3 --> F4["Fase 4 — Armazenamento & Arquivo"]
   F0 --> F4
-  F4 --> F5[Fase 5 — Supervisão & Logs]
-  F3 --> F5
-  F5 --> F6[Fase 6 — Extras & acabamento]
-  QW[Quick wins: PEND-A, PEND-C] -.encaixam a qualquer momento.-> F6
+  F0 --> F5["Fase 5 — Módulo Documentação: Drive/OCR/renomear/auditoria"]
+  FIA --> F5
+  F4 --> F5
+  F5 --> F6["Fase 6 — Estúdio de PDF + pipeline escanear→arquivar"]
+  FIA --> F6
+  F6 --> F7["Fase 7 — Assinatura digital em nuvem (ICP-Brasil)"]
+  F3 --> F8["Fase 8 — Supervisão, Logs e Modo de Teste"]
+  F5 --> F8
+  F8 --> F9["Fase 9 — Extras & acabamento"]
+  QW["Quick wins: PEND-A, PEND-C"] -.encaixam a qualquer momento.-> F9
 ```
 
 ---
 
-## FASE 0 — Fundação de permissões e segurança  *(vem primeiro)*
-- **P0.1** Módulo isolado `PERM`: modelo de dados (`tipo`, `dominio`, `supervisorAtivo`), função única
-  `pode(usuario, acao, alvo)`. **Migrar** `isSuperUser/isSiteAdmin/isPrivileged()` para o novo modelo
-  **sem quebrar** o acesso atual.
-- **P0.2** **Security Rules do Firebase por localidade** — o item nº 1 de sigilo (conferidor nunca vê
-  outra localidade). Testar com contas de teste.
-- **P0.3** Recuperação do superusuário: 2FA (orientação/obrigatório) + segredo de recuperação (hash) +
-  2 superusuários break-glass (2 supervisores mais ativos em 3 meses, promoção em dupla).
-- *Sem UI nova grande ainda; é fundação.*
+## FASE 0 — Fundação de permissões e segurança  *(vem primeiro, é o alicerce)*
+- **P0.1** Módulo isolado `PERM`: modelo de dados (`tipo`, `dominio`, `supervisorAtivo`), função
+  única `pode(usuario, acao, alvo)`. Migrar `isSuperUser/isSiteAdmin/isPrivileged()` para o novo
+  modelo **sem quebrar** o acesso atual. Hierarquia Regional → Localidade → Ponto.
+- **P0.2** **Security Rules do Firebase por localidade** — item nº 1 de sigilo (conferidor nunca
+  vê outra localidade). Testar com contas de teste.
+- **P0.3** Recuperação do superusuário: 2FA + segredo de recuperação (hash) + 2 superusuários
+  break-glass (2 supervisores mais ativos em 3 meses, promoção em dupla).
+- **P0.4** **Trava de concorrência** (base): mecanismo de "recurso ocupado" + fila, que o módulo
+  de Documentação vai precisar (vários usuários na mesma pasta) — desenhado já aqui, na fundação.
+- *Checkpoint: parar e validar o sigilo com contas de teste antes de seguir.*
+
+## FASE IA — Proxy de IA multi-provedor  *(base para todo módulo que usa IA)*
+- **PIA.1** Proxy (Apps Script) com **adaptadores plugáveis**: Claude e Gemini sempre + gancho
+  para outra. Chave(s) só no servidor. Config do superusuário escolhe o provedor.
+- **PIA.2** **Teto de gasto/tokens** por mês + alerta antes de estourar + pausar lote.
+- **PIA.3** Camada de OCR barato (motor dedicado) separada da IA de raciocínio.
+- *Pode andar em paralelo à Fase 1/2, mas é pré-requisito das Fases 5, 6, 7.*
 
 ## FASE 1 — Checklist como dado + Editor (resolve ARQ-01)
-- **P1.1** Migrar `SECS/ITEMS` → `/appConfig/checklistDef` (semente `checklist_def.json`), com **IDs
-  estáveis** e **versão da definição** (meses fechados guardam a versão que usaram).
-- **P1.2** Editor do superusuário: árvore Partes→Seções→Itens; criar/editar/renomear; **reordenar por
-  setas ▲▼**; **soft-delete** (arquivar); **rascunho→publicar**; pré-visualizar.
+- **P1.1** Migrar `SECS/ITEMS` → `/appConfig/checklistDef` (semente `checklist_def.json`), com
+  **IDs estáveis** e **versão da definição** (meses fechados guardam a versão que usaram).
+- **P1.2** Editor do superusuário: árvore Partes→Seções→Itens; criar/editar/renomear; **reordenar
+  por setas ▲▼**; **soft-delete**; **rascunho→publicar**; pré-visualizar. É também o **alvo do
+  "liberar"** do modo de teste (a versão aprimorada vira nova definição de checklist).
 
 ## FASE 2 — CARGOS
-- **C1** Listas editáveis (cargos + funções) no Firebase, pré-carregadas. **C2** Perfil: usuário escolhe
-  quais funções aparecem no relatório. **C3** Admin atribui cargo/funções + **cadastro de pessoas**.
-  **C4** Assinaturas do relatório (5 linhas) — com render verificado. **C5** Autocomplete + pré-carregar
-  assinantes do último relatório do ponto.
+- **C1** Listas editáveis (cargos + funções) no Firebase, pré-carregadas. **C2** Perfil: usuário
+  escolhe funções que aparecem no relatório. **C3** Admin atribui cargo/funções + cadastro de
+  pessoas. **C4** Assinaturas do relatório (5 linhas) — render verificado. **C5** Autocomplete +
+  pré-carregar assinantes do último relatório do ponto.
 
-## FASE 3 — Fluxo colaborativo por seção  *(o maior módulo)*
+## FASE 3 — Fluxo colaborativo por seção  *(o maior módulo do sistema principal)*
 - **P3.1** Estado por seção (vazia→em preenchimento→conferida/travada→aprovada) + cores/etiquetas.
 - **P3.2** Enviar/travar seção · **P3.3** Aprovar/**devolver para correção** (anti-autoaprovação).
-- **P3.4** Parcial × geral (consolidação; regenera geral ao salvar). **P3.5** Painel de progresso do mês.
-- *Substitui o fluxo atual rascunho→revisão→publicado. Muitas sub-rodadas pequenas.*
+- **P3.4** Parcial × geral (consolidação; regenera geral ao salvar). **P3.5** Painel de progresso
+  do mês (barra + prazo dia 20). *Substitui o fluxo atual. Muitas sub-rodadas pequenas.*
 
 ## FASE 4 — Armazenamento & Arquivo
-- **P4.1** Guardar `.md` versionado no Firebase (geral + parciais + versões). **P4.2** Backup no **Drive
-  da Regional** via Apps Script (isolado por área). **P4.3** **Console de Gestão de Armazenamento**:
-  medidor visual (barra/pizza estilo Drive), seletor granular, **previsão ao vivo**, **poda só com
-  consentimento**, **exclusão definitiva (>2 anos, superusuário, dupla verificação)**, **legal hold**.
-  **P4.4** Alertas de cota (50/75/90/95%) + **auto-calibração** pelo uso real + **capacidade máxima**
+- **P4.1** Guardar `.md` versionado no Firebase (geral + parciais + versões). **P4.2** Backup no
+  **Drive da Regional** via Apps Script (isolado por área). **P4.3** **Console de Gestão de
+  Armazenamento**: medidor visual (barra/pizza estilo Drive), seletor granular, previsão ao vivo,
+  poda só com consentimento, exclusão definitiva (>2 anos, superusuário, dupla verificação),
+  legal hold. **P4.4** Alertas de cota (50/75/90/95%) + auto-calibração + capacidade máxima
   (BaaS agnóstico).
 
-## FASE 5 — Supervisão & Logs
-- **P5.1** Página de arquivo/logs: tabela paginada (10–100), metadados, links geral/parte/seção,
-  ações por escopo. **P5.2** Acesso do supervisor aos relatórios/versões da equipe (por domínio).
-  **P5.3** **Log de auditoria append-only** (quem fez o quê; ninguém apaga).
+## FASE 5 — Módulo de Documentação (Drive/OCR/renomear/auditoria)  *(NOVO — o "conferidor-IA")*
+> Fonte: `MAPA_IA_DOCUMENTACAO_v1.md`. Depende de F0 (permissões/pastas), FIA (IA/OCR), F4 (Drive).
+- **P5.1** Ingestão + OCR barato + triagem (arquitetura em camadas, para caber no orçamento).
+- **P5.2** Estrutura de pastas Regional→Localidade→Ponto→mês→categorias; **editável** por
+  superusuário/admin regional; **modo simples** (tudo numa pasta); **prévia por amostragem**.
+- **P5.3** Renomeação padronizada (corrige mojibake; sem data no início; diferenciador de
+  duplicata) — engine compartilhada com o Estúdio de PDF.
+- **P5.4** Renomear/mover com **desfazer E refazer** (pilha undo/redo), escopo por domínio.
+- **P5.5** Relatório de auditoria (conferidor-IA): documento/carimbo/assinatura faltando, rubrica
+  vs assinatura, contas que não batem, lançamento sem documento e vice-versa — regras vindas do
+  **manual operacional** (o "script #1"). Resumo + detalhado = completo; um só = parcial.
+- **P5.6** LGPD: minimização, acesso por domínio, log sem conteúdo sensível, dados no Drive do
+  próprio ponto. `[LACUNA]` validar retenção/zero-data-retention do provedor de IA.
 
-## FASE 6 — Extras & Acabamento
-- **PEND-A** (☁ salvar no Drive do sistema + Drive pessoal no modal de relatório) — *quick win*.
+## FASE 6 — Estúdio de PDF + pipeline escanear→arquivar  *(NOVO)*
+> Fonte: `MAPA_MODULO_PDF_v1.md`. Reembala o seu "Gestor de Documentos v5.0" como módulo.
+- **P6.1** UI tarefa-primeiro (Juntar, Dividir, Converter, Comprimir, Imagem→PDF) + **modo
+  avançado fácil**. **Casa fixa no menu + atalhos contextuais.** Fim do "cada um implanta o seu".
+- **P6.2** Editar PDF — **Parte A** (adicionar texto/marca/carimbo/assinatura, cobrir, mexer em
+  páginas, preencher). **Parte B depois** (trocar texto embutido pela técnica cobrir+reescrever,
+  melhor em PDFs nascidos digitais).
+- **P6.3** Renomear (reusa engine de F5) com chave de IA no proxy.
+- **P6.4** **Pipeline escanear→agrupar→juntar→renomear→arquivar**: agrupamento barato por
+  heurística (ordem do scan, tipo, campos, hash) + IA só nos empates; **grau de confiança**;
+  **aprendizado de regras** (por ponto) + few-shot.
+- **P6.5** **Folhas separadoras** (branco / QR+cabeçalho+texto) + **editor de separadores**
+  (padrão só superusuário; usuário cria derivados) + estratégia de treinamento auto-eliminável.
+
+## FASE 7 — Assinatura digital em nuvem (ICP-Brasil)  *(NOVO — depende de F6)*
+> Fonte: `MAPA_MODULO_PDF_v1.md`, Seção 4.3. Alvo: assinar em lote **pelo celular**.
+- **P7.1** Integração com **provedor de certificado em nuvem** (cotar/testar; ADM referenda).
+- **P7.2** Fluxo de **assinatura em lote por assinante** (fila dos 3 diáconos) + arquivamento dos
+  assinados. **P7.3** Verificação de assinaturas digitais esperadas (liga com P5.5).
+- `[LACUNA jurídica]` confirmar formato (PAdES) e aceitação com ADM/provedor antes de fechar.
+
+## FASE 8 — Supervisão, Logs e Modo de Teste
+> Fontes: `MAPA_FLUXO_POR_SECAO_v1.md`, `MAPA_MODO_TESTE_v1.md`.
+- **P8.1** Página de arquivo/logs paginada; acesso do supervisor por domínio.
+- **P8.2** **Log de auditoria append-only** (quem fez o quê; ninguém apaga).
+- **P8.3** **Modo de teste isolado** (`/sandbox/{sessao}/testers/{uid}`): gaveta privada por
+  testador; usuários reais/virtuais na gaveta; relatório de revisões; import/mescla pelo
+  superusuário (com/sem IA); **lixeira em 2 estágios**; termos assinados por reautenticação
+  Google (com IPs/MACs disponíveis).
+
+## FASE 9 — Extras & Acabamento
+- **PEND-A** (☁ salvar no Drive do sistema + Drive pessoal no modal) — *quick win*.
 - **PEND-C** (verificar/ajustar "Atribuir") — *quick win*.
-- **Notificações** (e-mail via Apps Script). **"Ver como" nível menor**. **Limpeza agendada** (Apps
-  Script). **ARQ-02** (tirar a imagem base64 restante do `index.html`).
+- **Notificações** (e-mail via Apps Script). **"Ver como" nível menor**. **Limpeza agendada**.
+  **ARQ-02** (tirar imagem base64 do `index.html`).
 - **Fechamento da sessão**: versão **3.0** no `config.js`, **atualizar status** no consolidado,
   **RESUMO_SESSAO.md**.
 
@@ -101,10 +166,13 @@ graph TD
 
 ## Checkpoints e riscos
 - **Após a Fase 0** parar e validar o sigilo (Security Rules) com contas de teste — é o alicerce.
-- **Fase 3** é a maior; será quebrada em ~6–10 sub-rodadas.
-- Cada fase termina com um **relatório de integridade** e teste do dono.
-- Se o escopo mudar de novo, **atualiza-se o desenho** (docs) **antes** de codificar — mantendo o
-  método "desenhar → depois construir".
+- **Fase 3** (fluxo por seção) e **Fase 5+6** (documentação + PDF) são as maiores; cada uma em
+  ~6–10 sub-rodadas.
+- **Fases 5, 6 e 7** dependem de **custo** (IA e certificado): cotar/testar **antes** de codar o
+  caro. O orçamento de tokens (FIA.2) protege contra surpresa.
+- **Fase 7** (assinatura) tem `[LACUNA jurídica]` — não fechar sem ADM + provedor (+ jurídico).
+- Cada fase termina com **relatório de integridade** e teste do dono.
+- Se o escopo mudar, **atualiza-se o desenho** (docs) **antes** de codificar.
 
 ---
 
