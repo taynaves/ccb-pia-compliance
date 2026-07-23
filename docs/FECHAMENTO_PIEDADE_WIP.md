@@ -1,6 +1,11 @@
 # MANUAL DE FECHAMENTO DA PIEDADE — documento de consulta (EM CONSTRUÇÃO)
 ## Tudo o que é obrigatório para um fechamento perfeito · Regional Coxim-MS
 
+> 🗄️ **RASCUNHO SUPERADO — não use como referência.** Este arquivo foi o **rascunho de trabalho**
+> que acumulou os lotes de arquivos. A versão **definitiva** (já confrontada com o super manual)
+> é **[`MANUAL_FECHAMENTO_PIEDADE.md`](MANUAL_FECHAMENTO_PIEDADE.md)** e o **[`Manual_Fechamento_Piedade.docx`](Manual_Fechamento_Piedade.docx)**.
+> Mantido aqui só como **histórico** do processo.
+
 > ⚠️ **DOCUMENTO EM CONSTRUÇÃO (WIP).** Está sendo montado a partir de **32 arquivos** enviados
 > em lotes de 5. Ao final, será **confrontado com o `super_manual_piedade_ccb.md`** e virado o
 > documento de consulta definitivo. **Progresso: lote 5 de 7 processado (arquivos 1–25 de 32).**
