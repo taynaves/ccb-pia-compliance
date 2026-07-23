@@ -3,7 +3,7 @@
 
 > ⚠️ **DOCUMENTO EM CONSTRUÇÃO (WIP).** Está sendo montado a partir de **32 arquivos** enviados
 > em lotes de 5. Ao final, será **confrontado com o `super_manual_piedade_ccb.md`** e virado o
-> documento de consulta definitivo. **Progresso: lote 2 de 7 processado (arquivos 1–10 de 32).**
+> documento de consulta definitivo. **Progresso: lote 3 de 7 processado (arquivos 1–15 de 32).**
 >
 > **Método (para você confiar no conteúdo):** eu **só transcrevo e organizo** o que está nas
 > fontes — não invento regra. Marco `[LACUNA]` onde falta informação, `[CONFLITO]` onde duas
@@ -190,8 +190,52 @@ envelope com cupons → **conferência de assinaturas e cupons** → **CARIMBO 2
 lançar prestação de contas → **CARIMBO 3: BAIXADO** → **escanear e enviar ao SIGA** → **triturar
 o canhoto na presença das Irmãs**.
 
+### 9B.5 FLUXO 3 — Almoxarifado: atendimento com materiais (DT em 2 vias)
+`Ficha C-1 aprovada com materiais` → **anotar produtos no verso da C-1** → SIGA: criar reserva de
+produtos → SIGA: Módulo Expedição > Conferir → **emitir DT (Declaração de Trânsito) em 2 vias** →
+**Almoxarifado: Irmã/Diácono assina a 2ª via** → **Atendimento: atendido assina a 1ª via ao
+receber** → mês seguinte: DT e C-1 retornam para baixa → SIGA: lançar envelope com **valor R$ 0,00
+e mercadoria = SIM**.
+
+### 9B.6 FLUXO 4 — Viagens missionárias e locomoções
+- **Viagem missionária:** previsão e **transferência para a conta 10020** → aprovação e emissão do
+  **envelope de viagem** → retorno: viajante entrega envelope e comprovantes → SIGA: prestar contas
+  e **baixar adiantamento**.
+- **Locomoção local:** **1 cupom fiscal por lançamento** → SIGA: nova despesa Tesouraria — **conta
+  3026** → anexar **PDF do cupom** e **histórico 047** → quem viajou? **Diácono = 2 Diáconos
+  assinam** o relatório · **Irmã = 4 Diáconos assinam**.
+
+### 9B.7 FLUXO 5 — Prestação de contas, digitalização e fechamento mensal (detalhado)
+`Início da reunião vigente` → **receber envelopes do mês anterior** → assinatura e cupons OK? →
+**não:** colher assinatura de parente **ou** anotar justificativa · **sim:** seguir → **carimbar
+cupons com o PRONTUÁRIO** → SIGA: Prestação de Contas > baixar envelopes → **carimbar envelope com
+CONFERIDO e BAIXADO** → **triturar canhotos na presença das Irmãs** → SIGA: upload de fichas e
+envelopes **por prontuário** → **deletar arquivos digitais do computador local** → fim do mês:
+gerar extratos e Termo de Verificação do Caixa → **assinatura de mín. 3 Diáconos** no Termo → SIGA:
+Tesouraria > Fech. Piedade > **ENCERRAR** → **anexar extratos e Termo DENTRO da janela de
+encerramento** → gerar **Balancete, C-9 e Protocolo de Documentos** → **entregar Pastas 1 a 6 na
+ADM mediante Protocolo assinado**.
+
+### 9B.8 FLUXO 3b — O funil do fechamento mensal obrigatório (até dia 20)
+`Início do fechamento` → **todas as agregadas (Casas de Oração) fechadas?** → **não:** contatar a
+Casa de Oração aberta (repetir até fechar) · **sim:** seguir → **imprimir e assinar relatórios**,
+em dois grupos:
+- **Grupo 1:** Relatório de Viagens + Protocolo ADM + DTs (compras/ADM);
+- **Grupo 2:** C-9 + Atas/Listas de Presença + Termos de Caixa/Extratos.
+→ SIGA: Tesouraria > Fech. Piedade > **Encerrar** → **upload dos 6 itens** na janela de diálogo →
+**CONFIRMAR ENCERRAMENTO**.
+
 > **Uso no motor de auditoria:** cada fluxo vira uma **sequência esperada**; faltando uma etapa
 > ou um carimbo (LIQUIDADO→CONFERIDO→BAIXADO), o motor sinaliza a pendência.
+
+### 9B.9 Regras pontuais capturadas dos fluxos (para o motor)
+- **DT em 2 vias:** 2ª via assinada por **Irmã/Diácono** (no almoxarifado); 1ª via assinada pelo
+  **atendido** (ao receber). Ambas as assinaturas são obrigatórias.
+- **Locomoção local:** conta **3026**, **histórico 047**, **1 cupom = 1 lançamento**, PDF anexo.
+- **Cupons** carimbados com o **número do prontuário**.
+- **Segurança/LGPD:** após o upload ao SIGA, **deletar os arquivos digitais do computador local**.
+- **Pastas físicas 1 a 6** entregues à ADM **mediante Protocolo assinado**.
+- **Pré-condição de fechamento:** **todas as Casas de Oração agregadas** precisam estar fechadas.
 
 ---
 
@@ -212,8 +256,15 @@ o canhoto na presença das Irmãs**.
 9. `FLUXO_2_Dinamica_da_Reuniao_de_Atendimento.txt` — Seção 9B.3.
 10. `FLUXO_2b_Ciclo_de_Vida_da_Ficha_C1_e_Carimbos.txt` — Seção 9B.4.
 
-**Progresso: lote 2 de 7 processado (arquivos 1–10 de 32).**
-**Lotes 3–7 (11–32):** aguardando envio.
+**Lote 3 (11–15) — PROCESSADO:**
+11. `FLUXO_3_Almoxarifado_Atendimento_com_Materiais.txt` — Seção 9B.5.
+12. `FLUXO_3b_Funil_do_Fechamento_Mensal_ate_dia_20.txt` — Seção 9B.8.
+13. `FLUXO_4_Viagens_Missionarias_e_Locomocoes.txt` — Seção 9B.6.
+14. `FLUXO_5_Prestacao_de_Contas_Digitalizacao_e_Fechamento.txt` — Seção 9B.7.
+15. `INDICE_ETAPA3.md` — meta/índice dos 6 blocos do projeto anterior (198 itens).
+
+**Progresso: lote 3 de 7 processado (arquivos 1–15 de 32).**
+**Lotes 4–7 (16–32):** aguardando envio.
 
 > `[NOTA]` Ainda **falta o `super_manual_piedade_ccb.md`** (as 24 DOCs originais). O FASE5 é
 > derivado dele e já cita trechos, mas o super manual completo é ideal para o confronto final.
