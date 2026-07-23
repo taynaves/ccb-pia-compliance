@@ -36,6 +36,7 @@
 
 | Arquivo | O que é |
 |---|---|
+| [`ROTEIRO_COMPLIANCE_PIEDADE.md`](ROTEIRO_COMPLIANCE_PIEDADE.md) | **🧭 Roteiro consolidado do compliance** — 12 módulos/capítulos (EAPI + ACPI), cada um ligado a um Google Doc de trabalho na pasta do Drive. Índice-mestre. |
 | [`Manual_Fechamento_Piedade.docx`](Manual_Fechamento_Piedade.docx) | **📄 Documento de consulta (Word) para a equipe validar** — conciliação, documentos obrigatórios e escrituração. |
 | [`MANUAL_FECHAMENTO_PIEDADE.md`](MANUAL_FECHAMENTO_PIEDADE.md) | A versão navegável (Markdown) do documento de consulta definitivo. |
 | [`super_manual_piedade_ccb.md`](super_manual_piedade_ccb.md) | **O super manual** (24 documentos oficiais da CCB) — fonte primária. |
