@@ -123,13 +123,43 @@ Aqui preciso ser **muito honesto**, porque "editar PDF" esconde **duas coisas be
 | Tipo de edição | Dificuldade | Viável no nosso orçamento? |
 |---|---|---|
 | **(A) Adicionar por cima:** texto novo, caixas, destaque, "borracha" (whiteout), imagem, carimbo, assinatura, números de página, preencher formulários | **Média** — dá para fazer bem com PDF-lib + uma camada de desenho sobre a página | ✅ **Sim.** É a maior parte do que o Sejda faz e cobre o seu caso (completar/assinar comprovantes) |
-| **(B) Editar o texto que já está "impresso" dentro do PDF** (mudar uma palavra que já faz parte do arquivo, refluindo o parágrafo) | **Alta** — o Sejda faz de forma limitada; é tecnicamente difícil e nem o Sejda acerta sempre | ⚠️ **Parcial/arriscado.** Recomendo **não** prometer paridade total aqui |
+| **(B) Trocar o texto que já está "impresso" dentro do PDF** | **Alta**, mas viável pela sua técnica (abaixo) para o caso comum | 🟡 **Sim, para PDF "nascido digital" (ex.: comprovantes do SIGA).** Fica **para depois** (Parte A primeiro) |
 
-> **Proposta honesta:** entregamos o tipo **(A) com qualidade Sejda** (que resolve o seu problema
-> dos comprovantes — adicionar texto, carimbo e assinatura, apagar/cobrir, inserir/remover/girar
-> páginas, preencher campos). O tipo **(B)** — reescrever texto embutido — fica como **"quando
-> possível"**, sem promessa de igualar o Sejda, porque seria superestimar. `[LACUNA]` confirmar
-> na implementação até onde o (B) é viável sem comprometer o resto.
+> **Proposta honesta:** entregamos primeiro o tipo **(A) com qualidade Sejda**. O tipo **(B)** —
+> **trocar texto embutido** — fica **para uma etapa seguinte** (você mesmo confirmou "deixar a
+> parte B para depois"), mas registro aqui **sua técnica, que é boa e viável**:
+
+#### 4.2.1 A técnica que você propôs para "trocar o texto" (Parte B) — análise
+Sua ideia (resumo): **(1)** identificar a formatação exata do texto presente (fonte, tamanho,
+altura da linha); **(2)** desenhar por cima um **retângulo da cor exata do fundo**, da altura dos
+caracteres (de baixo da linha até acima), ficando **imperceptível** — como um **corretivo tipo
+fita**; podendo desenhar com **espaço ou setas** (setas seriam melhores) para dimensionar; **(3)**
+reescrever por cima com **a mesma fonte, cor, tamanho e espaçamentos** do original.
+
+**Meu parecer (honesto e animador):** essa é, na prática, **exatamente como os editores reais
+fazem** — inclusive o Sejda. Ninguém "reflui" o texto original; **cobre e reescreve por cima**.
+E há uma **ótima notícia**:
+- **Em PDF "nascido digital"** (gerado por sistema — como os **comprovantes do SIGA**), a fonte,
+  o tamanho e a **posição exata** de cada trecho de texto **estão dentro do arquivo** e podem ser
+  **lidos**. Ou seja: o sistema pode **detectar sozinho** a caixa do texto e a formatação — e a
+  sua etapa (1) fica **semiautomática** (o usuário nem precisa medir na mão). A etapa (2)
+  (retângulo cor-do-fundo) fica **perfeita** quando o fundo é branco/uniforme (o caso dos
+  comprovantes). A etapa (3) (reescrever) usa a **mesma fonte** detectada.
+- **A tecla de seta para dimensionar o retângulo** entra como **ajuste fino/manual** — ótimo
+  para os casos em que a detecção automática não pega 100%.
+
+**As ressalvas honestas (onde não é mágica):**
+1. **Documento escaneado (imagem)** — aí **não há** dados de fonte (é uma foto do texto) e o
+   fundo costuma ser **irregular** (não é branco puro). A técnica ainda funciona, mas o
+   "corretivo" pode deixar uma leve marca e a fonte vira **aproximação**. Menos perfeito.
+2. **Texto novo de tamanho diferente** do que foi coberto pode **desalinhar** o que vem à frente
+   (é cobrir-e-reescrever, não refluir parágrafo). Contornável com o ajuste manual.
+3. **Fonte incomum não embutida** → usamos a **mais parecida**.
+
+> **Conclusão:** sua técnica **está correta** e torna a Parte B **viável para o caso que mais
+> importa a você** (comprovantes do SIGA, nascidos digitais). Mantemos a ordem: **Parte A
+> primeiro; Parte B depois**, começando pelos PDFs nascidos digitais (melhor resultado) e tratando
+> escaneados como aproximação. `[LACUNA]` medir na implementação a precisão real por tipo de fonte.
 
 > **Nota de segurança:** editar/assinar acontece **sobre o documento**, e toda alteração relevante
 > (quem editou, quando) vai ao **log** — coerente com o resto do sistema.
@@ -145,37 +175,57 @@ em vez de subir arquivo por arquivo (como no gov.br), que é lento?
 simples (e onde preciso ser honesto) é **onde a "identidade digital" mora** e **como o navegador
 a alcança**. Vou separar em camadas, do mais simples ao mais forte:
 
-#### 4.3.1 Antes de tudo: hoje a assinatura é FÍSICA (isto é uma mudança de processo)
-Pelo seu próprio manual (script #1), hoje os documentos são **impressos, assinados à caneta por
-3 diáconos e escaneados**. Ou seja: assinar digitalmente **substituiria** a assinatura física —
-é uma **decisão institucional** (a CCB/ADM aceita assinatura digital no lugar da física para
-esses documentos?), não só técnica. **Preciso que você confirme isso antes**, porque muda tudo:
-- **Se a assinatura continua física:** o Estúdio de PDF **não precisa** de assinador ICP-Brasil.
-  O que importa é o **módulo de verificação** conferir se o documento escaneado **tem** as
-  assinaturas/carimbos (Seção 4.3.5).
-- **Se vamos migrar para digital:** aí sim entram as camadas abaixo.
+#### 4.3.1 DECIDIDO (22/07): ADM/CCB aceita assinatura digital, e o alvo é a Fase B (ICP-Brasil)
+Confirmado por você:
+- **A ADM/CCB aceita assinatura digital no lugar da física** para esses documentos.
+- **O alvo é a Fase B — ICP-Brasil (qualificada).** A Fase A (nossa simples) **não serve** para
+  esses documentos oficiais (a ADM exige validade forte); ela permanece útil só para
+  **usos internos de baixo risco** (ex.: os termos de confidencialidade do modo de teste).
+- **gov.br via API está descartado** — liberado apenas para **órgãos públicos**. Correto.
 
-#### 4.3.2 As três "identidades" possíveis (e o que cada uma exige)
-| Opção | Força jurídica | Onde a "chave" mora | Assina em lote sem subir 1 a 1? |
-|---|---|---|---|
-| **Assinatura eletrônica simples** (nossa, via reautenticação Google + hash + carimbo de tempo) | Baixa/média (vale p/ uso interno) | No nosso sistema | ✅ Fácil e total — nós controlamos |
-| **gov.br** (assinatura avançada) | Média/alta | Nuvem do governo | ⚠️ Só via **API oficial** (exige ser **integrador credenciado** — processo formal com o ITI); o portal comum é 1 a 1 |
-| **ICP-Brasil qualificada** (certificado A1 arquivo, ou A3 token/cartão) | **Alta** (presunção legal máxima) | A1 = arquivo; A3 = dentro do token físico | ✅ Em lote **é possível**, mas exige um **componente local** no PC (extensão/app que fala com o token) |
+**O motivo REAL de assinar digital (você deixou claro):** não é sobre carimbo em página — é
+**eliminar o deslocamento físico**. Hoje cada diácono precisa **ir até a secretaria** assinar. Com
+assinatura digital, **cada diácono assina em lote pelo próprio celular**, de onde estiver.
 
-#### 4.3.3 O detalhe técnico decisivo (por que não é "só clicar")
-- **Certificado A3 (token/cartão — o mais comum e seguro):** a chave **nunca sai do token**. Um
-  site na nuvem **não consegue** falar direto com um token USB. Precisa de um **componente local**
-  instalado no PC do diácono (uma extensão de navegador tipo *Web PKI*, ou um app assinador de
-  mesa). **Com** esse componente, dá para **assinar os 80 de uma vez** localmente (o token assina
-  um hash de cada arquivo em sequência; pode pedir o PIN uma vez ou a cada arquivo, conforme o
-  token). O nosso sistema **prepara o lote** e **entrega os assinados de volta** à pasta.
-- **Certificado A1 (arquivo .pfx):** a chave é um arquivo. Assinar 80 em lote é trivial — **mas**
-  alguém teria que **carregar a chave privada** onde a assinatura acontece. Se for no servidor,
-  é **risco sério** (entregar a chave privada). Recomendo, se A1, assinar **localmente** também,
-  não no servidor.
-- **gov.br:** assinar em lote pela **API** exige **credenciamento oficial** (não é "ligar um
-  botão"); o portal público (assinador.iti.br) é **um por vez** — exatamente a lentidão que você
-  quer evitar.
+> **Sua análise sobre a "Fase A com carimbo" estava certa — e por isso a descartamos.** A ideia de
+> aplicar uma imagem de carimbo em cada página, reimprimir, colher assinatura física e re-escanear
+> **criaria uma etapa a mais e mais morosa** — pois, se é para assinar no papel, os diáconos já
+> carimbam e assinam **antes** de escanear, e pronto. O **único ganho real** da via digital é
+> **assinar remoto, do celular** — e isso **exige a Fase B** (validade jurídica de verdade).
+
+#### 4.3.2 Para assinar DO CELULAR com ICP-Brasil: o caminho é o "certificado em nuvem"
+Como o objetivo é assinar **remoto, do celular** (Seção 4.3.1), o tipo tradicional de certificado
+ICP-Brasil **não serve**:
+- **A3 (token/cartão físico)** — a chave vive num pendrive/cartão que se pluga no **PC**. Não dá
+  para usar bem no celular, e exige componente local no computador. **Descartado para o seu caso.**
+- **A1 (arquivo .pfx)** — a chave é um arquivo; para assinar em lote alguém teria que **carregar
+  a chave privada** no servidor (**risco sério**). **Descartado.**
+- **✅ Certificado em NUVEM (ICP-Brasil, "certificado na nuvem")** — **este é o certo para você.**
+  A chave fica guardada num **cofre seguro (HSM) do provedor**, e o diácono **autoriza pelo app do
+  provedor no próprio celular** (PIN/biometria). Tem **validade qualificada ICP-Brasil** e
+  **permite assinar em lote via API**. É exatamente o "assino 80 de uma vez, do meu celular".
+
+> **Provedores conhecidos de certificado em nuvem ICP-Brasil** (exemplos de mercado; a validar na
+> implementação): *BirdID (Soluti), VIDaaS (Valid), SafeID (Serpro/Certisign), NeoID*, etc. Vários
+> oferecem **API de assinatura em lote**. `[SUPOSIÇÃO]` os nomes/condições mudam com o tempo —
+> vamos cotar e testar na hora de implementar.
+
+#### 4.3.3 Como ficaria o fluxo (assinatura em lote pelo celular)
+```mermaid
+graph TD
+  A["Sistema junta os PDFs que faltam a assinatura do diácono X"] --> B["Sistema chama a API do provedor de certificado em nuvem"]
+  B --> C["Diácono X recebe pedido no APP do provedor no celular"]
+  C --> D["Ele autoriza uma vez - PIN ou biometria - o lote inteiro"]
+  D --> E["Provedor assina todos os PDFs - PAdES ICP-Brasil - e devolve"]
+  E --> F["Sistema arquiva os PDFs assinados na pasta certa"]
+  F --> G["Repete para o diácono Y e o Z - cada um no seu celular"]
+```
+- **Uma autorização = o lote todo.** O diácono não sobe arquivo por arquivo (fim da lentidão do
+  gov.br). Ele aprova **uma vez** e o provedor assina os 80.
+- **Custo honesto `[LACUNA]`:** cada diácono precisa **contratar o próprio certificado em nuvem**
+  (custo **anual por pessoa** — tipicamente algumas dezenas a ~R$ 200/ano, varia por provedor). E
+  o uso da **API do provedor** pode ter custo/mensalidade. Isso precisa entrar no **orçamento da
+  Regional** — não é gratuito como a assinatura simples. Vale cotar antes de decidir o provedor.
 
 #### 4.3.4 A realidade dos "3 diáconos"
 Cada diácono tem **a sua própria** identidade digital. Então "assinar 80 de uma vez" é **por
@@ -184,23 +234,21 @@ uma **fila de assinaturas** ("faltam as assinaturas de B e C"), mas são **3 ses
 clique coletivo. Isso é **inerente** a qualquer assinatura com validade jurídica — não é
 limitação nossa.
 
-#### 4.3.5 Recomendação em fases (honesta e sem prometer demais)
-1. **Fase A — já resolve muito e é barata:** implementar a **assinatura eletrônica simples**
-   nossa (reautenticação Google + hash + carimbo de tempo + registro no log), **em lote**,
-   reusando o mecanismo que já desenhamos para os termos (`MAPA_MODO_TESTE_v1`). Serve para
-   documentos internos e para acelerar o fluxo. **`[LACUNA jurídica]` confirmar se a ADM aceita
-   isso** no lugar da assinatura física para cada tipo de documento.
-2. **Fase B — se precisar de validade forte:** integrar **ICP-Brasil A3 via componente local**
-   (ex.: uma extensão de navegador de assinatura), com o sistema **preparando e devolvendo o
-   lote**. É a que entrega o "seleciono 80 e assino todos" com peso jurídico máximo. Exige uma
-   ferramenta de assinatura local (algumas são comerciais — a avaliar custo).
-3. **gov.br por API:** só se a instituição quiser trilhar o **credenciamento** oficial — é um
-   projeto à parte, mais burocrático.
+#### 4.3.5 Plano definido (22/07)
+1. **Alvo confirmado — Fase B via certificado em nuvem ICP-Brasil**, com assinatura em lote pelo
+   celular (Seção 4.3.2/4.3.3). É o que entrega o objetivo real (assinar remoto, sem ir à
+   secretaria) com validade jurídica de verdade.
+2. **Fase A (nossa simples) fica só para uso interno de baixo risco** (termos de
+   confidencialidade, aceites) — **não** para os documentos oficiais dos 3 diáconos.
+3. **gov.br via API — descartado** (só órgãos públicos).
+4. **Passo prático antes de implementar:** **cotar e testar** 2–3 provedores de certificado em
+   nuvem (custo por diácono + custo/condições da API de lote), e **confirmar com a ADM** qual
+   provedor/procedimento ela referenda.
 
-> `[LACUNA importante]` Assinatura com validade jurídica é área sensível. Nada aqui deve ser
-> tratado como certeza legal sem **confirmação de um advogado** e da **ADM/CCB** sobre o que é
-> aceito para cada documento. Meu papel é dizer o que é **tecnicamente possível** — a decisão de
-> validade é jurídica/institucional.
+> `[LACUNA importante]` Assinatura com validade jurídica é área sensível. Mesmo com a ADM
+> aceitando, na implementação confirmamos com o **provedor** (e, se possível, um **parecer
+> jurídico**) que o formato de assinatura em lote (PAdES) atende ao que a ADM exige. Meu papel é
+> dizer o que é **tecnicamente possível**; a validade final é jurídica/institucional.
 
 #### 4.3.6 Ligação com a verificação documental (você lembrou bem)
 O **módulo de verificação** (`MAPA_IA_DOCUMENTACAO_v1`, Seção 6) **precisa** detectar **assinatura
@@ -460,13 +508,19 @@ Como vamos usar **folhas com QR**, o dono pediu um **editor de separadores**. De
 
 > Ou seja: **casa fixa no menu + atalhos contextuais que apontam para ela.** Confirme se topa.
 
-### ❓ Ainda em aberto (dependem de decisão sua/institucional)
-7. **Assinatura digital (Seção 4.3):** primeiro preciso saber — **a ADM/CCB aceita assinatura
-   digital no lugar da física** para esses documentos? E, se sim, qual nível: nossa **simples**
-   (Fase A), **ICP-Brasil A3** com componente local (Fase B), ou **gov.br** via credenciamento?
-8. **Editar PDF (Seção 4.2):** confirmar que o alcance tipo **(A)** (adicionar texto/marcas/
-   assinatura/carimbo, apagar, mexer em páginas, preencher formulário) já atende — deixando o
-   tipo **(B)** (reescrever texto embutido) como "quando possível", sem promessa de igualar Sejda.
+7. ✅ **Assinatura digital (Seção 4.3) — DECIDIDO.** ADM aceita digital; alvo = **Fase B via
+   certificado em nuvem ICP-Brasil**, assinatura em lote **pelo celular** (elimina o
+   deslocamento à secretaria). Fase A simples só para uso interno. gov.br descartado. Fase A com
+   carimbo+reimpressão descartada (etapa morosa e inútil).
+8. ✅ **Editar PDF (Seção 4.2) — DECIDIDO.** Parte A primeiro; Parte B depois, usando a técnica de
+   "cobrir com retângulo cor-do-fundo + reescrever com a fonte detectada" (viável para PDFs
+   nascidos digitais, como os do SIGA).
+
+### ❓ Ainda em aberto
+9. **Onde o módulo aparece:** confirmar a minha recomendação (casa fixa no menu + atalhos
+   contextuais) — Seção 7 acima.
+10. **Provedor de certificado em nuvem:** cotar/testar (BirdID, VIDaaS, SafeID…) e ver qual a ADM
+    referenda — só na hora de implementar a Fase B, mas convém você já ir sondando com a ADM.
 
 ---
 
