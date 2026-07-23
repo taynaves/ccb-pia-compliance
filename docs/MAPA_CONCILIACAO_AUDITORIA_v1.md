@@ -73,8 +73,17 @@ Para cada tipo, o motor aplica a **lista de exigências das normas internas** (d
 - se a ficha menciona **roupas/cesta básica** → a **DT** correspondente está anexa? E o inverso:
   se há **DT**, a ficha registra que seria atendido com roupas/cesta?
 
-> Isso é o **three-way match da CCB**: **envelope (autorização) + ficha C-1 (o atendimento) +
-> recibo (comprovante)** — mais a **DT** quando há mercadoria. O motor cruza os quatro.
+> Isso é **um exemplo** de match da CCB: **envelope (autorização) + ficha C-1 (o atendimento) +
+> recibo (comprovante)** — mais a **DT** quando há mercadoria.
+>
+> ⚠️ **Correção do dono (23/07):** o caso do **envelope é apenas UM** dos processos — **existem
+> muitos outros** (locomoção, viagem, numerários, transferências, aquisições, etc.), **cada um
+> com o seu próprio "conjunto de documentos que têm que casar"**. Por isso o motor **não** pode
+> ter uma regra fixa de "3 vias": ele precisa de um **catálogo de processos**, onde cada tipo de
+> processo define **quais documentos o compõem** e **como eles casam entre si**. Isso reforça a
+> necessidade do **motor de asserções montável** (Seção 3.4) e do **mapa de normas por tipo de
+> documento** (Seção 8, decisão 5) — é lá que cada processo será descrito. `[LACUNA]` mapear
+> **todos** os tipos de processo com a sua equipe.
 
 ### 3.3 Conciliação cruzada (o coração)
 1. **Lista `.md` de todos os atendimentos × Relatório de Atendimentos do SIGA** → aponta
@@ -151,9 +160,23 @@ A parte mais cara de IA (**OCR**) já estava prevista. **A conciliação em si q
   resumo** para humano. Ou seja, **a auditoria "pensa" de graça**; só **ler e explicar** custa
   token — e pouco, em lote.
 
-> **Resultado:** uma conciliação completa de um mês inteiro cabe **folgado** no seu limite ("menos
-> que uma janela de 5h do Claude Pro"), porque o trabalho pesado é **conta**, não **conversa com
-> IA**.
+> **Resultado:** a **conta** da conciliação é de graça. Mas há uma **ressalva honesta** sobre a
+> **leitura** — ver o alerta abaixo.
+
+> ⚠️ **Ajuste do dono (23/07): serão CENTENAS de campos MANUSCRITOS — a ficha C-1 é preenchida
+> inteiramente à mão.** Isso muda o cálculo de custo em um ponto: ler **texto impresso** é barato
+> (OCR comum); ler **letra manuscrita** com confiabilidade **exige a IA de visão** (mais cara que
+> o OCR comum) — o OCR tradicional erra muito em manuscrito. Consequências:
+> - **A conta continua de graça**, mas **a leitura das fichas C-1 vai custar mais** do que eu
+>   havia dado a entender. Precisamos **medir** com uma amostra real na implementação.
+> - **Estratégia para não estourar o orçamento:** (a) ler por **IA de visão só os campos que
+>   importam para a conciliação** (valor, prontuário, nome), não a ficha inteira; (b) processar
+>   **em lote**; (c) onde a IA ficar **em dúvida**, **pedir confirmação ao humano** (que já está
+>   ali conferindo) em vez de gastar mais tentando adivinhar; (d) **aprender** os campos fixos do
+>   formulário C-1 (posições sempre iguais) para focar a leitura.
+> - **Honestidade:** manuscrito é o **calcanhar de Aquiles** de qualquer sistema. O acerto **não
+>   será 100%**; o desenho assume isso e **transforma a dúvida em pedido de confirmação**, não em
+>   erro silencioso.
 
 ---
 
@@ -174,9 +197,11 @@ A parte mais cara de IA (**OCR**) já estava prevista. **A conciliação em si q
 1. **Depende dos relatórios do SIGA exportados** para a pasta. Não há (que eu saiba) API do SIGA
    para puxar sozinho — então a conciliação com o SIGA **só roda** se você **exportar** os
    relatórios (PDF/Excel) para a pasta. `[LACUNA]` confirmar formatos que o SIGA exporta.
-2. **Letra manuscrita** (nomes, valores à mão nas fichas) é o **ponto fraco do OCR** — nesses
-   campos o motor vai **pedir confirmação humana** mais vezes, em vez de arriscar. Honesto: aqui
-   o acerto não é 100%.
+2. **Letra manuscrita em GRANDE volume** (a ficha C-1 é **inteiramente manual**; serão **centenas**
+   de campos à mão por mês). É o **ponto mais difícil** de todo o sistema. Exige **IA de visão**
+   (não o OCR barato), custa mais, e **não acerta 100%**. O desenho assume isso: lê só os campos
+   que importam, em lote, e **converte dúvida em pedido de confirmação humana** (ver Seção 5). É
+   preciso **medir com amostra real** antes de prometer números.
 3. **Benford e anomalias** são **rastreadores**, não provas — apontam "onde olhar", não condenam.
 4. **A régua é o manual.** A qualidade da auditoria depende de mapearmos bem as normas internas
    (assinaturas por tipo, carimbos, contas). Vamos extrair isso do manual + com você.
