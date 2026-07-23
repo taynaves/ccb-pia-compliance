@@ -3,12 +3,19 @@
 
 > ⚠️ **DOCUMENTO EM CONSTRUÇÃO (WIP).** Está sendo montado a partir de **32 arquivos** enviados
 > em lotes de 5. Ao final, será **confrontado com o `super_manual_piedade_ccb.md`** e virado o
-> documento de consulta definitivo. **Progresso: lote 1 de 7 processado (arquivos 1–5 de 32).**
+> documento de consulta definitivo. **Progresso: lote 2 de 7 processado (arquivos 1–10 de 32).**
 >
 > **Método (para você confiar no conteúdo):** eu **só transcrevo e organizo** o que está nas
 > fontes — não invento regra. Marco `[LACUNA]` onde falta informação, `[CONFLITO]` onde duas
 > fontes divergem, e `[FONTE: arquivo]` a origem de cada regra. Números e normas serão
 > **confirmados por você/equipe** antes da versão final.
+>
+> ⭐ **DOCUMENTO-MESTRE identificado (lote 2):** o arquivo `FASE5_MapaProcessos_Contas_CCB_Piedade_v1.0.md`
+> (198 itens: 49 processos + 149 cartões de conta, com fonte citada, passos no SIGA, documentos,
+> **checklist de verificação** e prazos por item) já é, na prática, **a espinha dorsal** deste
+> documento de consulta. O plano é: **usar o FASE5 como base**, e este WIP **acrescenta** o que
+> ele não tem (fluxos operacionais, anotações de campo, plano vivo de Coxim, conflitos) — e no
+> final tudo é **confrontado com o `super_manual_piedade_ccb.md`** (a fonte de origem do FASE5).
 
 ---
 
@@ -22,6 +29,7 @@
 7. Segregação de funções e controles internos
 8. Regras por processo (viagens, almoxarifado, Santa Ceia, transferências/pares-espelho)
 9. Verificações de campo (anotações de reunião de treinamento)
+9-B. Fluxos operacionais (do início do mês ao fechamento)
 10. Fontes processadas / pendentes
 
 ---
@@ -70,6 +78,20 @@
   deve **igualar** as despesas lançadas.
 - **Adiantamentos a fornecedores (1040) e para despesas (1045):** manter **composição dos
   adiantamentos em aberto**.
+
+> `[FONTE: FASE5 #001/#002]` **Termo de Verificação do Caixa** (nome oficial): modelo em **SIGA >
+> Intranet > InfoCCB**; **mínimo 3 Diáconos** assinam; anexar em **SIGA > Tesouraria > Fech.
+> Piedade > coluna "Arquivo"** na conta do Grupo 100; **original** na **Pasta Nº 1** (Contabilidade)
+> + **cópia** na **Pasta Nº 4** (Tesouraria). Cofre **aberto e fechado por 2+ Diáconos em conjunto**,
+> nunca individualmente; **sem pendências de documento no caixa**.
+>
+> `[FONTE: FASE5 #002 / DOC-20]` **Antes de responder o checklist, emitir:** balancete auxiliar da
+> Piedade · Termo de Verificação do Caixa · extratos bancários (conta movimento **e** aplicação) ·
+> razão das contas · mapa de coletas e ofertas.
+>
+> `[FONTE: FASE5 #002 / DOC-18]` **Cheques:** cruzados e nominais ao favorecido, assinados por
+> **2 irmãos, preferencialmente Diáconos** (conforme procuração da ADM). Entradas sem
+> identificação no extrato → conta **2041** (depósitos não identificados).
 
 ## 5. Regras por conta (saldos esperados e contas que devem zerar)
 > `[FONTE: BLOCO1A + CHECKPOINT_E3]`
@@ -136,6 +158,43 @@ cc 130027576 (Piedade) · 10113 Santander cc 130027569 (Viagem) · 10114 Santand
 
 ---
 
+## 9-B. Fluxos operacionais (do início do mês ao fechamento)
+> `[FONTE: arquivos FLUXO_1, FLUXO_1a, FLUXO_2, FLUXO_2b]` — a **sequência esperada** de cada
+> processo (base para o motor de auditoria checar "o que deveria ter acontecido, e nesta ordem").
+
+### 9B.1 FLUXO 1 — Preparação pré-reunião (estoque e cadastros)
+`Início do mês` → **Inventário físico da lojinha** → há divergência de saldo? → **sim:** ajustar
+estoque no SIGA (**até sexta-feira**) · **não:** seguir → **receber doações/cestas** → **lançar
+entrada no SIGA** (Almoxarifado PADRÃO) → **Secretaria: revisar cadastros** → prontuário existe?
+→ **não:** criar novo prontuário **em nome do membro batizado** · **sim:** atualizar dados e
+cônjuge → **pronto para a reunião**.
+
+### 9B.2 FLUXO 1a — Almoxarifado atendendo outra cidade (ex.: Sonora)
+`Mês 1:` gerar **DT** no Almoxarifado Coxim → entrega física do material ao atendido em Sonora →
+`Mês 2:` a irmã traz a **Ficha C-1** para a reunião em Coxim → **descrever os produtos da DT no
+verso da C-1** → SIGA: lançar atendimento → **valor = R$ 0,00** → **mercadoria = SIM** → finalizar.
+
+### 9B.3 FLUXO 2 — Dinâmica da reunião de atendimento
+`Abertura` → SIGA: abrir reunião e **definir saldo inicial** → Secretaria: **autenticar
+participantes** → Mesa: analisar casos e fichas C-1 → **tipo de caso?**
+- **Normal/Momento:** preencher valores **em vermelho** na C-1;
+- **Emergência:** anotar reembolso na C-1;
+- **Sigiloso/Ministério:** separar para **reunião sigilosa pós-culto**.
+→ SIGA: lançar atendimento e **imprimir envelope** → **carimbar C-1 como LIQUIDADO** → entregar
+numerário e **colher assinatura no canhoto** → SIGA: encerrar reunião → **assinar Ata, Posição
+Financeira e Lista de Presença**.
+
+### 9B.4 FLUXO 2b — Ciclo de vida da Ficha C-1 e os 3 carimbos
+`Ficha preenchida` → lançamento de valores → **CARIMBO 1: LIQUIDADO** (na emissão) → retorno do
+envelope com cupons → **conferência de assinaturas e cupons** → **CARIMBO 2: CONFERIDO** → SIGA:
+lançar prestação de contas → **CARIMBO 3: BAIXADO** → **escanear e enviar ao SIGA** → **triturar
+o canhoto na presença das Irmãs**.
+
+> **Uso no motor de auditoria:** cada fluxo vira uma **sequência esperada**; faltando uma etapa
+> ou um carimbo (LIQUIDADO→CONFERIDO→BAIXADO), o motor sinaliza a pendência.
+
+---
+
 ## 10. Fontes processadas / pendentes
 **Lote 1 (1–5) — PROCESSADO:**
 1. `BLOCO1A_SubRodada_DOC21_ParteA_Contas100_210.md` — Plano de Contas Comentado (contas 100–210).
@@ -145,9 +204,17 @@ cc 130027576 (Piedade) · 10113 Santander cc 130027569 (Viagem) · 10114 Santand
 4. `contas_coxim.txt` — **plano de contas vivo de Coxim** (Seção 6).
 5. `conv_critiane.txt` — anotações de reunião (Seções 2, 3, 9).
 
-**Lotes 2–7 (6–32):** aguardando envio.
+**Lote 2 (6–10) — PROCESSADO:**
+6. `FASE5_MapaProcessos_Contas_CCB_Piedade_v1.0.md` — ⭐ **DOCUMENTO-MESTRE** (198 processos/contas
+   auditados). Será a espinha dorsal do documento final. *(455 KB; referenciado, não recopiado.)*
+7. `FLUXO_1_Preparacao_PreReuniao_Estoque_e_Cadastros.txt` — Seção 9B.1.
+8. `FLUXO_1a_Logistica_Almoxarifado_outras_cidades.txt` — Seção 9B.2.
+9. `FLUXO_2_Dinamica_da_Reuniao_de_Atendimento.txt` — Seção 9B.3.
+10. `FLUXO_2b_Ciclo_de_Vida_da_Ficha_C1_e_Carimbos.txt` — Seção 9B.4.
 
-> `[NOTA]` Os arquivos CHECKPOINT referem-se a um trabalho anterior que gerou o
-> `FASE5_MapaProcessos_Contas_CCB_Piedade_v1.0.md` (198 itens, 9 seções) a partir do
-> `super_manual_piedade_ccb.md` (24 DOCs). **Se você tiver esses dois arquivos**, enviá-los
-> enriquece muito o confronto final.
+**Progresso: lote 2 de 7 processado (arquivos 1–10 de 32).**
+**Lotes 3–7 (11–32):** aguardando envio.
+
+> `[NOTA]` Ainda **falta o `super_manual_piedade_ccb.md`** (as 24 DOCs originais). O FASE5 é
+> derivado dele e já cita trechos, mas o super manual completo é ideal para o confronto final.
+> Se tiver, envie em algum lote.
