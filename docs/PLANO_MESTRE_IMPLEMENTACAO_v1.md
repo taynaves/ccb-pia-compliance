@@ -14,8 +14,8 @@
 > **Documentos-fonte** (pasta `docs/`): `REQUISITOS_CONSOLIDADO_CCB_PIA.md` ·
 > `MAPA_PERMISSOES_RELATORIOS_v1.md` · `MAPA_ARMAZENAMENTO_E_EDITOR_v1.md` ·
 > `MAPA_FLUXO_POR_SECAO_v1.md` · `MAPA_MODO_TESTE_v1.md` · `MAPA_IA_v1.md` ·
-> `MAPA_IA_DOCUMENTACAO_v1.md` · `MAPA_MODULO_PDF_v1.md` · `CHECKLIST_CONTEUDO.md` ·
-> `checklist_def.json`.
+> `MAPA_IA_DOCUMENTACAO_v1.md` · `MAPA_MODULO_PDF_v1.md` · `MAPA_CONCILIACAO_AUDITORIA_v1.md` ·
+> `CHECKLIST_CONTEUDO.md` · `checklist_def.json`.
 
 ---
 
@@ -53,6 +53,9 @@ graph TD
   F0 --> F5["Fase 5 — Módulo Documentação: Drive/OCR/renomear/auditoria"]
   FIA --> F5
   F4 --> F5
+  F5 --> F5B["Fase 5-B — Motor de Conciliação e Auditoria Contínua"]
+  F1 --> F5B
+  F5B --> F3
   F5 --> F6["Fase 6 — Estúdio de PDF + pipeline escanear→arquivar"]
   FIA --> F6
   F6 --> F7["Fase 7 — Assinatura digital em nuvem (ICP-Brasil)"]
@@ -123,6 +126,24 @@ graph TD
   **manual operacional** (o "script #1"). Resumo + detalhado = completo; um só = parcial.
 - **P5.6** LGPD: minimização, acesso por domínio, log sem conteúdo sensível, dados no Drive do
   próprio ponto. `[LACUNA]` validar retenção/zero-data-retention do provedor de IA.
+
+## FASE 5-B — Motor de Conciliação e Auditoria Contínua  *(NOVO — o "auditor-IA")*
+> Fonte: `MAPA_CONCILIACAO_AUDITORIA_v1.md`. Extensão do M5; alimenta as Fases 1 e 3.
+- **P5B.1** Extração de dados-chave de cada documento para `.md` estruturado (durante o scan).
+- **P5B.2** Testes documento-a-documento (three-way match CCB: envelope + ficha C-1 + recibo +
+  DT), conforme as normas do manual (assinaturas, carimbos, prontuário, duplicidade).
+- **P5B.3** Conciliação cruzada: lista `.md` × Relatório de Atendimentos do SIGA; Posição
+  Financeira × Σ envelopes; **rastreamento banco→caixa→envelope→atendido** × razão/diário/balancete.
+- **P5B.4** **Motor de asserções montável** ("perguntas de relacionamento documental"): tipos de
+  regra (igualdade, soma, presença em pasta, contagem de assinaturas, ordem de datas, sequência,
+  duplicidade) autoráveis como **itens de checklist** (via editor da Fase 1; testável na Fase 8).
+- **P5B.5** Camada anti-fraude: Benford + duplicidade + números redondos/abaixo de alçada + mesma
+  assinatura + datas fora de ordem → alertas "verificar" (não acusação).
+- **P5B.6** Saída exceção-primeiro: placar conciliado×faltando, notificação do que falta,
+  **pré-preenche o checklist** com não conformidades e prováveis OK — **humano sempre confirma**.
+- *Custo de IA quase zero (a conciliação é matemática determinística; IA só lê ambíguo e redige).*
+- `[LACUNA]` depende de exportar os relatórios do SIGA para a pasta; OCR de manuscrito pede
+  confirmação humana.
 
 ## FASE 6 — Estúdio de PDF + pipeline escanear→arquivar  *(NOVO)*
 > Fonte: `MAPA_MODULO_PDF_v1.md`. Reembala o seu "Gestor de Documentos v5.0" como módulo.
