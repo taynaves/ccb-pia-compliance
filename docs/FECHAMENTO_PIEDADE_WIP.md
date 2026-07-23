@@ -3,7 +3,7 @@
 
 > ⚠️ **DOCUMENTO EM CONSTRUÇÃO (WIP).** Está sendo montado a partir de **32 arquivos** enviados
 > em lotes de 5. Ao final, será **confrontado com o `super_manual_piedade_ccb.md`** e virado o
-> documento de consulta definitivo. **Progresso: lote 4 de 7 processado (arquivos 1–20 de 32).**
+> documento de consulta definitivo. **Progresso: lote 5 de 7 processado (arquivos 1–25 de 32).**
 >
 > **Método (para você confiar no conteúdo):** eu **só transcrevo e organizo** o que está nas
 > fontes — não invento regra. Marco `[LACUNA]` onde falta informação, `[CONFLITO]` onde duas
@@ -57,6 +57,28 @@
 
 > `[LACUNA]` O manual (script #1) lista **6 blocos obrigatórios** de fechamento; a anotação acima
 > lista itens parecidos mas não idênticos. **Confrontar e unificar** com o super manual.
+
+### 2.1 Lista consolidada para anexar no encerramento `[FONTE: orientacoes_dales_2]`
+Na **primeira tela** do encerramento, anexar **tudo assinado**:
+- **Atas · Posição Financeira · Lista de Presença** (das reuniões Normal, **Fundo, Sigilo e
+  Música**);
+- **Relatório de viagem do período**;
+- **Inventário dos produtos**;
+- **Protocolo de entrega de documentos**;
+- **Extratos assinados das contas** — extratos do **banco** e do **SIGA**, **consolidados
+  (verificados) em um único arquivo**.
+
+### 2.2 Passo a passo para fechar o mês `[FONTE: passo_a_passo_para_fechamento]`
+Depois de **lançar tudo**:
+1. **Tesouraria > Relatórios:**
+   - **Protocolo de Documentos** (ordenado por lançamentos) → gerar → **imprimir 2 vias** (PDF);
+   - **Mov. Financeiro C-9** → gerar;
+   - **Balancete** → gerar (**"Exibir apenas com valores"**, código reduzido).
+2. **Tesouraria > Fechamento Piedade > competência > opções > anexar** (de preferência **antes**):
+   - atas assinadas · posições financeiras · listas de presença · relatório de viagens;
+   - junto: **Protocolo · C-9 · Balancete** (todos **assinados**).
+3. **⚠️ Só libera corretamente após o fechamento total no sistema** (reconhecimento de receitas
+   etc.) — aí as informações ficam corretas.
 
 ## 3. Reuniões de atendimento — o que anexar (cada reunião)
 > `[FONTE: conv_critiane.txt]`
@@ -162,6 +184,20 @@ cc 130027576 (Piedade) · 10113 Santander cc 130027569 (Viagem) · 10114 Santand
   BAIXADO** + **cópia do cupom fiscal**.
 - **Três reuniões sempre:** toda reunião de atendimento abre **três** — **Normal, Sigiloso,
   Fundo Musical** — mesmo sem atendimento em alguma (item 4.24).
+- **Gestão de reuniões `[FONTE: Orientacao_dales_junho_26]`:** **NUNCA** ter duas reuniões
+  **abertas ao mesmo tempo**; **nunca** cadastrar uma reunião com outra **agendada ou em
+  andamento**; **só agendar um evento após o anterior estar concluído**. A autenticação de
+  presença **só deixa entrar os Diáconos** quando cria o evento.
+- **Almoxarifado `[FONTE: Orientacao_dales_junho_26]`:** mesmo que o atendimento seja **só
+  roupas**, é preciso **enviar C-1 para aprovação na reunião**; **nunca** fazer **ficha de
+  emergência** do almoxarifado; `[LACUNA]` confirmar com Dales como fazer **saídas sem reunião**
+  para Sonora/SGO.
+- **Adiantamento que cruza o mês `[FONTE: orientacoes_dales_1]`:** se o adiantamento foi feito no
+  **fim de um mês** mas a viagem **começa no mês seguinte**, **remover o envelope de adiantamento
+  do mês anterior** e lançá-lo **no mês em que a viagem se iniciou** (evita pendências — foi o
+  problema dos envelopes do Dede→SP e do ir. José Hernandes em janeiro).
+- **Visto `[FONTE: orientacoes_dales_1]`:** quem assina o visto **tem que aparecer junto com o
+  responsável pelo visto**.
 - **Regra de ouro (plenário):** **todo lançamento no SIGA tem que ter documento assinado** que
   lhe dê veracidade. **Exceção:** **notas fiscais e cupons NÃO se assinam.** `[FONTE: notas_dales]`
 - **Transferências — pares espelho** (remetente Despesa ↔ receptora Receita), a bater sempre:
@@ -360,8 +396,16 @@ pelo atendido). Enviar no SIGA em **Piedade > Reunião > filtros > enviar docume
 - **Diáconos que assinam (Coxim):** adalto, nilson, joão. `[LACUNA]` confirmar papéis/atualidade.
 - **Inventário real do almoxarifado a cada 3 meses.**
 
-**Progresso: lote 4 de 7 processado (arquivos 1–20 de 32).**
-**Lotes 5–7 (21–32):** aguardando envio.
+**Lote 5 (21–25) — PROCESSADO:**
+21. `Orientacao_dales_junho_26.txt` — gestão de reuniões + almoxarifado (Seção 8).
+22. `orientacoes_dales_1.txt` — adiantamento cruzando o mês + visto (Seção 8).
+23. `orientacoes_dales_2.txt` — lista consolidada de encerramento (Seção 2.1).
+24. `passo_a_passo_para_fechamento.txt` — passo a passo de fechamento (Seção 2.2).
+25. `piedade_..._plano-de-contas-comentado_2020-07.md` — ⭐ **fonte oficial DOC-21** (Plano de
+    Contas Comentado completo, jul/2020; é a origem do BLOCO1A). *(referenciado, não recopiado.)*
+
+**Progresso: lote 5 de 7 processado (arquivos 1–25 de 32).**
+**Lotes 6–7 (26–32):** aguardando envio.
 
 > `[NOTA]` Ainda **falta o `super_manual_piedade_ccb.md`** (as 24 DOCs originais). O FASE5 é
 > derivado dele e já cita trechos, mas o super manual completo é ideal para o confronto final.
