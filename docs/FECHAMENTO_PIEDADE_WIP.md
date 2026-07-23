@@ -3,7 +3,7 @@
 
 > ⚠️ **DOCUMENTO EM CONSTRUÇÃO (WIP).** Está sendo montado a partir de **32 arquivos** enviados
 > em lotes de 5. Ao final, será **confrontado com o `super_manual_piedade_ccb.md`** e virado o
-> documento de consulta definitivo. **Progresso: lote 3 de 7 processado (arquivos 1–15 de 32).**
+> documento de consulta definitivo. **Progresso: lote 4 de 7 processado (arquivos 1–20 de 32).**
 >
 > **Método (para você confiar no conteúdo):** eu **só transcrevo e organizo** o que está nas
 > fontes — não invento regra. Marco `[LACUNA]` onde falta informação, `[CONFLITO]` onde duas
@@ -30,7 +30,9 @@
 8. Regras por processo (viagens, almoxarifado, Santa Ceia, transferências/pares-espelho)
 9. Verificações de campo (anotações de reunião de treinamento)
 9-B. Fluxos operacionais (do início do mês ao fechamento)
-10. Fontes processadas / pendentes
+11. Itens de checklist do SIGA (conferência a posteriori)
+12. Conferência detalhada da Ficha C-1 (antes de escanear)
+13. Fontes processadas / pendentes
 
 ---
 
@@ -138,6 +140,30 @@ cc 130027576 (Piedade) · 10113 Santander cc 130027569 (Viagem) · 10114 Santand
   21/07/2025).
 - **Estoque:** máximo de **4 reuniões** por item.
 - **Viagens:** prestação de contas em até **2 meses**; pendência **bloqueia nova viagem**.
+- **Compras de baixo valor:** abaixo de **R$ 300,00** fica **dispensada** a apresentação de **3
+  orçamentos** ou contrato nacional via CNS. `[FONTE: notas_compra_baixo_valor.txt]`
+- **Cotações:** sempre efetuadas e **anexadas aos documentos fiscais** (item 6.5).
+- **Cestas básicas:** primeiro **lançar em Produtos e Serviços > Mov. Estoque > + Novo estoque**.
+- **Locomoção (detalhe — `[FONTE: notas_dales]`):** Tesouraria > Caixas e Bancos > Nova Despesa.
+  Inserir **valor total recebido, valor gasto, valor devolvido** (troco) e **complementação**
+  (reembolso se o adiantamento foi insuficiente). Se o **cupom > adiantamento** e o irmão **abre
+  mão do reembolso**, lançar como reembolso mesmo → gera **sobra em caixa** (ajustar no Termo de
+  Verificação do Caixa). Conta **10010** (Caixa Obra Pia) para **todas** as locomoções (diác. e
+  irmãs); despesa **3026**; **histórico 047** (pgto cupom fiscal). **Fornecedor = CNPJ.** Data do
+  documento = **início da viagem**; data de retorno = **data do cupom**; forma de pagamento = a
+  mesma do adiantamento (em Coxim, **dinheiro**). Se o cupom for de data posterior, no relatório
+  de locomoção usar a **data de retorno = data do cupom**.
+- **Rateio:** quando a nota fiscal da Piedade contém itens **fora da competência** da Piedade
+  (alimentação, limpeza etc. para a Congregação).
+- **Assinaturas de locomoção:** **veracidade** = o próprio viajante; **ciência** = **mín. 2
+  Diáconos**. **Locomoção das IRMÃS = 4 Diáconos** (3 autorizando + 1 para visto do caixa).
+  Locomoções **não precisam de carimbo** (são despesas de Tesouraria).
+- **Viagem missionária — baixa DENTRO do mês da viagem.** Anexar **scan do envelope com carimbo
+  BAIXADO** + **cópia do cupom fiscal**.
+- **Três reuniões sempre:** toda reunião de atendimento abre **três** — **Normal, Sigiloso,
+  Fundo Musical** — mesmo sem atendimento em alguma (item 4.24).
+- **Regra de ouro (plenário):** **todo lançamento no SIGA tem que ter documento assinado** que
+  lhe dê veracidade. **Exceção:** **notas fiscais e cupons NÃO se assinam.** `[FONTE: notas_dales]`
 - **Transferências — pares espelho** (remetente Despesa ↔ receptora Receita), a bater sempre:
   | Remetente (Despesa) | Receptora (Receita) |
   |---|---|
@@ -239,7 +265,63 @@ em dois grupos:
 
 ---
 
-## 10. Fontes processadas / pendentes
+## 11. Itens de checklist do SIGA (conferência a posteriori)
+> `[FONTE: Itens_a_serem_observados_e_conferidos_a_posteriori.txt]` — itens numerados do checklist
+> oficial (a casar com o checklist do sistema):
+- **4.18** — Numeração das páginas do **Livro Ata** em ordem sequencial; atas em ordem
+  cronológica; **listas de presença** também numeradas sequencialmente.
+- **4.21** — Cadastro de **prontuários** conferido regularmente para **não haver duplicidades**.
+- **4.22** — Diáconos e Irmãs instruídos a **jamais usar cartão pessoal** nos atendimentos.
+- **4.24** — **Todas** as reuniões registradas no SIGA, **mesmo sem atendimento** (Geral, Sigilo,
+  Fundo Musical).
+- **5.1** — **Livro de Atas encadernado em brochura**.
+- **5.3** — Documentos de **atendimento ao Ministério arquivados separadamente**.
+- **6.5** — **Cotações** sempre efetuadas e **anexadas** aos documentos fiscais.
+- **6.8** — Compras para estoque no SIGA conforme procedimento; existência física, **plaqueta/
+  controle de estoque atualizado**.
+
+## 12. Conferência detalhada da Ficha C-1 (ANTES de escanear)
+> `[FONTE: NOTAS_fechamento_com_cristiane.txt]` — o "passo a passo" da conferência de cada ficha.
+> **É a base direta do motor de auditoria da C-1.**
+
+**Ordem obrigatória:** conferir/lançar **→ carimbar** (nunca carimbar antes de conferir).
+**Antes de tudo: assinatura de 2 ou 3 Diáconos** na ficha.
+
+**(a) Conferir o lançamento de cada ficha** (sempre com as informações da **casa do atendido**):
+- **Caso** = Reunião ou Emergência — e se está **assinalado**;
+- **Sempre "caso novo"** (não marcar reapresentação) e assinalado;
+- **Quem atenderá** (Irmãs ou Diácono) — assinalado;
+- **Data** — obrigatória;
+- **Nº do prontuário** — obrigatório;
+- **Estado civil** — se casado(a), **incluir nome do cônjuge**;
+- **Ficha no nome do ESPOSO se batizado** (ainda que há poucos meses); **sempre em nome de
+  batizado(a)**;
+- **Renda:** valor que a pessoa paga/ganha (aluguel, trabalho, previdência); **"Piedade atende
+  mensal" = SEMPRE NÃO**; quanto ganham os **filhos** (se moram na casa, somar todos); **nº de
+  filhos que trabalham**;
+- **Valor de momento em VERMELHO** (numérico **e** por extenso); **assinatura do secretário ou
+  do presidente da reunião**.
+
+**(b) Sequência de carimbos:**
+- **LIQUIDADO** — só **depois** de conferir e lançar os valores;
+- **CONFERIDO** — depois de conferir os **valores dos envelopes** (compras + deixado com o atendido);
+- **BAIXADO** — depois de lançar os valores dos comprovantes e do "deixado com a família".
+
+**(c) Escanear e enviar:** ficha (LIQUIDADA) + envelope (CONFERIDO e BAIXADO) + **DT** (recebida
+pelo atendido). Enviar no SIGA em **Piedade > Reunião > filtros > enviar documentos** —
+**sempre FICHA, ENVELOPE e DT**.
+
+> **Semântica de status no SIGA `[FONTE: cristiane]`:** **VERDE (encerrado)** = a reunião foi
+> encerrada, **mas sem** prestação de contas; **VERMELHO (baixado)** = prestação de contas das
+> fichas **feita**. `[LACUNA]` confirmar essa leitura de cores com a equipe (parece contraintuitiva).
+
+> **⚠️ SIGILO (reforço):** ao anexar atas/listas/posição do mês (que **conselho fiscal e
+> contadores** conseguem ver), **NUNCA** incluir **qualquer listagem de atendidos**.
+> `[FONTE: notas_dales]`
+
+---
+
+## 13. Fontes processadas / pendentes
 **Lote 1 (1–5) — PROCESSADO:**
 1. `BLOCO1A_SubRodada_DOC21_ParteA_Contas100_210.md` — Plano de Contas Comentado (contas 100–210).
    *(fonte extensa — regras-chave extraídas; texto integral fica no arquivo original.)*
@@ -263,8 +345,23 @@ em dois grupos:
 14. `FLUXO_5_Prestacao_de_Contas_Digitalizacao_e_Fechamento.txt` — Seção 9B.7.
 15. `INDICE_ETAPA3.md` — meta/índice dos 6 blocos do projeto anterior (198 itens).
 
-**Progresso: lote 3 de 7 processado (arquivos 1–15 de 32).**
-**Lotes 4–7 (16–32):** aguardando envio.
+**Lote 4 (16–20) — PROCESSADO:**
+16. `Itens_a_serem_observados_e_conferidos_a_posteriori.txt` — Seção 11 (itens 4.x/5.x/6.x).
+17. `NOMEACAO_ARQUIVOS.txt` — **padrão de nome:** `DATA_INVERT - TIPO_DOC - ENVOLVIDO - VALOR`
+    (ex.: `26_05_03 - LOc_pia - mariene - $100`). → alimenta o **renomeador** (`MAPA_IA_DOCUMENTACAO_v1`).
+18. `notas_dales.txt` — regras de locomoção/viagem/fechamento (Seções 2, 8, 9).
+19. `notas_compra_baixo_valor.txt` — dispensa de 3 orçamentos < R$300 (Seção 8).
+20. `NOTAS_fechamento_com_cristiane.txt` — conferência da C-1 e fechamento (Seções 12 e 8).
+
+**Novos itens de campo `[FONTE: notas_dales]`** (a confirmar com equipe):
+- **Termo de Verificação do Caixa em atraso:** fazer para **todas as contas de jul/2025 a
+  fev/2026** (Tesouraria > Caixas e Bancos > Extrato, filtros data/tipo).
+- **Protocolo de entrega à ADM:** figurativo, mas **assinado por 1 Diácono + 1 da ADM** (qualquer).
+- **Diáconos que assinam (Coxim):** adalto, nilson, joão. `[LACUNA]` confirmar papéis/atualidade.
+- **Inventário real do almoxarifado a cada 3 meses.**
+
+**Progresso: lote 4 de 7 processado (arquivos 1–20 de 32).**
+**Lotes 5–7 (21–32):** aguardando envio.
 
 > `[NOTA]` Ainda **falta o `super_manual_piedade_ccb.md`** (as 24 DOCs originais). O FASE5 é
 > derivado dele e já cita trechos, mas o super manual completo é ideal para o confronto final.
