@@ -37,7 +37,8 @@
 11. [Controles anti-erro e anti-fraude](#11-controles-anti-erro-e-anti-fraude)
 12. [Plano de contas de Coxim (vivo) + contas-chave](#12-plano-de-contas-de-coxim)
 13. [Conflitos e pontos em aberto (confirmar com a equipe)](#13-conflitos-e-pontos-em-aberto)
-14. [Mapa de fontes](#14-mapa-de-fontes)
+14. [O Checklist oficial de verificação (ACPI)](#14-o-checklist-oficial-de-verificação-acpi)
+15. [Mapa de fontes](#15-mapa-de-fontes)
 
 ---
 
@@ -248,6 +249,9 @@ via assinada pelo **atendido** ao receber) → mês seguinte, DT + C-1 retornam 
 - **Deletar arquivos digitais locais** após o upload ao SIGA (higiene/LGPD).
 - **Visto:** quem assina o visto **aparece junto com o responsável** pelo visto.
 - **Placar Power BI:** <50 vermelho · ≥50 e <70 amarelo · ≥70 verde.
+- **Ordem cronológica dos lançamentos (DOC-04):** na Piedade, **não** se lança entrada/saída com
+  data retroativa se já houver documento **concluído** em data posterior — lançar **na ordem das
+  datas** dos documentos (garante o custo médio correto).
 
 ## 12. Plano de contas de Coxim
 **Vivo (em uso):** 100 Caixa — 10010 Obra da Piedade · 10020 Viagens · 10030 Assembleias/Reuniões.
@@ -271,9 +275,43 @@ via assinada pelo **atendido** ao receber) → mês seguinte, DT + C-1 retornam 
 5. `[LACUNA]` **Termo de Verificação do Caixa em atraso:** gerar para **todas as contas de
    jul/2025 a fev/2026** (backlog citado pelo Dales).
 6. `[LACUNA]` **Diáconos que assinam (Coxim):** adalto, nilson, joão — confirmar papéis atuais.
-7. `[NOTA]` **Super manual bruto** não fornecido; reconciliação final pendente quando disponível.
+7. ✅ `[RESOLVIDO]` **Super manual bruto** confrontado (`super_manual_piedade_ccb.md`, 24 DOCs).
+   Confirmou o conteúdo e acrescentou: o que digitalizar por área (DOC-06), o Checklist oficial
+   de verificação (DOC-20, Seção 14) e a ordem cronológica de lançamentos (DOC-04, Seção 11).
 
-## 14. Mapa de fontes
+## 14. O Checklist oficial de verificação (ACPI)
+> `[FONTE: DOC-20 — Checklist da Tesouraria da Piedade]`. É a **verificação formal** que se faz em
+> torno do fechamento — a "prova real" da escrituração. O sistema que estamos construindo deve
+> **espelhar** esta mecânica.
+
+- **Tipo/evento:** **ACPI — Administração | Contábil | Piedade**. Menu: **Verificação >
+  Verificação Grupos de Trabalho > Novo**. Permissão: *"VERIFICAÇÃO - RESPONDER CHECKLIST GRUPOS
+  DE TRABALHO"*.
+- **Periodicidade:** **mensal ou semestral** (conforme o Manual de Escrituração).
+- **Competência/data:** período **jan–jun** → competência **06**, data **30/06**; período
+  **jul–dez** → competência **12**, data **31/12** (para verificação semestral).
+- **Preparação (emitir antes):** balancete auxiliar, Termo de Verificação do Caixa, extratos
+  (movimento e aplicação), razão das contas, mapa de coletas e ofertas — do período verificado.
+- **Quatro respostas possíveis por item:**
+  1. **SIM** — totalmente em conformidade;
+  2. **SIM, COM RESSALVAS** — parcialmente; **obrigatório** justificar no campo de considerações;
+  3. **NÃO APLICÁVEL** — não se aplica à localidade (ou **saldo zero/imaterial** → usar esta e
+     mencionar nas considerações);
+  4. **NÃO** — não conforme; **obrigatório** justificar.
+  > Em qualquer resposta pode-se **anexar documentos** como evidência.
+- **Encerramento:** só encerra com **todas** as perguntas respondidas; inserir os **nomes dos
+  participantes** (verificadores e verificados) e clicar em "Salvar e Encerrar".
+- **Relatório assinado:** após colher assinaturas, **digitalizar e anexar** o relatório em
+  Verificação > ... > Opções > Anexos.
+- **Rodízio:** a Regional distribui as Administrações entre os verificadores online e faz
+  **rodízio anual** (leva em conta o conhecimento de cada um e a complexidade da localidade).
+
+> 💡 **Implicação para o sistema:** os **quatro tipos de resposta** (Sim / Sim com ressalvas /
+> Não aplicável / Não) e a **obrigatoriedade de justificar** (Não e Ressalvas) devem ser
+> refletidos no checklist do nosso sistema e no Motor de Conciliação — `[a incorporar]` no
+> `REQUISITOS_CONSOLIDADO` quando retomarmos a implementação.
+
+## 15. Mapa de fontes
 - **Compilado integral (sem resumo):** `FONTES_FECHAMENTO_PIEDADE_COMPILADO.txt` (27 arquivos).
 - **Documento-mestre (auditado):** `FASE5_MapaProcessos_Contas_CCB_Piedade_v1.0.md` (198 itens).
 - **Plano de contas comentado:** DOC-21 (jul/2020).
