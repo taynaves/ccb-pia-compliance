@@ -2,7 +2,7 @@
 ## O "coração" do sistema · Roteiro-mestre de todos os procedimentos · CCB · Regional Coxim-MS
 
 > **O que é este arquivo (em uma frase):** é o **coração** (o *núcleo duro*) de todo o compliance
-> da Piedade — o **índice-mestre** que amarra cada procedimento a um capítulo/módulo, diz de onde
+> da Piedade — o **índice-mestre** que amarra cada procedimento a um **módulo do SIGA**, diz de onde
 > vem (fonte), onde vive a versão editável (Google Doc) e qual é o seu estado. No futuro, é este
 > arquivo que vira a **régua** do Motor de Conciliação e Verificação automática.
 >
@@ -10,21 +10,29 @@
 > **Google Doc** próprio, escrito em estilo **"receita de bolo"** (passos curtos, em ordem, sem
 > jargão). Este arquivo aqui é o **mapa** que diz onde está cada coisa.
 
-- **Versão do núcleo:** v0.1 (fundação — índice e regras montados; módulos a preencher).
-- **Fonte de estrutura:** `docs/ROTEIRO_COMPLIANCE_PIEDADE.md` (12 módulos, EAPI + ACPI).
+- **Versão do núcleo:** v0.2 (reorganização por módulos do SIGA; proposta de topografia para validar).
+- **Fontes de estrutura:** menu do **SIGA** (imagem enviada pelo dono, jul/2026) + `docs/ROTEIRO_COMPLIANCE_PIEDADE.md`.
 - **Brief de origem:** `docs/KICKOFF_NUCLEO_COMPLIANCE.md`.
+- **Destino final:** após validação, **publicação web só-leitura** (a equipe visualiza; **não** edita, **não** comenta, **não** solicita acesso).
 
 ---
 
-## 1. Como este núcleo funciona (a ideia em 4 pontos)
+## 1. Princípio organizador — duas equipes, dois modos de usar
 
-1. **Cada procedimento vira um capítulo (módulo).** São **12 módulos** (Seção 4).
-2. **Cada módulo tem um Google Doc** na sua pasta do Drive — é a **fonte viva**, onde a equipe
-   contribui aos poucos. Este `.md` **resume** cada módulo e **aponta** para o seu Doc.
-3. **Estilo obrigatório dos Docs:** *receita de bolo*. Dois níveis por documento —
-   **(a)** um resumo rápido do capítulo e **(b)** o passo a passo detalhado.
-4. **Este arquivo é vivo:** a cada "varredura" (organização) de um módulo, o resumo do capítulo
-   correspondente aqui é revisado, e a versão do núcleo sobe (v0.1 → v0.2 → …).
+O compliance da Piedade é usado por **dois públicos diferentes**, e a estrutura precisa servir aos dois:
+
+| Público | Quando usa | Como navega | Precisa de |
+|---|---|---|---|
+| **Equipe de escrituração** (dia a dia) | O tempo todo | Pelo **menu do SIGA** (Secretaria, Piedade, Tesouraria…) | Achar rápido "como faço X no SIGA" |
+| **Equipe de verificação** (1×/mês) | No fechamento/verificação | Pelos **relatórios EAPI e ACPI** (checklist) | Achar "onde está a regra do item Y do checklist" |
+
+**Decisão de arquitetura (v0.2):** o **eixo principal** passa a ser o **menu do SIGA** — porque é por
+ele que a equipe do dia a dia navega. A visão **EAPI/ACPI** (os 12 capítulos do checklist) **não é
+abandonada**: ela vira um **índice de referência cruzada** (Seção 6) que aponta cada item do
+checklist para o módulo do SIGA onde a regra vive. Assim, os dois públicos acham o que precisam.
+
+> `[SUPOSIÇÃO — validar com o dono]` Esta é uma **proposta de topografia**. Se algo não fizer
+> sentido para a rotina real da equipe, ajustamos antes de encher os Google Docs.
 
 ### 1.1 As três camadas de documento (não confundir)
 | Camada | Onde vive | Papel |
@@ -43,8 +51,9 @@
 - **Dois níveis por documento:**
   1. **Resumo geral rápido** — o que é o módulo e o que ele cobre, em poucas linhas.
   2. **Detalhamento passo a passo** — cada procedimento como uma receita.
-- **Convenções de sinalização** (herdadas do Manual de Fechamento):
-  ⏰ prazo · ✅ obrigatório · ⚠️ atenção/risco · ★ regra crítica ·
+- **Cabeçalhos espelham o caminho do SIGA** (ex.: `Tesouraria › Caixas e Bancos › Nova Despesa`) —
+  isso permite os **links profundos** (Seção 5).
+- **Convenções de sinalização:** ⏰ prazo · ✅ obrigatório · ⚠️ atenção/risco · ★ regra crítica ·
   `[CONFLITO]` fontes divergem · `[LACUNA]` falta confirmar · `[SUPOSIÇÃO]` dedução a validar.
 - **Nada decide sozinho:** o documento é **guia de conferência**; a palavra final é sempre de um
   **Diácono responsável**. O sistema **nunca inventa nem remove norma** — só organiza e sinaliza.
@@ -56,7 +65,7 @@
 | Recurso | ID | Uso |
 |---|---|---|
 | **Pasta de trabalho** — "Documentos orientadores de procedimentos e compliance da piedade" | `1it6qnSzzgczVLfuFcXf_UecoZXGDZ_8B` | **onde os Google Docs dos módulos são criados** |
-| **Doc existente** — `Manual_Fechamento_Piedade - RRM_Coxim` | `1OkISPyYWgjNzuXPHTDlxRAYmoUCi7dh3dHl81gArf9k` | **Módulo 11** (Fechamento), em edição pela equipe |
+| **Doc existente** — `Manual_Fechamento_Piedade - RRM_Coxim` | `1OkISPyYWgjNzuXPHTDlxRAYmoUCi7dh3dHl81gArf9k` | **Módulo 07** (Fechamento), em edição pela equipe |
 | **Pasta "Manuais e orientações"** (matéria-prima) | `1RM121AxkdP1MgTPgIEJspRVp4NVrJ0oA` | ler os manuais-fonte |
 
 **Matéria-prima confirmada na pasta "Manuais e orientações"** (ler via Drive):
@@ -67,186 +76,114 @@ BANNER Fluxo Geral CCB.pdf · Revista Seminovos.pdf · subpastas **Formulários*
 `[LACUNA]` O brief cita ainda, nesta pasta: *Manual da Obra da Piedade*, *Manual da Tesouraria*,
 *Plano de Contas Comentado Piedade 2025*, *IT.PIA.BPG.01 BI Piedade*, *estatuto CCB 2013*,
 *código de ética*, *Seção 09 Conselho Fiscal*, *serviços bancários Santander/Bradesco* —
-**confirmar a presença destes** ao entrar em cada subpasta (podem estar nas subpastas).
+**confirmar a presença destes** ao entrar em cada subpasta.
 
 ---
 
-## 4. Os 12 módulos (índice-mestre)
+## 4. Estrutura do SIGA (o menu, transcrito) — o eixo dos módulos
 
-> Convenção de nome do Google Doc (espelha o que o dono já usa): **`<NN> <Módulo> - Piedade RRM-Coxim`**.
-> O Doc já existente `Manual_Fechamento_Piedade - RRM_Coxim` é aceito como está (Módulo 11).
+> Transcrição do menu lateral do SIGA (imagem enviada pelo dono). É a **espinha dorsal** da nova
+> organização. Cada **módulo do menu** vira um **Google Doc** (ou parte de um).
 
-### PARTE A — EAPI · Estrutura e Atendimento da Piedade
-| Cap. | Módulo | Google Doc (fonte viva) | Estado |
-|---|---|---|---|
-| 1 | Estrutura, cargos e responsabilidades | `01 Estrutura e Responsabilidades - Piedade RRM-Coxim` | ⬜ a criar |
-| 2 | Cadastros e preparação pré-reunião | `02 Cadastros e Preparação - Piedade RRM-Coxim` | ⬜ a criar |
-| 3 | Reuniões de atendimento e Ficha C-1 | `03 Reuniões e Ficha C-1 - Piedade RRM-Coxim` | ⬜ a criar |
-| 4 | Almoxarifado, materiais, cestas e seminovos | `04 Almoxarifado e Materiais - Piedade RRM-Coxim` | ⬜ a criar |
-| 5 | Arquivo, digitalização e sigilo | `05 Arquivo e Digitalização - Piedade RRM-Coxim` | ⬜ a criar |
+- **Intranet** → InfoCCB
+- **Secretaria** → Cadastro (Cadastro Responsáveis Piedade · Ministério · Administradores e outros Cargos) · Eventos · Controle de Acesso
+- **Verificação** → Verificação Conselho Fiscal · Checklist Grupos de Trabalho
+- **Voluntário** → Apontamentos · Cadastros (Livros · Voluntários · Funções)
+- **Produtos/Serviços** → Fornecedor · Cotação de Preços · Pedidos de Compra · Estoque · Mov. Estoque · Montagem Kit · Reserva de Estoque · Expedição · Troca de Produtos · Sala de Costura · Relatórios (Pedidos de Compra · Mov. Produto · Inventário Produto · Mov. Estoque · Atend. Produtos)
+- **Piedade** → Reunião · Prestação de Contas · Relatórios (Atendimentos · Ordem de Compra · Termo Livro de ATAs) · Cadastros (Prontuário · Grupo Atendimento · Cartão Crédito/Débito)
+- **Viagem** → Viagem · Cadastros (Cartão Crédito · Missões Aprovadas · Aprovadores)
+- **Tesouraria** → Cartões (Cartão Viagens · Cartão Piedade) · Caixas e Bancos · Contas a Pagar · Transf. Numerários · Doações · Reconhecer Receitas · Fech. Piedade · Relatórios (Extrato · Contas a Pagar · Adiantamento · Fluxo de Caixa · Mapa Coletas · Despesas · Depósitos · Razão Gerencial · Balancete Financ. · Protocolo de Doc. · Mov. Fin. C-9)
+- **Contabilidade** → Relatórios (Razão · Diário · Balancete · Etiqueta Contábil · Balancete Comparativo · Movimentação)
 
-### PARTE B — ACPI · Administração Contábil da Piedade
-| Cap. | Módulo | Google Doc (fonte viva) | Estado |
-|---|---|---|---|
-| 6 | Plano de contas e critérios de lançamento | `06 Plano de Contas e Lançamentos - Piedade RRM-Coxim` | ⬜ a criar |
-| 7 | Tesouraria: caixas, bancos, aplicações, cartões, cheques | `07 Tesouraria - Piedade RRM-Coxim` | ⬜ a criar |
-| 8 | Adiantamentos, viagens e locomoções | `08 Viagens e Locomoções - Piedade RRM-Coxim` | ⬜ a criar |
-| 9 | Coletas, ofertas e transferências | `09 Coletas e Ofertas - Piedade RRM-Coxim` | ⬜ a criar |
-| 10 | Conciliações e conferências | `10 Conciliações - Piedade RRM-Coxim` | ⬜ a criar |
-| 11 | **Fechamento mensal** | **`Manual_Fechamento_Piedade - RRM_Coxim`** | 🟨 em edição (Doc existe) |
-| 12 | Verificação (Checklist ACPI) e controles internos | `12 Verificação e Controles - Piedade RRM-Coxim` | ⬜ a criar |
+### 4.1 Os módulos propostos (um Google Doc cada)
 
-**Legenda de estado:** ⬜ a criar · 🟨 em edição · 🟩 varrido/organizado nesta versão do núcleo.
+> Convenção de nome do Doc: **`<NN> <Módulo do SIGA> - Piedade RRM-Coxim`**.
+> "Verif." = a que capítulo(s) do checklist **EAPI/ACPI** o módulo responde (referência cruzada, Seção 6).
 
----
+| Nº | Módulo (por área do SIGA) | Abrange (subáreas do SIGA) | Verif. | Estado |
+|---|---|---|---|---|
+| **00** | Começar aqui: SIGA, InfoCCB e acesso | Intranet/InfoCCB · Controle de Acesso · login · onde ficam modelos (ex.: Termo de Verificação) | — | ⬜ a criar |
+| **01** | Secretaria: responsáveis, cargos e estrutura | Secretaria › Cadastro (Responsáveis Piedade · Ministério · Administradores e outros Cargos) · Eventos · Controle de Acesso | EAPI-1 | ⬜ a criar |
+| **02** | Voluntário: livros, voluntários e funções | Voluntário › Apontamentos · Cadastros (Livros · Voluntários · Funções) | EAPI-1/5 | ⬜ a criar |
+| **03** | Piedade: reuniões, atendimento e Ficha C-1 | Piedade › Reunião · Prestação de Contas · Relatórios (Atendimentos · Ordem de Compra · Termo Livro de ATAs) · Cadastros (Prontuário · Grupo Atendimento · Cartão) | EAPI-2/3 | ⬜ a criar |
+| **04** | Produtos/Serviços: almoxarifado, compras e materiais | Produtos/Serviços › todas as subáreas + Relatórios · Sala de Costura · seminovos | EAPI-4 / ACPI compras | ⬜ a criar |
+| **05** | Viagem: missões, cartões e prestação | Viagem › Viagem · Cadastros (Cartão Crédito · Missões Aprovadas · Aprovadores) | ACPI-8 | ⬜ a criar |
+| **06** | Tesouraria: caixas, bancos, cartões, contas a pagar, transferências, doações, receitas | Tesouraria › Cartões · Caixas e Bancos · Contas a Pagar · Transf. Numerários · Doações · Reconhecer Receitas | ACPI-7/9 | ⬜ a criar |
+| **07** | Tesouraria: **Fechamento da Piedade** | Tesouraria › Fech. Piedade + relatórios do encerramento (Protocolo de Doc. · Mov. Fin. C-9 · Balancete) | ACPI-11 | 🟨 Doc existe |
+| **08** | Conciliações e conferências (Tesouraria + Contabilidade) | Tesouraria › Relatórios (Extrato · Adiantamento · Mapa Coletas · Depósitos · Razão Gerencial · Balancete Financ.…) + Contabilidade › Relatórios | ACPI-10 | ⬜ a criar |
+| **09** | Plano de contas e critérios de lançamento (transversal) | base de Tesouraria/Contabilidade: função das contas, históricos-padrão, ordem cronológica | ACPI-6 | ⬜ a criar |
+| **10** | Verificação: Checklist Grupos de Trabalho (ACPI) e Conselho Fiscal | Verificação › Verificação Conselho Fiscal · Checklist Grupos de Trabalho | ACPI-12 | ⬜ a criar |
+| **11** | Arquivo, digitalização e sigilo (transversal) | enviar documentos · deletar locais · o que (não) digitalizar · LGPD/sigilo | EAPI-5 | ⬜ a criar |
 
-## 5. Os capítulos — objetivo, escopo, fontes e estado
+**Legenda de estado:** ⬜ a criar · 🟨 em edição (Doc existe) · 🟩 varrido/organizado nesta versão.
 
-> O detalhamento passo a passo vive no **Google Doc** de cada módulo. Abaixo fica o **resumo-régua**
-> que este núcleo mantém. (Para o Módulo 11, o conteúdo já está aprofundado em
-> `docs/MANUAL_FECHAMENTO_PIEDADE.md`.)
-
-### PARTE A — EAPI
-
-#### Capítulo 1 — Estrutura, cargos e responsabilidades
-- **Objetivo:** quem é quem e quem responde pelo quê na Obra da Piedade.
-- **Cobre:** hierarquia (Conselho dos Diáconos, Grupo Gestor, GDBRAS, Sistema de Informação);
-  funções (Secretaria, Atendimento, Viagem, Produtos e Serviços); responsabilidades documentais
-  dos Diáconos; oficialização de Irmãs da Piedade.
-- **Fontes:** DOC-11, DOC-16, DOC-18, DOC-08, DOC-13.
-- **Estado:** ⬜ Google Doc a criar.
-
-#### Capítulo 2 — Cadastros e preparação pré-reunião
-- **Objetivo:** deixar tudo pronto antes da reunião de atendimento.
-- **Cobre:** inventário físico da lojinha (ajuste até a sexta anterior); revisão de cadastros e
-  prontuários (sem duplicidade; ficha no nome de batizado; cônjuge); catálogo de produtos;
-  cadastro de grupos/cartões de atendimento.
-- **Fontes:** FLUXO 1, DOC-24, DOC-22, DOC-23.
-- **Estado:** ⬜ Google Doc a criar.
-
-#### Capítulo 3 — Reuniões de atendimento e Ficha C-1
-- **Objetivo:** conduzir a reunião e escriturar corretamente cada atendimento.
-- **Cobre:** as **3 reuniões** (Normal, Sigiloso/GDBRAS, Fundo Musical); dinâmica da mesa; tipos de
-  caso (normal/momento, emergência, sigiloso); **Ficha C-1** (campos; valor de momento em vermelho;
-  ficha 100% manuscrita); os **3 carimbos** LIQUIDADO → CONFERIDO → BAIXADO; envelope; ata, posição
-  financeira e lista de presença; encadernação das atas em brochura.
-- **Fontes:** FLUXO 2 / 2b, DOC-24, DOC-05, DOC-15, DOC-18, DOC-20 (itens 4.x).
-- **Estado:** ⬜ Google Doc a criar.
-
-#### Capítulo 4 — Almoxarifado, materiais, cestas e seminovos
-- **Objetivo:** controlar estoque e atender com materiais dentro das normas.
-- **Cobre:** entradas/saídas de estoque; **DT (Declaração de Trânsito)** em 2 vias; atendimento com
-  materiais (valor R$ 0,00, mercadoria = SIM); atendimento a outras cidades (Sonora/SGO); cestas
-  básicas; seminovos; Santa Ceia (Circular 234/2025); estoque máximo (4 reuniões/item); inventário
-  trimestral.
-- **Fontes:** FLUXO 1a / 3, DOC-03, DOC-17, DOC-07, DOC-24.
-- **Estado:** ⬜ Google Doc a criar.
-
-#### Capítulo 5 — Arquivo, digitalização e sigilo
-- **Objetivo:** digitalizar e guardar a documentação com segurança e sigilo.
-- **Cobre:** **o que digitalizar por área** (Piedade, Viagens, Tesouraria); o que **NÃO** digitalizar;
-  deletar arquivos locais após upload; acesso restrito aos Diáconos da documentação sigilosa;
-  **nunca** anexar listagem de atendidos.
-- **Fontes:** DOC-06 / DOC-19, DOC-18.
-- **Estado:** ⬜ Google Doc a criar.
-
-### PARTE B — ACPI
-
-#### Capítulo 6 — Plano de contas e critérios de lançamento
-- **Objetivo:** contabilizar cada evento na conta certa, na ordem certa.
-- **Cobre:** plano de contas comentado (função/funcionamento/exemplos/históricos-padrão); plano
-  **vivo de Coxim** (+ contas inativas); ordem **cronológica** de lançamentos (DOC-04); saldos
-  esperados e contas que zeram.
-- **Fontes:** DOC-21, DOC-04, `contas_coxim`.
-- **Estado:** ⬜ Google Doc a criar. *(Base já sintetizada em `MANUAL_FECHAMENTO_PIEDADE.md` §7 e §12.)*
-
-#### Capítulo 7 — Tesouraria: caixas, bancos, aplicações, cartões, cheques
-- **Objetivo:** operar a tesouraria com controle e comprovação.
-- **Cobre:** movimentação do cofre (2+ Diáconos); cartões de crédito/débito; cheques (cruzados,
-  nominais, 2 assinaturas); lançamentos com comprovante anexado; depósitos não identificados.
-- **Fontes:** DOC-18, DOC-21, DOC-23, DOC-10.
-- **Estado:** ⬜ Google Doc a criar.
-
-#### Capítulo 8 — Adiantamentos, viagens e locomoções
-- **Objetivo:** adiantar, prestar contas e baixar viagens/locomoções corretamente.
-- **Cobre:** aprovação e autorização de viagem (FOR.PIA.01); envelope de viagem; prestação de contas
-  (baixa dentro do mês; prazo 2 meses); adiantamento que cruza o mês; **locomoção** (conta 10010,
-  despesa 3026, histórico 047; irmãs = 4 Diáconos).
-- **Fontes:** DOC-01 / DOC-02, FLUXO 4, DOC-21 (contas 1044/1047), notas_dales.
-- **Estado:** ⬜ Google Doc a criar. *(Base já sintetizada em `MANUAL_FECHAMENTO_PIEDADE.md` §8.1–8.2.)*
-
-#### Capítulo 9 — Coletas, ofertas e transferências
-- **Objetivo:** registrar e repassar coletas/ofertas nos prazos.
-- **Cobre:** modalidades de captação; Fundo Musical (contas 1065/2085/4205); Arrecadação Exterior
-  (repasse até dia 10); Coleta Nível Brasil (8º dia útil); importação de extrato (.TXT);
-  transferências entre departamentos e **pares espelho**.
-- **Fontes:** IT.TES.03, IT.TES.05, DOC-18, DOC-21.
-- **Estado:** ⬜ Google Doc a criar. *(Base já sintetizada em `MANUAL_FECHAMENTO_PIEDADE.md` §9 e §8.5.)*
-
-#### Capítulo 10 — Conciliações e conferências
-- **Objetivo:** provar que os números batem antes de fechar.
-- **Cobre:** Termo de Verificação do Caixa; conciliação bancária e de aplicações; relatório TES01701
-  × extrato; adiantamentos em aberto × contabilidade; reconhecer receitas (casas fechadas).
-- **Fontes:** DOC-18, DOC-21, DOC-20, IT.TES.05.
-- **Estado:** ⬜ Google Doc a criar. *(Hoje detalhado em `MANUAL_FECHAMENTO_PIEDADE.md` §5.)*
-- `[SUPOSIÇÃO]` Pode ser mantido dentro do Módulo 11 (Fechamento) ou desmembrado em Doc próprio —
-  **decisão do dono** na primeira varredura.
-
-#### Capítulo 11 — Fechamento mensal
-- **Objetivo:** encerrar o mês com todos os documentos obrigatórios.
-- **Cobre:** os **documentos do encerramento** e suas assinaturas; passo a passo (gerar Protocolo,
-  C-9, Balancete); anexação na janela de Fech. Piedade; entrega das Pastas 1–6 à ADM; prazos
-  (dia 20 fechamento, dia 30 digitalização).
-- **Fonte viva:** **`Manual_Fechamento_Piedade - RRM_Coxim`** (Drive) + `docs/MANUAL_FECHAMENTO_PIEDADE.md`.
-- **Fontes:** DOC-06/19, DOC-18, DOC-16, FLUXO 3b / 5.
-- **Estado:** 🟨 em edição (Doc já existe; aguarda primeira varredura quando o dono pedir).
-
-#### Capítulo 12 — Verificação (Checklist ACPI) e controles internos
-- **Objetivo:** a verificação formal e os controles anti-erro/anti-fraude.
-- **Cobre:** Checklist **ACPI** (mensal/semestral; competência 06/12; 4 respostas Sim / Sim com
-  ressalvas / Não aplicável / Não, com justificativa obrigatória; rodízio anual de verificadores);
-  segregação de funções; regra de ouro (lançamento com documento assinado); LGPD/sigilo; Power BI.
-- **Fontes:** DOC-20, DOC-12, DOC-18.
-- **Estado:** ⬜ Google Doc a criar. *(Mecânica já detalhada em `MANUAL_FECHAMENTO_PIEDADE.md` §14.)*
+> `[SUPOSIÇÃO]` Alguns itens são **transversais** (09 Plano de contas, 11 Arquivo/sigilo) — não são um
+> único item de menu, mas atravessam vários. Mantê-los como módulos próprios ajuda a consulta; se o
+> dono preferir, podem ser **apêndices** dentro de outro módulo.
 
 ---
 
-## 6. Fluxo de trabalho com os Google Docs
+## 5. Links profundos (SIGA → gdoc → parágrafo)
+
+Objetivo do dono: de cada **área/subárea do SIGA** (e de cada relatório EAPI/ACPI) chegar direto à
+**informação exata** dentro de um Google Doc.
+
+**O que dá para fazer (honesto):**
+- ✅ Link até um **cabeçalho** ou **marcador (bookmark)** do Google Doc — precisão de **seção/parágrafo**.
+  Como os cabeçalhos espelham o caminho do SIGA (Seção 2), o link cai no procedimento certo.
+- ✅ Citar **página** de um PDF-fonte no texto (ex.: "Manual SIGA Cap. 03, p. 12").
+- ⚠️ `[LACUNA técnica]` **"Linha" exata** não é um endereço estável no Google Docs — o texto reflui
+  quando alguém edita. Por isso ancoramos em **cabeçalho/bookmark**, não em número de linha.
+
+**Como fica montado:** este núcleo (e, no futuro, a página web) terá uma **tabela SIGA → link**,
+onde cada subárea do menu leva ao cabeçalho correspondente no gdoc do módulo. Montamos essa tabela
+**à medida que cada gdoc for criado** (o link só existe depois do documento).
+
+---
+
+## 6. Índice de referência cruzada EAPI/ACPI → módulo do SIGA
+
+> Para a **equipe de verificação** (que pensa em checklist, não em menu). Cada capítulo do checklist
+> aponta para o módulo do SIGA onde a regra vive. (Base: `ROTEIRO_COMPLIANCE_PIEDADE.md`.)
+
+| Checklist (capítulo) | Assunto | Módulo(s) do SIGA |
+|---|---|---|
+| **EAPI-1** | Estrutura, cargos e responsabilidades | 01 · 02 |
+| **EAPI-2** | Cadastros e preparação pré-reunião | 03 (e 04 p/ inventário lojinha) |
+| **EAPI-3** | Reuniões de atendimento e Ficha C-1 | 03 |
+| **EAPI-4** | Almoxarifado, materiais, cestas e seminovos | 04 |
+| **EAPI-5** | Arquivo, digitalização e sigilo | 11 |
+| **ACPI-6** | Plano de contas e critérios de lançamento | 09 |
+| **ACPI-7** | Tesouraria: caixas, bancos, aplicações, cartões, cheques | 06 |
+| **ACPI-8** | Adiantamentos, viagens e locomoções | 05 |
+| **ACPI-9** | Coletas, ofertas e transferências | 06 |
+| **ACPI-10** | Conciliações e conferências | 08 |
+| **ACPI-11** | Fechamento mensal | 07 |
+| **ACPI-12** | Verificação (Checklist ACPI) e controles internos | 10 |
+
+O detalhe de objetivo/escopo/fontes de cada capítulo EAPI/ACPI continua em
+`docs/ROTEIRO_COMPLIANCE_PIEDADE.md` (não repetido aqui para não duplicar).
+
+---
+
+## 7. Fluxo de trabalho com os Google Docs
 
 1. **Criar** um Google Doc por módulo na pasta de trabalho (Seção 3), com o nome da convenção.
-2. **Preencher** cada um (resumo + detalhado, estilo receita de bolo) a partir das fontes.
+2. **Preencher** (resumo + detalhado, estilo receita de bolo) a partir das fontes.
 3. **Varredura periódica (quando o dono pedir):** varrer todo o conteúdo (inclusive o que a equipe
    acrescentou) → reorganizar por assunto → deduplicar → marcar dúbio/incompleto/conflitante →
    **em caso de conflito, PERGUNTAR** antes de decidir → reedição final limpa.
 4. **Versões históricas (proteção):** **antes de sobrescrever** um Doc, **copiar a versão atual**
-   para a subpasta **`_Histórico de versões`** (dentro da pasta de trabalho). Assim qualquer versão
-   anterior pode voltar. *(A subpasta será criada na primeira vez que um Doc for sobrescrito.)*
-5. **Após cada varredura, atualizar este núcleo** (`.md`): revisar o resumo do capítulo e subir a
-   versão do núcleo.
-
----
-
-## 7. Limitações técnicas honestas (o que as ferramentas fazem e o que NÃO fazem)
-
-- **Caminho `H:\Meu Drive\...` (Windows do dono) NÃO é acessível** por aqui. O acesso é ao
-  **Google Drive pela API**, sempre **por ID** (Seção 3), nunca pelo caminho `H:`.
-- **Compartilhamento/permissões:** as ferramentas atuais **criam, leem, copiam e escrevem**
-  arquivos, mas **não alteram o compartilhamento** ("qualquer um com o link pode comentar" etc.) —
-  só é possível **ler** as permissões. ⚠️ **O dono precisará ligar o compartilhamento manualmente**
-  em cada Google Doc criado (ou avisaremos se surgir ferramenta de permissão). Não prometemos o
-  que a ferramenta não faz.
-- **PDFs grandes / escaneados:** são lidos por extração de texto; alguns são imagem e podem vir
-  **sem texto** — nesse caso, sinalizar `[LACUNA]` e combinar outra via (ex.: envio do texto).
-- **Editar um Google Doc que já existe:** a via mais segura é **guardar a versão anterior no
-  histórico** (item 6.4) e então **regravar o conteúdo**. Para o Módulo 11 (Doc já existente e
-  editado pela equipe), a primeira varredura confirma a melhor mecânica antes de tocar no Doc.
+   para a subpasta **`_Histórico de versões`** (criada na primeira sobrescrita).
+5. **Após cada varredura, atualizar este núcleo** (`.md`): revisar o resumo do módulo, a tabela
+   SIGA → link (Seção 5) e subir a versão do núcleo.
 
 ---
 
 ## 8. Pontos em aberto e conflitos (a validar com a equipe)
 
-> Consolidado de `MANUAL_FECHAMENTO_PIEDADE.md` §13 e do `ROTEIRO`. **Nenhum destes é decidido pelo
-> sistema** — cada um espera confirmação humana.
+> Consolidado de `MANUAL_FECHAMENTO_PIEDADE.md` §13, do `ROTEIRO` e das orientações do dono.
+> **Nenhum destes é decidido pelo sistema** — cada um espera confirmação humana.
 
 1. ⚠️ `[CONFLITO]` **Contas 10120/10130:** o DOC-21 as trata como ativas; em Coxim estão **inativas**
    (vivas: 10113/10114). **O motor de auditoria usa o plano de Coxim como verdade.** Confirmar qual
@@ -260,27 +197,54 @@ BANNER Fluxo Geral CCB.pdf · Revista Seminovos.pdf · subpastas **Formulários*
 5. `[LACUNA]` **Termo de Verificação do Caixa em atraso:** gerar para **todas as contas de jul/2025
    a fev/2026** (backlog citado pelo Dales).
 6. `[LACUNA]` **Diáconos que assinam (Coxim):** adalto, nilson, joão — confirmar papéis atuais.
-7. `[SUPOSIÇÃO]` **Módulos 10 e 12** podem virar Docs próprios ou permanecer dentro do Módulo 11 —
-   decidir na primeira varredura.
+7. `[SUPOSIÇÃO]` **Topografia dos módulos (Seção 4.1):** eixo agora é o **menu do SIGA**; validar a
+   divisão e o tratamento dos módulos transversais (09 Plano de contas, 11 Arquivo/sigilo).
+
+### 8.1 Notas do dono (jul/2026) — registradas
+- 🅝 **Manual de Fechamento (Módulo 07):** a atualização feita pela equipe no Google Doc foi
+  **irrisória**. Confrontado com **todo o material-fonte**, o conteúdo ainda está **muito
+  incompleto** — a varredura desse módulo deve **acrescentar bastante coisa**, não só reorganizar.
+- 🅝 **Publicação final:** depois da fase de verificação/validação, os documentos vão para a **web em
+  modo só-leitura** — a equipe **visualiza**, mas **não edita, não comenta e não pede acesso**.
+  (Candidato natural: GitHub Pages, que o projeto já usa; ou "publicar na web" dos gdocs. A definir
+  na fase de publicação.)
+- 🅝 **Liberdade de reorganização:** autorizado **dividir este núcleo em mais de um arquivo** ou
+  **migrar partes** para outros documentos, conforme a topografia pedir.
 
 ---
 
 ## 9. Visão de futuro (o rumo — não é para agora)
 
-O dono quer que, adiante, **o superusuário edite as regras** (este núcleo `.md` ou os Google Docs
-de cada módulo) e o Claude Code, **em outra sessão**, transforme isso no **código/arquivo correto**,
-que é **substituído no GitHub** e passa a valer. Cada "depuração" gera **nova versão do engine**,
-documentada — inclusive um **capítulo de "novidades da versão" na Ajuda**. É o modelo de
-**regras como configuração** (config-driven), a ser desenhado quando implementarmos o Motor de
-Conciliação e Auditoria (ver `docs/MAPA_CONCILIACAO_AUDITORIA_v1.md`).
+O dono quer que, adiante, **o superusuário edite as regras** (este núcleo `.md` ou os Google Docs de
+cada módulo) e o Claude Code, **em outra sessão**, transforme isso no **código/arquivo correto**, que
+é **substituído no GitHub** e passa a valer. Cada "depuração" gera **nova versão do engine**,
+documentada — inclusive um **capítulo de "novidades da versão" na Ajuda**. É o modelo de **regras
+como configuração** (config-driven), a ser desenhado quando implementarmos o Motor de Conciliação e
+Auditoria (ver `docs/MAPA_CONCILIACAO_AUDITORIA_v1.md`).
 
 ---
 
-## 10. Registro de versões do núcleo
+## 10. Limitações técnicas honestas (o que as ferramentas fazem e o que NÃO fazem)
+
+- **Caminho `H:\Meu Drive\...` (Windows do dono) NÃO é acessível** por aqui. O acesso é ao
+  **Google Drive pela API**, sempre **por ID** (Seção 3), nunca pelo caminho `H:`.
+- **Compartilhamento/permissões:** as ferramentas **criam, leem, copiam e escrevem** arquivos, mas
+  **não alteram o compartilhamento** — só é possível **ler** as permissões. ⚠️ **O dono precisará
+  ligar o compartilhamento/publicação manualmente** em cada Doc (ou na publicação web final).
+- **PDFs grandes / escaneados:** lidos por extração de texto; alguns são imagem e podem vir **sem
+  texto** — nesse caso, sinalizar `[LACUNA]` e combinar outra via.
+- **Editar um Google Doc que já existe:** guardar a versão anterior no histórico (item 7.4) e então
+  regravar o conteúdo. Para o Módulo 07 (Doc existente), a primeira varredura confirma a mecânica.
+- **Links "linha exata" no gdoc:** não são estáveis (o texto reflui) — ancoramos em cabeçalho/bookmark.
+
+---
+
+## 11. Registro de versões do núcleo
 
 | Versão | Data | O que mudou |
 |---|---|---|
-| v0.1 | 2026-07-24 | Fundação: índice-mestre dos 12 módulos, regras de estilo, mapa do Drive (IDs verificados), protocolo de versões, limitações honestas e pontos em aberto consolidados. Nenhum Google Doc criado ainda. |
+| v0.1 | 2026-07-24 | Fundação: índice dos 12 capítulos EAPI/ACPI, regras de estilo, mapa do Drive, protocolo de versões, limitações e pontos em aberto. |
+| v0.2 | 2026-07-24 | **Reorganização por módulos do SIGA** (novo eixo primário, a partir do menu enviado pelo dono). EAPI/ACPI vira referência cruzada (Seção 6). Adiciona: transcrição do menu do SIGA (Seção 4), links profundos SIGA→gdoc (Seção 5), destino de publicação web só-leitura, e notas do dono (Seção 8.1). Proposta de topografia — a validar. |
 
 ---
 
